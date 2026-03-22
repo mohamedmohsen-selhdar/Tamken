@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowRight, Activity, Cpu, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import './Home.css';
 
 const Home = () => {
   const heroRef = useRef(null);
@@ -10,8 +9,8 @@ const Home = () => {
     const handleScroll = () => {
       if (heroRef.current) {
         const scrollY = window.scrollY;
-        const bg = heroRef.current.querySelector('.hero-bg');
-        const content = heroRef.current.querySelector('.hero-content');
+        const bg = heroRef.current.querySelector('.hero-bg-parallax');
+        const content = heroRef.current.querySelector('.hero-content-parallax');
         if (bg && content) {
           bg.style.transform = `translateY(${scrollY * 0.5}px)`;
           content.style.transform = `translateY(${scrollY * 1.2}px)`;
@@ -23,72 +22,82 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home-page">
+    <div className="w-full">
       {/* Hero Section */}
-      <section className="hero-section" ref={heroRef}>
-        <div className="hero-bg"></div>
-        <div className="container hero-content">
-          <div className="hero-badge animate-fade-up">Navigating Industrial Evolution</div>
-          <h1 className="hero-title animate-fade-up" style={{ animationDelay: '100ms' }}>
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20" ref={heroRef}>
+        <div className="hero-bg-parallax absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(170,30,30,0.15)_0%,transparent_60%)] -z-10"></div>
+        <div className="hero-content-parallax container mx-auto px-6 max-w-4xl text-center z-10 transition-transform duration-300 ease-out">
+          <div className="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
+            Navigating Industrial Evolution
+          </div>
+          <h1 className="text-5xl md:text-7xl lg:text-[84px] font-bold mb-8 leading-[1.1] text-foreground tracking-tight animate-slide-up" style={{ animationDelay: '100ms' }}>
             Transforming <span className="text-gradient">Manufacturing</span><br/>
             Into Excellence
           </h1>
-          <p className="hero-subtitle animate-fade-up" style={{ animationDelay: '200ms' }}>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
             We partner with manufacturers to transform operations, enhance efficiency,
             and drive sustainable performance improvement through structured methodologies.
           </p>
-          <div className="hero-cta animate-fade-up" style={{ animationDelay: '300ms' }}>
-            <Link to="/journey" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+          <div className="animate-slide-up" style={{ animationDelay: '300ms' }}>
+            <Link to="/journey" className="inline-flex items-center gap-2 bg-foreground text-background hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-industrial font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(220,38,38,0.2)]">
               Explore THE Journey <ArrowRight size={20} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Offerings Section (CSS Grid, varying card sizes) */}
-      <section className="section offerings-section">
-        <div className="container">
-          <div className="section-header text-center">
-            <h2 className="section-title">Our Core Offerings</h2>
-            <p className="section-desc">End-to-End Industrial Transformation</p>
+      {/* Offerings Section */}
+      <section className="py-32 relative z-10">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Our Core Offerings</h2>
+            <p className="text-muted-foreground text-lg">End-to-End Industrial Transformation</p>
           </div>
 
-          <div className="grid bento-grid">
+          <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[minmax(180px,auto)] gap-8">
             {/* Journey Card - Large Span */}
-            <div className="glass-panel premium-card bento-large border-beam">
-              <div className="card-content">
-                <div className="card-icon"><Activity size={32} /></div>
-                <h3>THE Journey</h3>
-                <p>A comprehensive, phased transformation service designed to elevate factory performance across all core operational pillars. Integrates process design, KPIs, digital tools, and on-ground implementation.</p>
-                <Link to="/journey" className="card-link">Discover THE Journey <span>&rarr;</span></Link>
+            <div className="md:col-span-8 md:row-span-2 glass-panel rounded-industrial transition-all duration-300 hover:-translate-y-2 hover:border-primary glow-primary overflow-hidden group">
+              <div className="p-8 h-full flex flex-col relative z-10 bg-gradient-to-br from-card to-background">
+                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl">
+                  <Activity size={32} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">THE Journey</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-lg">A comprehensive, phased transformation service designed to elevate factory performance across all core operational pillars. Integrates process design, KPIs, digital tools, and on-ground implementation.</p>
+                <Link to="/journey" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
+                  Discover THE Journey <span>&rarr;</span>
+                </Link>
               </div>
             </div>
 
             {/* FLAPP Card */}
-            <div className="glass-panel premium-card border-beam">
-              <div className="card-content">
-                <div className="card-icon"><Cpu size={32} /></div>
-                <h3>FLAPP</h3>
-                <p>A mobile-first system capturing real-time shop floor data.</p>
-                <Link to="/flapp" className="card-link">Learn About FLAPP <span>&rarr;</span></Link>
+            <div className="md:col-span-4 glass-panel rounded-industrial transition-all duration-300 hover:-translate-y-2 hover:border-primary glow-primary group">
+              <div className="p-8 h-full flex flex-col bg-gradient-to-b from-card to-background">
+                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl">
+                  <Cpu size={32} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">FLAPP</h3>
+                <p className="text-muted-foreground flex-grow mb-8">A mobile-first system capturing real-time shop floor data.</p>
+                <Link to="/flapp" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
+                  Learn About FLAPP <span>&rarr;</span>
+                </Link>
               </div>
             </div>
 
             {/* Stats Card */}
-            <div className="glass-panel premium-card">
-              <div className="card-content stat-card">
-                <div className="stat-number">197+</div>
-                <div className="stat-label">Improvement Projects</div>
+            <div className="md:col-span-4 glass-panel rounded-industrial flex flex-col items-center justify-center text-center p-8 transition-transform hover:scale-[1.02]">
+              <div className="text-6xl font-bold font-heading bg-gradient-to-t from-muted-foreground to-foreground bg-clip-text text-transparent mb-2">
+                197+
               </div>
+              <div className="font-mono text-muted-foreground uppercase tracking-widest text-sm">Improvement Projects</div>
             </div>
 
             {/* Quality Card */}
-            <div className="glass-panel premium-card bento-wide">
-              <div className="card-content row-content">
-                <ShieldCheck size={48} className="icon-large" />
+            <div className="md:col-span-12 glass-panel rounded-industrial flex items-center p-8 transition-all duration-300 hover:border-primary">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
+                <ShieldCheck size={48} className="text-success shrink-0" />
                 <div>
-                  <h3>Quality into Practice</h3>
-                  <p>Building robust systems to align with expectations, ensuring high-standard outputs and sustainable growth.</p>
+                  <h3 className="text-2xl font-bold mb-2">Quality into Practice</h3>
+                  <p className="text-muted-foreground text-lg">Building robust systems to align with expectations, ensuring high-standard outputs and sustainable growth.</p>
                 </div>
               </div>
             </div>
@@ -97,23 +106,30 @@ const Home = () => {
       </section>
 
       {/* Vision / Mission Section */}
-      <section className="section vision-section">
-        <div className="container">
-          <div className="grid vision-grid">
-            <div className="vision-text">
-              <h2>Vision & Mission</h2>
-              <p>Becoming the leading transformation partner for industrial excellence, empowering factories to reach world-class operational standards.</p>
-              <p>We design, implement, monitor, and sustain operational excellence initiatives directly on the ground, ensuring real results.</p>
+      <section className="py-32 bg-secondary/50 border-t border-border/50">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">Vision & Mission</h2>
+              <p className="text-xl text-muted-foreground mb-6 leading-relaxed">
+                Becoming the leading transformation partner for industrial excellence, empowering factories to reach world-class operational standards.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                We design, implement, monitor, and sustain operational excellence initiatives directly on the ground, ensuring real results.
+              </p>
             </div>
-            <div className="vision-stats grid">
-              <div className="stat-box glass-panel premium-card">
-                <h4>60+</h4><span>Businesses</span>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="glass-panel p-8 text-center rounded-industrial">
+                <h4 className="text-4xl font-bold text-primary mb-2">60+</h4>
+                <span className="text-muted-foreground font-medium">Businesses</span>
               </div>
-              <div className="stat-box glass-panel premium-card">
-                <h4>23+</h4><span>Sectors</span>
+              <div className="glass-panel p-8 text-center rounded-industrial">
+                <h4 className="text-4xl font-bold text-primary mb-2">23+</h4>
+                <span className="text-muted-foreground font-medium">Sectors</span>
               </div>
-              <div className="stat-box glass-panel premium-card" style={{gridColumn: 'span 2'}}>
-                <h4>100%</h4><span>Real-time Visibility</span>
+              <div className="col-span-2 glass-panel p-8 text-center rounded-industrial bg-card/40">
+                <h4 className="text-4xl font-bold text-primary mb-2">100%</h4>
+                <span className="text-muted-foreground font-medium">Real-time Visibility</span>
               </div>
             </div>
           </div>

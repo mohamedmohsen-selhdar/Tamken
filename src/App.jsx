@@ -26,16 +26,10 @@ const ReadingProgress = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  return <div style={{ 
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    height: '4px', 
-    background: 'var(--accent)', 
-    width: `${width}%`, 
-    zIndex: 9999,
-    transition: 'width 100ms linear'
-  }} />;
+  return <div 
+    className="fixed top-0 left-0 h-1 bg-primary z-[9999] transition-all duration-100 ease-linear"
+    style={{ width: `${width}%` }} 
+  />;
 };
 
 function App() {
@@ -43,12 +37,15 @@ function App() {
     <Router>
       <ScrollToTop />
       <ReadingProgress />
-      <div className="mesh-bg">
-        <div className="mesh-blob blob-1"></div>
-        <div className="mesh-blob blob-2"></div>
+      {/* Thaqeb style background with noise and dark gradient */}
+      <div className="fixed inset-0 z-[-2] bg-background">
+        <div className="absolute inset-0 bg-noise pointer-events-none opacity-50 mix-blend-overlay"></div>
+        {/* Damped Red/Black radial glows */}
+        <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-primary/10 blur-[100px] animate-pulse-slow pointer-events-none"></div>
+        <div className="absolute -bottom-[20%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-ai-glow/10 blur-[120px] animate-float pointer-events-none" style={{ animationDelay: '-5s' }}></div>
       </div>
       <Navbar />
-      <main className="animate-fade-up">
+      <main className="min-h-screen relative animate-fade-in">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/journey" element={<Journey />} />

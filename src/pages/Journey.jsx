@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import './Journey.css';
+import React from 'react';
 import { Network, Search, Briefcase, Zap, Trello } from 'lucide-react';
 
 const Journey = () => {
@@ -37,38 +36,51 @@ const Journey = () => {
   ];
 
   return (
-    <div className="journey-page">
-      <header className="page-header section text-center">
-        <div className="container">
-          <h1 className="hero-title animate-fade-up">THE Journey</h1>
-          <p className="hero-subtitle animate-fade-up" style={{ animationDelay: '100ms' }}>
+    <div className="w-full relative z-10">
+      <header className="min-h-[40vh] flex flex-col justify-center items-center pt-32 pb-16 text-center">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-foreground animate-slide-up">THE Journey</h1>
+          <p className="text-xl text-muted-foreground animate-slide-up" style={{ animationDelay: '100ms' }}>
             A comprehensive, phased transformation service designed to elevate factory performance across all core operational pillars.
           </p>
         </div>
       </header>
 
-      <section className="horizontal-gallery-section section pt-0">
-        <div className="container">
-          <div className="horizontal-gallery">
+      <section className="overflow-hidden pb-32">
+        <div className="px-6 md:px-12">
+          {/* Horizontal Gallery with Snap Scroll */}
+          <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-12 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden" 
+               style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)', maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
+            
             {phases.map((phase, idx) => (
               <div 
-                className="gallery-card glass-panel premium-card animate-fade-up" 
                 key={idx}
+                className="glass-panel rounded-industrial min-w-[350px] w-[350px] shrink-0 snap-center relative p-8 flex flex-col animate-slide-in-right hover:border-primary transition-colors"
                 style={{ animationDelay: `${200 + idx * 100}ms` }}
               >
-                <div className="phase-number">0{idx + 1}</div>
-                <div className="phase-icon card-icon">
+                <div className="absolute top-6 right-6 font-mono text-6xl font-bold text-white/5 leading-none">
+                  0{idx + 1}
+                </div>
+                
+                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl relative z-10">
                   {phase.icon}
                 </div>
-                <h3>{phase.title}</h3>
-                <p>{phase.desc}</p>
-                <div className="phase-metrics">
+                
+                <h3 className="text-2xl font-bold mb-4 relative z-10">{phase.title}</h3>
+                <p className="text-muted-foreground flex-grow relative z-10 text-lg">{phase.desc}</p>
+                
+                <div className="flex flex-wrap gap-2 mt-8 relative z-10">
                   {phase.metrics.map((m, i) => (
-                    <span key={i} className="metric-badge">{m}</span>
+                    <span key={i} className="text-[13px] font-mono px-3 py-1 rounded-full bg-success/10 text-success border border-success/30">
+                      {m}
+                    </span>
                   ))}
                 </div>
               </div>
             ))}
+            
+            {/* Spacer for ending scroll nicely */}
+            <div className="min-w-[5vw] shrink-0"></div>
           </div>
         </div>
       </section>
