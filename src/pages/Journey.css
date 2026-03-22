@@ -1,0 +1,86 @@
+.page-header {
+  min-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.horizontal-gallery-section {
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.horizontal-gallery {
+  display: flex;
+  gap: var(--spacing-lg);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--spacing-xl);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  /* fade edges for premium feel */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.horizontal-gallery::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.gallery-card {
+  min-width: 350px;
+  width: 350px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  position: relative;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.phase-number {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: var(--font-mono);
+  font-size: 48px;
+  color: rgba(255,255,255, 0.05); /* very subtle */
+  font-weight: 700;
+  line-height: 1;
+}
+
+.gallery-card h3 {
+  font-size: 24px;
+  margin-bottom: var(--spacing-sm);
+  z-index: 1;
+}
+
+.gallery-card p {
+  color: var(--text-secondary);
+  flex-grow: 1;
+  z-index: 1;
+}
+
+.phase-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  z-index: 1;
+}
+
+.metric-badge {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.pt-0 {
+  padding-top: 0;
+}
