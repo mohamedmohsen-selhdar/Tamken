@@ -1,6 +1,42 @@
-import React, { useEffect, useRef } from 'react';
-import { ArrowRight, Activity, Cpu, ShieldCheck } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 2000 }) => {
+  const [text, setText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    const currentPhase = phrases[loopNum % phrases.length];
+    
+    if (isDeleting) {
+      if (text === '') {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+        timer = setTimeout(() => {}, 500);
+      } else {
+        timer = setTimeout(() => setText(text.slice(0, -1)), deletingSpeed);
+      }
+    } else {
+      if (text === currentPhase) {
+        timer = setTimeout(() => setIsDeleting(true), pause);
+      } else {
+        timer = setTimeout(() => setText(currentPhase.slice(0, text.length + 1)), typingSpeed);
+      }
+    }
+    
+    return () => clearTimeout(timer);
+  }, [text, isDeleting, loopNum, phrases, typingSpeed, deletingSpeed, pause]);
+
+  return (
+    <span className="font-mono inline-block text-primary">
+      {text}
+      <span className="animate-pulse ml-1 inline-block w-2 bg-primary h-[1em] align-middle -mt-1"></span>
+    </span>
+  );
+};
 
 const Home = () => {
   const heroRef = useRef(null);
@@ -13,7 +49,7 @@ const Home = () => {
         const content = heroRef.current.querySelector('.hero-content-parallax');
         if (bg && content) {
           bg.style.transform = `translateY(${scrollY * 0.5}px)`;
-          content.style.transform = `translateY(${scrollY * 1.2}px)`;
+          content.style.transform = `translateY(${scrollY * 0.3}px)`;
         }
       }
     };
@@ -24,24 +60,49 @@ const Home = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20" ref={heroRef}>
-        <div className="hero-bg-parallax absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(170,30,30,0.15)_0%,transparent_60%)] -z-10"></div>
-        <div className="hero-content-parallax container mx-auto px-6 max-w-4xl text-center z-10 transition-transform duration-300 ease-out">
-          <div className="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
-            Navigating Industrial Evolution
-          </div>
-          <h1 className="text-5xl md:text-7xl lg:text-[84px] font-bold mb-8 leading-[1.1] text-foreground tracking-tight animate-slide-up" style={{ animationDelay: '100ms' }}>
-            Transforming <span className="text-gradient">Manufacturing</span><br/>
-            Into Excellence
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
-            We partner with manufacturers to transform operations, enhance efficiency,
-            and drive sustainable performance improvement through structured methodologies.
-          </p>
-          <div className="animate-slide-up" style={{ animationDelay: '300ms' }}>
-            <Link to="/journey" className="inline-flex items-center gap-2 bg-foreground text-background hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-industrial font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(220,38,38,0.2)]">
-              Explore THE Journey <ArrowRight size={20} />
-            </Link>
+      <section className="relative min-h-[100vh] flex items-end justify-start pb-24 pt-32 overflow-hidden" ref={heroRef}>
+        {/* Abstract Parallax Background */}
+        <div className="hero-bg-parallax absolute inset-0 -z-20 bg-background bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/20 via-background to-background">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30 mix-blend-overlay"></div>
+          {/* Heavy Overlay */}
+          <div className="absolute inset-0 bg-black/60"></div>
+        </div>
+
+        <div className="hero-content-parallax container mx-auto px-6 max-w-7xl z-10 w-full transition-transform duration-300 ease-out">
+          <div className="flex flex-col items-start gap-6">
+            
+            {/* Interactive Telemetry Artifact */}
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 animate-slide-up shadow-[0_0_20px_rgba(220,38,38,0.15)]">
+              <Terminal size={16} className="text-primary opacity-80" />
+              <div className="text-xs tracking-wider uppercase font-mono text-zinc-400">
+                <span className="hidden sm:inline">STATUS: </span>
+                <Typewriter phrases={[
+                  "SYS.OP_EXCELLENCE_INIT",
+                  "AWAITING_MANUFACTURING_DATA...",
+                  "OPTIMIZING_FACTORY_PERFORMANCE",
+                  "TRACKING_KPI: 99.4%"
+                ]} />
+              </div>
+            </div>
+            
+            {/* Aggressive Typography & Contrast */}
+            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[110px] font-black leading-[0.9] text-white tracking-tighter animate-slide-up" style={{ animationDelay: '100ms' }}>
+              TRANSFORM<br/>
+              <span className="text-primary">MANUFACTURING</span><br/>
+              INTO EXCELLENCE.
+            </h1>
+            
+            <p className="text-lg md:text-xl text-zinc-400 max-w-2xl animate-slide-up mt-2 font-medium" style={{ animationDelay: '200ms' }}>
+              We partner with manufacturers to transform operations, enhance efficiency,
+              and drive sustainable performance improvement through structured methodologies.
+            </p>
+            
+            <div className="animate-slide-up mt-6 flex gap-4" style={{ animationDelay: '300ms' }}>
+              <Link to="/journey" className="inline-flex items-center gap-3 bg-white text-black hover:bg-primary hover:text-white px-8 py-5 rounded-none font-bold tracking-widest uppercase transition-all duration-300 hover:translate-x-2">
+                EXPLORE THE JOURNEY <ArrowRight size={20} />
+              </Link>
+            </div>
+            
           </div>
         </div>
       </section>
