@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare, Layers, Hexagon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare, Layers, Hexagon, Mic } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
 import { FloatingSquares } from '../components/FloatingSquares';
 
@@ -80,7 +80,18 @@ const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 200
 
 const Home = () => {
   const heroRef = useRef(null);
+  const navigate = useNavigate();
   const { articles } = useArticles();
+
+  const [currentWord, setCurrentWord] = useState(0);
+  const words = ["MANUFACTURING", "OPERATIONS", "EFFICIENCY"];
+
+  useEffect(() => {
+      const interval = setInterval(() => {
+          setCurrentWord((prev) => (prev + 1) % words.length);
+      }, 3000);
+      return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,70 +110,101 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {/* Floating Action Button - Microphone / Book Meeting */}
+      <div className="fixed bottom-8 right-8 z-50 animate-fade-in group" style={{ animationDelay: '1000ms' }}>
+        <div className="absolute -inset-2 bg-white/20 dark:bg-primary/20 rounded-full blur-md group-hover:bg-white/40 dark:group-hover:bg-primary/40 transition-all duration-300 animate-pulse"></div>
+        <button className="relative flex items-center justify-center w-14 h-14 bg-white text-black rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.5)] border border-black/5 hover:scale-110 transition-transform duration-300">
+          <Mic className="w-6 h-6" />
+        </button>
+      </div>
+
       {/* Hero Section */}
       <section className="relative min-h-[95vh] w-full overflow-hidden bg-background flex flex-col items-center justify-center p-4 md:p-8 pt-24" ref={heroRef}>
-        {/* Top-Left Volumetric Light Ray */}
-        <div className="absolute top-[-20%] left-[20%] w-[120%] h-[150%] origin-top-left -rotate-45 pointer-events-none z-0 mix-blend-screen opacity-50 dark:opacity-100">
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/5 to-transparent blur-3xl"></div>
+        
+        {/* Top-Left Volumetric Light Ray (Sunlight Shadow) */}
+        <div className="absolute top-[-20%] left-[20%] w-[120%] h-[150%] origin-top-left -rotate-45 pointer-events-none z-0 mix-blend-screen opacity-100">
+            <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/10 to-transparent blur-3xl"></div>
         </div>
 
         {/* Abstract Parallax Background */}
-        <div className="hero-bg-parallax absolute inset-0 -z-20 bg-background bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/10 via-background to-background dark:from-primary/20">
+        <div className="hero-bg-parallax absolute inset-0 -z-20 bg-background bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-background to-background dark:from-primary/10">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-10 dark:opacity-30 mix-blend-overlay"></div>
           {/* Heavy Overlay */}
-          <div className="absolute inset-0 dark:bg-black/60"></div>
+          <div className="absolute inset-0 dark:bg-black/80"></div>
         </div>
 
         <FloatingSquares />
 
-        <div className="hero-content-parallax relative z-10 max-w-5xl text-center flex flex-col items-center mt-16 w-full transition-transform duration-300 ease-out">
+        <div className="hero-content-parallax relative z-10 max-w-5xl text-center flex flex-col items-center mt-16 w-full transition-transform duration-300 ease-out pointer-events-none">
           
           {/* Semantic Badge */}
-          <div className="flex items-center gap-2 mb-8 text-primary font-mono tracking-widest uppercase text-[10px] md:text-xs border border-primary/30 px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md animate-fade-in shadow-[0_0_15px_rgba(220,38,38,0.2)]">
-            <Terminal size={12} />
-            <span>STATUS: OPERATIONAL EXCELLENCE</span>
+          <div className="flex items-center gap-2 mb-8 text-foreground/70 dark:text-zinc-400 font-mono tracking-widest uppercase text-[10px] md:text-xs border border-border/50 px-4 py-1.5 rounded-full bg-background/40 backdrop-blur-md animate-fade-in">
+            <span>MANUFACTURING NETWORK</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-foreground dark:text-white mb-6 leading-[0.9] drop-shadow-xl w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
-            TRANSFORM <br className="hidden md:block" />
-            <Typewriter phrases={['MANUFACTURING', 'OPERATIONS', 'EFFICIENCY']} pause={2500} className="text-primary text-gradient drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]" /> <br className="hidden md:block"/>
-            INTO EXCELLENCE.
+          {/* Sliding Headline */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-6 leading-tight drop-shadow-xl w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
+            Transforming operations into <br className="hidden md:block" />
+            <span className="relative inline-block w-full h-[1.1em] text-center align-top overflow-hidden font-bold">
+                {words.map((word, index) => (
+                    <span
+                        key={word}
+                        className={`absolute left-0 top-0 w-full transition-all duration-700 ease-in-out ${currentWord === index
+                            ? "opacity-100 translate-y-0"
+                            : currentWord < index
+                                ? "opacity-0 translate-y-full"
+                                : "opacity-0 -translate-y-full"
+                            }`}
+                    >
+                        {word}
+                    </span>
+                ))}
+            </span>
           </h1>
 
-          <p className="text-muted-foreground font-medium max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
-            We partner with manufacturers to transform operations, enhance efficiency,
-            and drive sustainable performance improvement through structured methodologies.
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
+            Transform designs into high-precision fabricated parts that captivate your customers and fuel business growth.
           </p>
 
           {/* Central Glowing CTA */}
-          <div className="relative flex items-center justify-center w-full max-w-[600px] mt-4 animate-slide-up" style={{ animationDelay: '300ms' }}>
+          <div className="relative pointer-events-auto flex items-center justify-center w-full max-w-[600px] mt-4 animate-slide-up" style={{ animationDelay: '300ms' }}>
+              
               {/* Orbiting Icons */}
-              <div className="absolute inset-0 pointer-events-none hidden md:block">
-                  <div className="absolute top-[10%] left-[20%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '0ms' }}>
+              <div className="absolute inset-0 pointer-events-none opacity-20 hidden md:block">
+                  <div className="absolute top-[10%] left-[20%] text-foreground/40 bg-surface-elevated p-3 rounded-xl border border-border/50 shadow-industrial backdrop-blur-sm animate-float" style={{ animationDelay: '0ms' }}>
                       <Cpu className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
-                  <div className="absolute bottom-[20%] left-[10%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '600ms' }}>
+                  <div className="absolute bottom-[20%] left-[10%] text-foreground/40 bg-surface-elevated p-3 rounded-xl border border-border/50 shadow-industrial backdrop-blur-sm animate-float" style={{ animationDelay: '600ms' }}>
                       <Layers className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
-                  <div className="absolute top-[20%] right-[15%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '1200ms' }}>
+                  <div className="absolute top-[20%] right-[15%] text-foreground/40 bg-surface-elevated p-3 rounded-xl border border-border/50 shadow-industrial backdrop-blur-sm animate-float" style={{ animationDelay: '1200ms' }}>
                       <Activity className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
-                  <div className="absolute bottom-[25%] right-[15%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '1800ms' }}>
+                  <div className="absolute bottom-[25%] right-[15%] text-foreground/40 bg-surface-elevated p-3 rounded-xl border border-border/50 shadow-industrial backdrop-blur-sm animate-float" style={{ animationDelay: '1800ms' }}>
                       <Hexagon className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
               </div>
 
               <div className="relative z-10 flex flex-col items-center gap-6">
-                <Link to="/journey" className="inline-flex items-center gap-3 bg-foreground text-background dark:bg-white dark:text-black hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-white px-8 py-5 rounded-none font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(220,38,38,0.3)]">
-                  EXPLORE THE JOURNEY <ArrowRight size={20} />
-                </Link>
+                <button
+                    className="relative group cursor-pointer"
+                    onClick={() => navigate("/journey")}
+                >
+                    <span className="absolute inset-x-0 -bottom-px h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></span>
+                    <span className="absolute inset-0 rounded-full overflow-hidden">
+                        <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
+                    </span>
+                    <div className="relative flex items-center justify-center gap-3 space-x-2 rounded-full bg-[#1f1f1f] border border-[#2a2a2a] px-8 py-4 text-base md:text-lg font-medium text-white z-10 hover:bg-[#2a2a2a] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)]">
+                        <span className="relative mt-0.5 tracking-wide">Explore the Journey</span>
+                    </div>
+                </button>
               </div>
           </div>
         </div>
 
         {/* Subtle Overlay Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-transparent to-transparent z-10 pointer-events-none" />
       </section>
 
       {/* Offerings Section */}
