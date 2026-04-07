@@ -3,7 +3,6 @@ import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSqua
 import { Link, useNavigate } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
 import { FloatingSquares } from '../components/FloatingSquares';
-import { useConversation } from '@elevenlabs/react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const testimonialsData = [
@@ -90,22 +89,31 @@ const Home = () => {
   const navigate = useNavigate();
   const { articles } = useArticles();
 
-  // ElevenLabs Conversational AI
-  const conversation = useConversation({
-    onConnect: () => console.log('ElevenLabs connected'),
-    onDisconnect: () => console.log('ElevenLabs disconnected'),
-    onError: (err) => console.error('ElevenLabs error', err),
-  });
-  const isAgentActive = conversation.status === 'connected';
+  // ElevenLabs Conversational AI — using direct client (no provider needed)
+  const [agentSession, setAgentSession] = useState(null);
+  const isAgentActive = agentSession !== null;
 
   const handleMicClick = useCallback(async () => {
-    if (isAgentActive) {
-      await conversation.endSession();
-    } else {
-      await navigator.mediaDevices.getUserMedia({ audio: true }).catch(() => {});
-      await conversation.startSession({ agentId: 'agent_8701knmfpehweyxa79pzab4m9agd' });
+    if (agentSession) {
+      // End existing session
+      agentSession.endSession();
+      setAgentSession(null);
+      return;
     }
-  }, [conversation, isAgentActive]);
+    try {
+      // Dynamically import so it never crashes on load
+      const { Conversation } = await import('@elevenlabs/client');
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const session = await Conversation.startSession({
+        agentId: 'agent_8701knmfpehweyxa79pzab4m9agd',
+        onDisconnect: () => setAgentSession(null),
+        onError: () => setAgentSession(null),
+      });
+      setAgentSession(session);
+    } catch (e) {
+      console.error('ElevenLabs session error:', e);
+    }
+  }, [agentSession]);
 
   // Scroll reveal refs
   const [offeringsRef, offeringsVisible] = useScrollReveal();
