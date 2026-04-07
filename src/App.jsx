@@ -4,7 +4,11 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Journey from './pages/Journey';
 import Flapp from './pages/Flapp';
+import Articles from './pages/Articles';
+import Dashboard from './pages/Dashboard';
 import Footer from './components/Footer';
+import { ThemeProvider } from './components/ThemeProvider';
+import { ArticleProvider } from './context/ArticleContext';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -34,26 +38,32 @@ const ReadingProgress = () => {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <ReadingProgress />
-      {/* Thaqeb style background with noise and dark gradient */}
-      <div className="fixed inset-0 z-[-2] bg-background">
-        <div className="absolute inset-0 bg-noise pointer-events-none opacity-50 mix-blend-overlay"></div>
-        {/* Damped Red/Black radial glows */}
-        <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-primary/10 blur-[100px] animate-pulse-slow pointer-events-none"></div>
-        <div className="absolute -bottom-[20%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-ai-glow/10 blur-[120px] animate-float pointer-events-none" style={{ animationDelay: '-5s' }}></div>
-      </div>
-      <Navbar />
-      <main className="min-h-screen relative animate-fade-in">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/journey" element={<Journey />} />
-          <Route path="/flapp" element={<Flapp />} />
-        </Routes>
-      </main>
-      <Footer />
-    </Router>
+    <ThemeProvider>
+      <ArticleProvider>
+        <Router>
+          <ScrollToTop />
+          <ReadingProgress />
+          {/* Thaqeb style background with noise and dark gradient */}
+          <div className="fixed inset-0 z-[-2] bg-background transition-colors duration-500">
+            <div className="absolute inset-0 bg-noise pointer-events-none opacity-50 mix-blend-overlay"></div>
+            {/* Damped Red/Black radial glows */}
+            <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-primary/10 blur-[100px] animate-pulse-slow pointer-events-none"></div>
+            <div className="absolute -bottom-[20%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-ai-glow/10 blur-[120px] animate-float pointer-events-none" style={{ animationDelay: '-5s' }}></div>
+          </div>
+          <Navbar />
+          <main className="min-h-screen relative animate-fade-in">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/journey" element={<Journey />} />
+              <Route path="/flapp" element={<Flapp />} />
+              <Route path="/articles" element={<Articles />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
+          </main>
+          <Footer />
+        </Router>
+      </ArticleProvider>
+    </ThemeProvider>
   );
 }
 
