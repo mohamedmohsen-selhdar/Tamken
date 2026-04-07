@@ -3,6 +3,7 @@ import { useArticles } from '../context/ArticleContext';
 import { useCaseStudies } from '../context/CaseStudyContext';
 import { useCareers } from '../context/CareerContext';
 import { Settings, Plus, Trash2, Edit2, LogOut, FileText, Briefcase, BriefcaseBusiness } from 'lucide-react';
+import ImageUpload from '../components/ImageUpload';
 
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -186,7 +187,14 @@ const Dashboard = () => {
                 <>
                   <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Title</label><input required type="text" value={articleForm.title} onChange={e => setArticleForm({...articleForm, title: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
                   <div><label className="block text-sm mb-1 text-muted-foreground">Category</label><input required type="text" value={articleForm.category} onChange={e => setArticleForm({...articleForm, category: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                  <div><label className="block text-sm mb-1 text-muted-foreground">Image URL (Optional)</label><input type="text" value={articleForm.imageUrl} onChange={e => setArticleForm({...articleForm, imageUrl: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
+                  <div className="md:col-span-2">
+                    <ImageUpload
+                      currentUrl={articleForm.imageUrl}
+                      onUpload={(url) => setArticleForm({...articleForm, imageUrl: url})}
+                      folder="articles"
+                      label="Cover Image (upload to Supabase)"
+                    />
+                  </div>
                   <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Content</label><textarea required rows="5" value={articleForm.content} onChange={e => setArticleForm({...articleForm, content: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
                 </>
               )}
@@ -198,7 +206,14 @@ const Dashboard = () => {
                   <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Challenge</label><textarea required rows="2" value={caseStudyForm.challenge} onChange={e => setCaseStudyForm({...caseStudyForm, challenge: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
                   <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Solution</label><textarea required rows="3" value={caseStudyForm.solution} onChange={e => setCaseStudyForm({...caseStudyForm, solution: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
                   <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Impact (Results)</label><input required type="text" value={caseStudyForm.impact} onChange={e => setCaseStudyForm({...caseStudyForm, impact: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                  <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Image URL (Optional)</label><input type="text" value={caseStudyForm.imageUrl} onChange={e => setCaseStudyForm({...caseStudyForm, imageUrl: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
+                  <div className="md:col-span-2">
+                    <ImageUpload
+                      currentUrl={caseStudyForm.imageUrl}
+                      onUpload={(url) => setCaseStudyForm({...caseStudyForm, imageUrl: url})}
+                      folder="case-studies"
+                      label="Case Study Image (upload to Supabase)"
+                    />
+                  </div>
                 </>
               )}
 
