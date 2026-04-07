@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare, Layers, Hexagon, Mic, MicOff } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowRight, Activity, Cpu, BookOpen, MessageSquare, Layers, Hexagon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
 import { FloatingSquares } from '../components/FloatingSquares';
@@ -89,9 +89,6 @@ const Home = () => {
   const navigate = useNavigate();
   const { articles } = useArticles();
 
-  // ElevenLabs — show/hide a floating panel with the widget
-  const [showAgent, setShowAgent] = useState(false);
-  const toggleAgent = useCallback(() => setShowAgent(s => !s), []);
 
   // Scroll reveal refs
   const [offeringsRef, offeringsVisible] = useScrollReveal();
@@ -127,55 +124,6 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-      {/* ElevenLabs AI Agent — Floating Popup Panel */}
-      <div className="fixed bottom-8 left-8 z-[60] animate-fade-in" style={{ animationDelay: '1000ms' }}>
-
-        {/* Popup panel — only rendered when open so widget initialises fresh */}
-        {showAgent && (
-          <div className="absolute bottom-16 left-0 w-[320px] bg-[#0f0f0f] border border-primary/30 rounded-2xl shadow-[0_0_40px_rgba(220,38,38,0.25)] overflow-hidden animate-fade-in">
-            {/* Panel header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-white/8">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                <span className="text-xs font-bold text-white tracking-wider">TAMKEN AI AGENT</span>
-              </div>
-              <button onClick={toggleAgent} className="text-zinc-500 hover:text-white transition-colors text-lg leading-none">&times;</button>
-            </div>
-            {/* ElevenLabs widget rendered visibly inside panel */}
-            <div className="flex items-center justify-center p-6 min-h-[160px]">
-              <elevenlabs-convai
-                agent-id="agent_8701knmfpehweyxa79pzab4m9agd"
-                style={{ width: '100%' }}
-              />
-            </div>
-            <p className="text-[9px] text-zinc-600 text-center pb-3 px-4">Press the microphone to start talking</p>
-          </div>
-        )}
-
-        {/* Mic trigger button */}
-        <div className="relative group">
-          <div className={`absolute -inset-2 rounded-full blur-md transition-all duration-300 ${
-            showAgent ? 'bg-primary/50 animate-pulse' : 'bg-primary/25 group-hover:bg-primary/40 animate-pulse'
-          }`} />
-          <button
-            onClick={toggleAgent}
-            title="Talk to TAMKEN AI"
-            className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 hover:scale-110 ${
-              showAgent
-                ? 'bg-primary text-white border-primary/60 shadow-[0_4px_30px_rgba(220,38,38,0.8)] scale-105'
-                : 'bg-primary text-white border-primary/30 shadow-[0_4px_30px_rgba(220,38,38,0.6)] hover:shadow-[0_4px_40px_rgba(220,38,38,0.9)]'
-            }`}
-          >
-            {showAgent ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-          </button>
-          {/* Hover tooltip */}
-          {!showAgent && (
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-[#1a1a1a] border border-white/10 text-white text-[10px] font-semibold tracking-wide px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
-              Talk to TAMKEN AI
-            </div>
-          )}
-        </div>
-      </div>
       {/* Hero Section */}
       <section className="relative min-h-[95vh] w-full overflow-hidden bg-background flex flex-col items-center justify-center p-4 md:p-8 pt-24" ref={heroRef}>
         

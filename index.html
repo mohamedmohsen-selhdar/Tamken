@@ -27,10 +27,28 @@
       }
     </style>
     <!-- ElevenLabs Conversational AI Widget -->
-    <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+    <!-- Position ElevenLabs widget to bottom-left -->
+    <style>
+      elevenlabs-convai {
+        position: fixed !important;
+        bottom: 24px !important;
+        left: 24px !important;
+        right: auto !important;
+        z-index: 9999 !important;
+      }
+      /* Make sure its shadow host doesn't shift to bottom-right */
+      elevenlabs-convai > * {
+        bottom: 0 !important;
+        right: auto !important;
+        left: 0 !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <!-- ElevenLabs convai widget placed at end of body for correct init -->
+    <elevenlabs-convai agent-id="agent_8701knmfpehweyxa79pzab4m9agd"></elevenlabs-convai>
   </body>
 </html>
