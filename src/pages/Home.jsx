@@ -89,31 +89,32 @@ const Home = () => {
   const navigate = useNavigate();
   const { articles } = useArticles();
 
-  // ElevenLabs Conversational AI — using direct client (no provider needed)
-  const [agentSession, setAgentSession] = useState(null);
-  const isAgentActive = agentSession !== null;
+  // ElevenLabs — trigger the official web component's internal button
+  const [agentActive, setAgentActive] = useState(false);
+  const [micLoading, setMicLoading] = useState(false);
 
-  const handleMicClick = useCallback(async () => {
-    if (agentSession) {
-      // End existing session
-      agentSession.endSession();
-      setAgentSession(null);
-      return;
-    }
-    try {
-      // Dynamically import so it never crashes on load
-      const { Conversation } = await import('@elevenlabs/client');
-      await navigator.mediaDevices.getUserMedia({ audio: true });
-      const session = await Conversation.startSession({
-        agentId: 'agent_8701knmfpehweyxa79pzab4m9agd',
-        onDisconnect: () => setAgentSession(null),
-        onError: () => setAgentSession(null),
-      });
-      setAgentSession(session);
-    } catch (e) {
-      console.error('ElevenLabs session error:', e);
-    }
-  }, [agentSession]);
+  const handleMicClick = useCallback(() => {
+    setMicLoading(true);
+    // Give the widget time to be in DOM, then click its internal button
+    const tryClick = (attempts = 0) => {
+      const widget = document.getElementById('el-widget');
+      if (!widget) { if (attempts < 10) setTimeout(() => tryClick(attempts + 1), 200); return; }
+      const root = widget.shadowRoot;
+      if (!root) { if (attempts < 10) setTimeout(() => tryClick(attempts + 1), 200); return; }
+      // Try multiple selectors ElevenLabs uses
+      const btn = root.querySelector('button[aria-label*="call"], button[aria-label*="start"], button[class*="call"], button[class*="mic"], button:not([aria-label*="close"])');
+      if (btn) {
+        btn.click();
+        setAgentActive(a => !a);
+        setMicLoading(false);
+      } else if (attempts < 15) {
+        setTimeout(() => tryClick(attempts + 1), 200);
+      } else {
+        setMicLoading(false);
+      }
+    };
+    tryClick();
+  }, []);
 
   // Scroll reveal refs
   const [offeringsRef, offeringsVisible] = useScrollReveal();
@@ -149,25 +150,35 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-      {/* ElevenLabs AI Agent - Mic Button */}
+      {/* ElevenLabs native widget — positioned off-screen, our mic button triggers it */}
+      <div style={{ position: 'fixed', bottom: '-300px', left: '-300px', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
+        <elevenlabs-convai id="el-widget" agent-id="agent_8701knmfpehweyxa79pzab4m9agd"></elevenlabs-convai>
+      </div>
+
+      {/* Custom Mic Launcher */}
       <div className="fixed bottom-8 left-8 z-[60] animate-fade-in" style={{ animationDelay: '1000ms' }}>
         <div className="relative group">
           <div className={`absolute -inset-2 rounded-full blur-md transition-all duration-300 ${
-            isAgentActive
-              ? 'bg-green-500/40 animate-pulse'
-              : 'bg-primary/25 group-hover:bg-primary/50 animate-pulse'
-          }`}></div>
+            agentActive ? 'bg-green-500/40 animate-pulse' : 'bg-primary/25 group-hover:bg-primary/50 animate-pulse'
+          }`} />
           <button
             onClick={handleMicClick}
-            title={isAgentActive ? 'End conversation' : 'Talk to TAMKEN AI'}
+            title="Talk to TAMKEN AI"
             className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 hover:scale-110 ${
-              isAgentActive
+              agentActive
                 ? 'bg-green-600 text-white border-green-500/50 shadow-[0_4px_30px_rgba(34,197,94,0.6)]'
                 : 'bg-primary text-white border-primary/30 shadow-[0_4px_30px_rgba(220,38,38,0.6)] hover:shadow-[0_4px_40px_rgba(220,38,38,0.9)]'
             }`}
           >
-            {isAgentActive ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+            {micLoading
+              ? <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              : agentActive ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />
+            }
           </button>
+          {/* Tooltip */}
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-[#1a1a1a] border border-white/10 text-white text-[10px] font-semibold tracking-wide px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
+            {agentActive ? 'Click to end call' : 'Talk to TAMKEN AI'}
+          </div>
         </div>
       </div>
       {/* Hero Section */}
