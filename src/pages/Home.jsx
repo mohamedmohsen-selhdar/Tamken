@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare, Layers, Hexagon, Mic } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare, Layers, Hexagon, Mic, MicOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
 import { FloatingSquares } from '../components/FloatingSquares';
+import { useConversation } from '@elevenlabs/react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const testimonialsData = [
   {
@@ -88,8 +90,31 @@ const Home = () => {
   const navigate = useNavigate();
   const { articles } = useArticles();
 
+  // ElevenLabs Conversational AI
+  const conversation = useConversation({
+    onConnect: () => console.log('ElevenLabs connected'),
+    onDisconnect: () => console.log('ElevenLabs disconnected'),
+    onError: (err) => console.error('ElevenLabs error', err),
+  });
+  const isAgentActive = conversation.status === 'connected';
+
+  const handleMicClick = useCallback(async () => {
+    if (isAgentActive) {
+      await conversation.endSession();
+    } else {
+      await navigator.mediaDevices.getUserMedia({ audio: true }).catch(() => {});
+      await conversation.startSession({ agentId: 'agent_8701knmfpehweyxa79pzab4m9agd' });
+    }
+  }, [conversation, isAgentActive]);
+
+  // Scroll reveal refs
+  const [offeringsRef, offeringsVisible] = useScrollReveal();
+  const [statsRef, statsVisible] = useScrollReveal();
+  const [articlesRef, articlesVisible] = useScrollReveal();
+  const [testimonialsRef, testimonialsVisible] = useScrollReveal();
+
   const [currentWord, setCurrentWord] = useState(0);
-  const words = ["MANUFACTURING", "EFFICIENCY", "EXCELLENCE"];
+  const words = ['MANUFACTURING', 'EFFICIENCY', 'EXCELLENCE'];
 
   useEffect(() => {
       const interval = setInterval(() => {
@@ -116,36 +141,25 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-      {/* ElevenLabs AI Agent - Mic Button as sole launcher */}
+      {/* ElevenLabs AI Agent - Mic Button */}
       <div className="fixed bottom-8 left-8 z-[60] animate-fade-in" style={{ animationDelay: '1000ms' }}>
         <div className="relative group">
-          <div className="absolute -inset-2 bg-primary/25 rounded-full blur-md group-hover:bg-primary/50 transition-all duration-300 animate-pulse"></div>
+          <div className={`absolute -inset-2 rounded-full blur-md transition-all duration-300 ${
+            isAgentActive
+              ? 'bg-green-500/40 animate-pulse'
+              : 'bg-primary/25 group-hover:bg-primary/50 animate-pulse'
+          }`}></div>
           <button
-            id="el-mic-trigger"
-            onClick={() => {
-              const widget = document.querySelector('elevenlabs-convai');
-              if (!widget) return;
-              // Try the SDK toggle first
-              if (typeof widget.startSession === 'function') {
-                widget.startSession();
-                return;
-              }
-              // Otherwise click the native (hidden) button inside shadow root
-              const root = widget.shadowRoot;
-              if (root) {
-                const btn = root.querySelector('button');
-                if (btn) btn.click();
-              }
-            }}
-            title="Talk to TAMKEN AI"
-            className="relative flex items-center justify-center w-14 h-14 bg-primary text-white rounded-full shadow-[0_4px_30px_rgba(220,38,38,0.6)] border border-primary/30 hover:scale-110 hover:shadow-[0_4px_40px_rgba(220,38,38,0.9)] transition-all duration-300"
+            onClick={handleMicClick}
+            title={isAgentActive ? 'End conversation' : 'Talk to TAMKEN AI'}
+            className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 hover:scale-110 ${
+              isAgentActive
+                ? 'bg-green-600 text-white border-green-500/50 shadow-[0_4px_30px_rgba(34,197,94,0.6)]'
+                : 'bg-primary text-white border-primary/30 shadow-[0_4px_30px_rgba(220,38,38,0.6)] hover:shadow-[0_4px_40px_rgba(220,38,38,0.9)]'
+            }`}
           >
-            <Mic className="w-6 h-6" />
+            {isAgentActive ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
           </button>
-        </div>
-        {/* ElevenLabs native widget — visually hidden, mic button above controls it */}
-        <div style={{ position: 'fixed', bottom: '-200px', left: '-200px', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
-          <elevenlabs-convai agent-id="agent_8701knmfpehweyxa79pzab4m9agd"></elevenlabs-convai>
         </div>
       </div>
       {/* Hero Section */}
@@ -240,7 +254,10 @@ const Home = () => {
       </section>
 
       {/* Offerings Section */}
-      <section className="py-32 relative z-10">
+      <section
+        ref={offeringsRef}
+        className={`py-32 relative z-10 reveal ${ offeringsVisible ? 'visible' : '' }`}
+      >
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Our Core Offerings</h2>
@@ -282,7 +299,10 @@ const Home = () => {
       </section>
 
       {/* Stats and Clients Marquee Section */}
-      <section className="py-24 bg-card border-y border-border/50 overflow-hidden relative">
+      <section
+        ref={statsRef}
+        className={`py-24 bg-card border-y border-border/50 overflow-hidden relative reveal ${ statsVisible ? 'visible' : '' }`}
+      >
         <div className="container mx-auto px-6 max-w-7xl mb-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group">
@@ -315,7 +335,10 @@ const Home = () => {
       </section>
 
       {/* Latest Articles Section */}
-      <section className="py-32 relative z-10 border-t border-border/50 bg-background/50">
+      <section
+        ref={articlesRef}
+        className={`py-32 relative z-10 border-t border-border/50 bg-background/50 reveal ${ articlesVisible ? 'visible' : '' }`}
+      >
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
@@ -384,7 +407,10 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-32 relative z-10 border-t border-border/50 bg-[#0a0a0a]">
+      <section
+        ref={testimonialsRef}
+        className={`py-32 relative z-10 border-t border-border/50 bg-[#0a0a0a] reveal ${ testimonialsVisible ? 'visible' : '' }`}
+      >
         <div className="container mx-auto px-6 max-w-7xl z-10 relative">
           <div className="text-center mb-16">
             <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4">
