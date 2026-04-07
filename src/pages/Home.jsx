@@ -116,30 +116,37 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-      {/* ElevenLabs AI Agent - Inline Widget */}
-      <div className="fixed bottom-8 left-8 z-50 animate-fade-in"  style={{ animationDelay: '1000ms' }}>
+      {/* ElevenLabs AI Agent - Mic Button as sole launcher */}
+      <div className="fixed bottom-8 left-8 z-[60] animate-fade-in" style={{ animationDelay: '1000ms' }}>
         <div className="relative group">
           <div className="absolute -inset-2 bg-primary/25 rounded-full blur-md group-hover:bg-primary/50 transition-all duration-300 animate-pulse"></div>
           <button
+            id="el-mic-trigger"
             onClick={() => {
-              if (window.ElevenLabsConvai) {
-                window.ElevenLabsConvai.toggle();
-              } else {
-                const widget = document.querySelector('elevenlabs-convai');
-                if (widget) {
-                  const btn = widget.shadowRoot && widget.shadowRoot.querySelector('button[aria-label], button');
-                  if (btn) btn.click();
-                }
+              const widget = document.querySelector('elevenlabs-convai');
+              if (!widget) return;
+              // Try the SDK toggle first
+              if (typeof widget.startSession === 'function') {
+                widget.startSession();
+                return;
+              }
+              // Otherwise click the native (hidden) button inside shadow root
+              const root = widget.shadowRoot;
+              if (root) {
+                const btn = root.querySelector('button');
+                if (btn) btn.click();
               }
             }}
-            title="Talk to our AI Agent"
+            title="Talk to TAMKEN AI"
             className="relative flex items-center justify-center w-14 h-14 bg-primary text-white rounded-full shadow-[0_4px_30px_rgba(220,38,38,0.6)] border border-primary/30 hover:scale-110 hover:shadow-[0_4px_40px_rgba(220,38,38,0.9)] transition-all duration-300"
           >
             <Mic className="w-6 h-6" />
           </button>
         </div>
-        {/* ElevenLabs Convai Widget - hidden native button, we control it above */}
-        <elevenlabs-convai agent-id="agent_8701knmfpehweyxa79pzab4m9agd" style={{ position: 'fixed', bottom: '0', left: '0', zIndex: 40 }}></elevenlabs-convai>
+        {/* ElevenLabs native widget — visually hidden, mic button above controls it */}
+        <div style={{ position: 'fixed', bottom: '-200px', left: '-200px', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
+          <elevenlabs-convai agent-id="agent_8701knmfpehweyxa79pzab4m9agd"></elevenlabs-convai>
+        </div>
       </div>
       {/* Hero Section */}
       <section className="relative min-h-[95vh] w-full overflow-hidden bg-background flex flex-col items-center justify-center p-4 md:p-8 pt-24" ref={heroRef}>
