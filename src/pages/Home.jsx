@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare } from 'lucide-react';
+import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare, Layers, Hexagon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
+import { FloatingSquares } from '../components/FloatingSquares';
 
 const testimonialsData = [
   {
@@ -100,7 +101,12 @@ const Home = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="relative min-h-[100vh] flex items-end justify-start pb-24 pt-32 overflow-hidden" ref={heroRef}>
+      <section className="relative min-h-[95vh] w-full overflow-hidden bg-background flex flex-col items-center justify-center p-4 md:p-8 pt-24" ref={heroRef}>
+        {/* Top-Left Volumetric Light Ray */}
+        <div className="absolute top-[-20%] left-[20%] w-[120%] h-[150%] origin-top-left -rotate-45 pointer-events-none z-0 mix-blend-screen opacity-50 dark:opacity-100">
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/5 to-transparent blur-3xl"></div>
+        </div>
+
         {/* Abstract Parallax Background */}
         <div className="hero-bg-parallax absolute inset-0 -z-20 bg-background bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/10 via-background to-background dark:from-primary/20">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-10 dark:opacity-30 mix-blend-overlay"></div>
@@ -108,43 +114,55 @@ const Home = () => {
           <div className="absolute inset-0 dark:bg-black/60"></div>
         </div>
 
-        <div className="hero-content-parallax container mx-auto px-6 max-w-7xl z-10 w-full transition-transform duration-300 ease-out">
-          <div className="flex flex-col items-start gap-6">
-            
-            {/* Interactive Telemetry Artifact */}
-            <div className="inline-flex items-center gap-3 px-4 py-2 bg-background/80 dark:bg-black/60 backdrop-blur-md border border-border/50 dark:border-white/10 animate-slide-up shadow-[0_0_20px_rgba(220,38,38,0.15)]">
-              <Terminal size={16} className="text-primary opacity-80" />
-              <div className="text-xs tracking-wider uppercase font-mono text-zinc-400">
-                <span className="hidden sm:inline">STATUS: </span>
-                <Typewriter phrases={[
-                  "SYS.OP_EXCELLENCE_INIT",
-                  "AWAITING_MANUFACTURING_DATA...",
-                  "OPTIMIZING_FACTORY_PERFORMANCE",
-                  "TRACKING_KPI: 99.4%"
-                ]} />
+        <FloatingSquares />
+
+        <div className="hero-content-parallax relative z-10 max-w-5xl text-center flex flex-col items-center mt-16 w-full transition-transform duration-300 ease-out">
+          
+          {/* Semantic Badge */}
+          <div className="flex items-center gap-2 mb-8 text-primary font-mono tracking-widest uppercase text-[10px] md:text-xs border border-primary/30 px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md animate-fade-in shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+            <Terminal size={12} />
+            <span>STATUS: OPERATIONAL EXCELLENCE</span>
+          </div>
+
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-foreground dark:text-white mb-6 leading-[0.9] drop-shadow-xl w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
+            TRANSFORM <br className="hidden md:block" />
+            <Typewriter phrases={['MANUFACTURING', 'OPERATIONS', 'EFFICIENCY']} pause={2500} className="text-primary text-gradient drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]" /> <br className="hidden md:block"/>
+            INTO EXCELLENCE.
+          </h1>
+
+          <p className="text-muted-foreground font-medium max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
+            We partner with manufacturers to transform operations, enhance efficiency,
+            and drive sustainable performance improvement through structured methodologies.
+          </p>
+
+          {/* Central Glowing CTA */}
+          <div className="relative flex items-center justify-center w-full max-w-[600px] mt-4 animate-slide-up" style={{ animationDelay: '300ms' }}>
+              {/* Orbiting Icons */}
+              <div className="absolute inset-0 pointer-events-none hidden md:block">
+                  <div className="absolute top-[10%] left-[20%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '0ms' }}>
+                      <Cpu className="w-6 h-6 md:w-8 md:h-8" />
+                  </div>
+                  <div className="absolute bottom-[20%] left-[10%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '600ms' }}>
+                      <Layers className="w-6 h-6 md:w-8 md:h-8" />
+                  </div>
+                  <div className="absolute top-[20%] right-[15%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '1200ms' }}>
+                      <Activity className="w-6 h-6 md:w-8 md:h-8" />
+                  </div>
+                  <div className="absolute bottom-[25%] right-[15%] text-foreground/40 bg-background/50 p-3 rounded-xl border border-border/50 backdrop-blur-sm animate-float" style={{ animationDelay: '1800ms' }}>
+                      <Hexagon className="w-6 h-6 md:w-8 md:h-8" />
+                  </div>
               </div>
-            </div>
-            
-            {/* Aggressive Typography & Contrast */}
-            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[110px] font-black leading-[0.9] text-foreground dark:text-white tracking-tighter animate-slide-up" style={{ animationDelay: '100ms' }}>
-              TRANSFORM<br/>
-              <Typewriter phrases={['MANUFACTURING', 'OPERATIONS', 'EFFICIENCY']} pause={2500} className="" /><br/>
-              INTO EXCELLENCE.
-            </h1>
-            
-            <p className="text-lg md:text-xl text-zinc-400 max-w-2xl animate-slide-up mt-2 font-medium" style={{ animationDelay: '200ms' }}>
-              We partner with manufacturers to transform operations, enhance efficiency,
-              and drive sustainable performance improvement through structured methodologies.
-            </p>
-            
-            <div className="animate-slide-up mt-6 flex gap-4" style={{ animationDelay: '300ms' }}>
-              <Link to="/journey" className="inline-flex items-center gap-3 bg-foreground text-background dark:bg-white dark:text-black hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-white px-8 py-5 rounded-none font-bold tracking-widest uppercase transition-all duration-300 hover:translate-x-2">
-                EXPLORE THE JOURNEY <ArrowRight size={20} />
-              </Link>
-            </div>
-            
+
+              <div className="relative z-10 flex flex-col items-center gap-6">
+                <Link to="/journey" className="inline-flex items-center gap-3 bg-foreground text-background dark:bg-white dark:text-black hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-white px-8 py-5 rounded-none font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(220,38,38,0.3)]">
+                  EXPLORE THE JOURNEY <ArrowRight size={20} />
+                </Link>
+              </div>
           </div>
         </div>
+
+        {/* Subtle Overlay Fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
       </section>
 
       {/* Offerings Section */}
