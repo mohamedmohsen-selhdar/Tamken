@@ -8,8 +8,26 @@
     <!-- Calendly badge widget begin -->
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
     <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-    <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/mohamedmohsen-tamken/30min', text: 'Schedule time with me', color: '#0069ff', textColor: '#ffffff', branding: true }); }</script>
+    <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/mohamedmohsen-tamken/30min', text: 'Book a Meeting', color: '#b91c1c', textColor: '#ffffff', branding: false }); }</script>
     <!-- Calendly badge widget end -->
+    <!-- Override Calendly badge button to match brand -->
+    <style>
+      .calendly-badge-widget .calendly-badge-content {
+        background: linear-gradient(135deg, #b91c1c, #dc2626) !important;
+        box-shadow: 0 0 20px rgba(220,38,38,0.5), 0 4px 15px rgba(0,0,0,0.4) !important;
+        border-radius: 9999px !important;
+        font-family: inherit !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.02em !important;
+      }
+      .calendly-badge-widget .calendly-badge-content:hover {
+        box-shadow: 0 0 30px rgba(220,38,38,0.8), 0 4px 20px rgba(0,0,0,0.5) !important;
+        transform: translateY(-2px) !important;
+        transition: all 0.3s ease !important;
+      }
+    </style>
+    <!-- ElevenLabs Conversational AI Widget -->
+    <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
   </head>
   <body>
     <div id="root"></div>

@@ -116,12 +116,30 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-      {/* Floating Action Button - AI Agent */}
-      <div className="fixed bottom-8 left-8 z-50 animate-fade-in group" style={{ animationDelay: '1000ms' }}>
-        <div className="absolute -inset-2 bg-primary/20 rounded-full blur-md group-hover:bg-primary/40 transition-all duration-300 animate-pulse"></div>
-        <a href="https://elevenlabs.io/app/talk-to?agent_id=agent_8701knmfpehweyxa79pzab4m9agd&branch_id=agtbrch_8601knmfpgfnfvvsvt281q93ykxa" target="_blank" rel="noopener noreferrer" className="relative flex items-center justify-center w-14 h-14 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-[0_4px_30px_rgba(220,38,38,0.5)] border border-white/10 hover:scale-110 transition-transform duration-300">
-          <Mic className="w-6 h-6" />
-        </a>
+      {/* ElevenLabs AI Agent - Inline Widget */}
+      <div className="fixed bottom-8 left-8 z-50 animate-fade-in"  style={{ animationDelay: '1000ms' }}>
+        <div className="relative group">
+          <div className="absolute -inset-2 bg-primary/25 rounded-full blur-md group-hover:bg-primary/50 transition-all duration-300 animate-pulse"></div>
+          <button
+            onClick={() => {
+              if (window.ElevenLabsConvai) {
+                window.ElevenLabsConvai.toggle();
+              } else {
+                const widget = document.querySelector('elevenlabs-convai');
+                if (widget) {
+                  const btn = widget.shadowRoot && widget.shadowRoot.querySelector('button[aria-label], button');
+                  if (btn) btn.click();
+                }
+              }
+            }}
+            title="Talk to our AI Agent"
+            className="relative flex items-center justify-center w-14 h-14 bg-primary text-white rounded-full shadow-[0_4px_30px_rgba(220,38,38,0.6)] border border-primary/30 hover:scale-110 hover:shadow-[0_4px_40px_rgba(220,38,38,0.9)] transition-all duration-300"
+          >
+            <Mic className="w-6 h-6" />
+          </button>
+        </div>
+        {/* ElevenLabs Convai Widget - hidden native button, we control it above */}
+        <elevenlabs-convai agent-id="agent_8701knmfpehweyxa79pzab4m9agd" style={{ position: 'fixed', bottom: '0', left: '0', zIndex: 40 }}></elevenlabs-convai>
       </div>
       {/* Hero Section */}
       <section className="relative min-h-[95vh] w-full overflow-hidden bg-background flex flex-col items-center justify-center p-4 md:p-8 pt-24" ref={heroRef}>
@@ -148,18 +166,21 @@ const Home = () => {
           </div>
 
           {/* Sliding Headline */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-[0.9] drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
-            TRANSFORM OPERATIONS INTO
-            <span className="relative block w-full h-[1.1em] text-center align-top overflow-hidden font-bold mt-4 text-primary text-gradient drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-tight drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
+            <span className="block">TRANSFORM</span>
+            <span className="block">OPERATIONS INTO</span>
+            {/* Swipe container — explicit px height matching font-size */}
+            <span className="relative block overflow-hidden w-full font-black drop-shadow-[0_0_20px_rgba(220,38,38,0.6)]" style={{ height: '1.15em', marginTop: '0.15em' }}>
                 {words.map((word, index) => (
                     <span
                         key={word}
-                        className={`absolute left-0 top-0 w-full transition-all duration-700 ease-in-out ${currentWord === index
-                            ? "opacity-100 translate-y-0"
-                            : currentWord < index
-                                ? "opacity-0 translate-y-full"
-                                : "opacity-0 -translate-y-full"
-                            }`}
+                        className={`absolute left-0 right-0 top-0 w-full text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-700 transition-all duration-700 ease-in-out ${
+                            currentWord === index
+                                ? 'opacity-100 translate-y-0'
+                                : currentWord < index
+                                    ? 'opacity-0 translate-y-full'
+                                    : 'opacity-0 -translate-y-full'
+                        }`}
                     >
                         {word}
                     </span>
