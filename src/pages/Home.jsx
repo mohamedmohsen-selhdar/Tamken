@@ -89,32 +89,9 @@ const Home = () => {
   const navigate = useNavigate();
   const { articles } = useArticles();
 
-  // ElevenLabs — trigger the official web component's internal button
-  const [agentActive, setAgentActive] = useState(false);
-  const [micLoading, setMicLoading] = useState(false);
-
-  const handleMicClick = useCallback(() => {
-    setMicLoading(true);
-    // Give the widget time to be in DOM, then click its internal button
-    const tryClick = (attempts = 0) => {
-      const widget = document.getElementById('el-widget');
-      if (!widget) { if (attempts < 10) setTimeout(() => tryClick(attempts + 1), 200); return; }
-      const root = widget.shadowRoot;
-      if (!root) { if (attempts < 10) setTimeout(() => tryClick(attempts + 1), 200); return; }
-      // Try multiple selectors ElevenLabs uses
-      const btn = root.querySelector('button[aria-label*="call"], button[aria-label*="start"], button[class*="call"], button[class*="mic"], button:not([aria-label*="close"])');
-      if (btn) {
-        btn.click();
-        setAgentActive(a => !a);
-        setMicLoading(false);
-      } else if (attempts < 15) {
-        setTimeout(() => tryClick(attempts + 1), 200);
-      } else {
-        setMicLoading(false);
-      }
-    };
-    tryClick();
-  }, []);
+  // ElevenLabs — show/hide a floating panel with the widget
+  const [showAgent, setShowAgent] = useState(false);
+  const toggleAgent = useCallback(() => setShowAgent(s => !s), []);
 
   // Scroll reveal refs
   const [offeringsRef, offeringsVisible] = useScrollReveal();
@@ -150,35 +127,53 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-      {/* ElevenLabs native widget — positioned off-screen, our mic button triggers it */}
-      <div style={{ position: 'fixed', bottom: '-300px', left: '-300px', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
-        <elevenlabs-convai id="el-widget" agent-id="agent_8701knmfpehweyxa79pzab4m9agd"></elevenlabs-convai>
-      </div>
-
-      {/* Custom Mic Launcher */}
+      {/* ElevenLabs AI Agent — Floating Popup Panel */}
       <div className="fixed bottom-8 left-8 z-[60] animate-fade-in" style={{ animationDelay: '1000ms' }}>
+
+        {/* Popup panel — only rendered when open so widget initialises fresh */}
+        {showAgent && (
+          <div className="absolute bottom-16 left-0 w-[320px] bg-[#0f0f0f] border border-primary/30 rounded-2xl shadow-[0_0_40px_rgba(220,38,38,0.25)] overflow-hidden animate-fade-in">
+            {/* Panel header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-white/8">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                <span className="text-xs font-bold text-white tracking-wider">TAMKEN AI AGENT</span>
+              </div>
+              <button onClick={toggleAgent} className="text-zinc-500 hover:text-white transition-colors text-lg leading-none">&times;</button>
+            </div>
+            {/* ElevenLabs widget rendered visibly inside panel */}
+            <div className="flex items-center justify-center p-6 min-h-[160px]">
+              <elevenlabs-convai
+                agent-id="agent_8701knmfpehweyxa79pzab4m9agd"
+                style={{ width: '100%' }}
+              />
+            </div>
+            <p className="text-[9px] text-zinc-600 text-center pb-3 px-4">Press the microphone to start talking</p>
+          </div>
+        )}
+
+        {/* Mic trigger button */}
         <div className="relative group">
           <div className={`absolute -inset-2 rounded-full blur-md transition-all duration-300 ${
-            agentActive ? 'bg-green-500/40 animate-pulse' : 'bg-primary/25 group-hover:bg-primary/50 animate-pulse'
+            showAgent ? 'bg-primary/50 animate-pulse' : 'bg-primary/25 group-hover:bg-primary/40 animate-pulse'
           }`} />
           <button
-            onClick={handleMicClick}
+            onClick={toggleAgent}
             title="Talk to TAMKEN AI"
             className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 hover:scale-110 ${
-              agentActive
-                ? 'bg-green-600 text-white border-green-500/50 shadow-[0_4px_30px_rgba(34,197,94,0.6)]'
+              showAgent
+                ? 'bg-primary text-white border-primary/60 shadow-[0_4px_30px_rgba(220,38,38,0.8)] scale-105'
                 : 'bg-primary text-white border-primary/30 shadow-[0_4px_30px_rgba(220,38,38,0.6)] hover:shadow-[0_4px_40px_rgba(220,38,38,0.9)]'
             }`}
           >
-            {micLoading
-              ? <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-              : agentActive ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />
-            }
+            {showAgent ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
           </button>
-          {/* Tooltip */}
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-[#1a1a1a] border border-white/10 text-white text-[10px] font-semibold tracking-wide px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
-            {agentActive ? 'Click to end call' : 'Talk to TAMKEN AI'}
-          </div>
+          {/* Hover tooltip */}
+          {!showAgent && (
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-[#1a1a1a] border border-white/10 text-white text-[10px] font-semibold tracking-wide px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
+              Talk to TAMKEN AI
+            </div>
+          )}
         </div>
       </div>
       {/* Hero Section */}
