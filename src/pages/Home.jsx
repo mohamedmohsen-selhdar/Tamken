@@ -116,7 +116,13 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-
+      {/* Floating Action Button - AI Agent */}
+      <div className="fixed bottom-8 left-8 z-50 animate-fade-in group" style={{ animationDelay: '1000ms' }}>
+        <div className="absolute -inset-2 bg-primary/20 rounded-full blur-md group-hover:bg-primary/40 transition-all duration-300 animate-pulse"></div>
+        <a href="https://elevenlabs.io/app/talk-to?agent_id=agent_8701knmfpehweyxa79pzab4m9agd&branch_id=agtbrch_8601knmfpgfnfvvsvt281q93ykxa" target="_blank" rel="noopener noreferrer" className="relative flex items-center justify-center w-14 h-14 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-[0_4px_30px_rgba(220,38,38,0.5)] border border-white/10 hover:scale-110 transition-transform duration-300">
+          <Mic className="w-6 h-6" />
+        </a>
+      </div>
       {/* Hero Section */}
       <section className="relative min-h-[95vh] w-full overflow-hidden bg-background flex flex-col items-center justify-center p-4 md:p-8 pt-24" ref={heroRef}>
         
