@@ -42,7 +42,12 @@ const testimonialsData = [
   }
 ];
 
-const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 2000, className = 'font-mono' }) => {
+const clientsList = [
+    "RICHIE", "Egypt Gold", "Contistahl", "EIPAL",
+    "Harmony", "MITCO", "TRONIX", "GIZ"
+];
+
+const Typewriter = ({ phrases, typingSpeed = 100, deletingSpeed = 50, pause = 1500, className = "" }) => {
   const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
@@ -144,7 +149,7 @@ const Home = () => {
           </div>
 
           {/* Sliding Headline */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-6 leading-tight drop-shadow-xl w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-[0.9] drop-shadow-xl w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
             Transforming operations into <br className="hidden md:block" />
             <span className="relative inline-block w-full h-[1.1em] text-center align-top overflow-hidden font-bold">
                 {words.map((word, index) => (
@@ -160,7 +165,8 @@ const Home = () => {
                         {word}
                     </span>
                 ))}
-            </span>
+            </span><br className="hidden md:block" />
+            <span className="text-primary text-gradient drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">EXCELLENCE.</span>
           </h1>
 
           <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
@@ -215,54 +221,70 @@ const Home = () => {
             <p className="text-muted-foreground text-lg">End-to-End Industrial Transformation</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[minmax(180px,auto)] gap-8">
-            {/* Journey Card - Large Span */}
-            <div className="md:col-span-8 md:row-span-2 glass-panel rounded-industrial transition-all duration-300 hover:-translate-y-2 hover:border-primary glow-primary overflow-hidden group">
-              <div className="p-8 h-full flex flex-col relative z-10 bg-gradient-to-br from-card to-background">
-                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Journey Card */}
+            <div className="glass-panel p-10 rounded-industrial overflow-hidden relative group hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-500 hover:-translate-y-2 border border-border/50 hover:border-primary/50">
+              <div className="absolute inset-0 bg-gradient-to-br from-card via-background to-primary/5 group-hover:to-primary/10 transition-colors duration-500"></div>
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                   <Activity size={32} />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">THE Journey</h3>
-                <p className="text-muted-foreground flex-grow mb-8 text-lg">A comprehensive, phased transformation service designed to elevate factory performance across all core operational pillars. Integrates process design, KPIs, digital tools, and on-ground implementation.</p>
-                <Link to="/journey" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
-                  Discover THE Journey <span>&rarr;</span>
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">THE Journey</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">A comprehensive, phased transformation service designed to elevate factory performance across all core operational pillars. Integrates process design, KPIs, digital tools, and on-ground implementation.</p>
+                <Link to="/journey" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide">
+                  Discover THE Journey <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
 
             {/* FLAPP Card */}
-            <div className="md:col-span-4 glass-panel rounded-industrial transition-all duration-300 hover:-translate-y-2 hover:border-primary glow-primary group">
-              <div className="p-8 h-full flex flex-col bg-gradient-to-b from-card to-background">
-                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl">
+            <div className="glass-panel p-10 rounded-industrial overflow-hidden relative group hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-500 hover:-translate-y-2 border border-border/50 hover:border-primary/50">
+              <div className="absolute inset-0 bg-gradient-to-bl from-card via-background to-primary/5 group-hover:to-primary/10 transition-colors duration-500"></div>
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                   <Cpu size={32} />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">FLAPP</h3>
-                <p className="text-muted-foreground flex-grow mb-8">A mobile-first system capturing real-time shop floor data.</p>
-                <Link to="/flapp" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
-                  Learn About FLAPP <span>&rarr;</span>
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">FLAPP</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">A mobile-first system capturing real-time shop floor data. Identifies inefficiencies to drive precision and maintain uncompromised standards.</p>
+                <Link to="/flapp" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide">
+                  Learn About FLAPP <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Stats Card */}
-            <div className="md:col-span-4 glass-panel rounded-industrial flex flex-col items-center justify-center text-center p-8 transition-transform hover:scale-[1.02]">
-              <div className="text-6xl font-bold font-heading bg-gradient-to-t from-muted-foreground to-foreground bg-clip-text text-transparent mb-2">
-                197+
-              </div>
-              <div className="font-mono text-muted-foreground uppercase tracking-widest text-sm">Improvement Projects</div>
+      {/* Stats and Clients Marquee Section */}
+      <section className="py-24 bg-card border-y border-border/50 overflow-hidden relative">
+        <div className="container mx-auto px-6 max-w-7xl mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group">
+                <h3 className="text-5xl md:text-6xl font-black text-foreground mb-2 flex justify-center items-center group-hover:text-primary transition-colors">+70</h3>
+                <p className="text-muted-foreground font-medium uppercase tracking-widest text-sm md:text-md">Clients</p>
             </div>
-
-            {/* Quality Card */}
-            <div className="md:col-span-12 glass-panel rounded-industrial flex items-center p-8 transition-all duration-300 hover:border-primary">
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
-                <ShieldCheck size={48} className="text-success shrink-0" />
-                <div>
-                  <h3 className="text-2xl font-bold mb-2">Quality into Practice</h3>
-                  <p className="text-muted-foreground text-lg">Building robust systems to align with expectations, ensuring high-standard outputs and sustainable growth.</p>
-                </div>
-              </div>
+            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group">
+                <h3 className="text-5xl md:text-6xl font-black text-foreground mb-2 flex justify-center items-center group-hover:text-primary transition-colors">197</h3>
+                <p className="text-muted-foreground font-medium uppercase tracking-widest text-sm md:text-md">Implemented Projects</p>
+            </div>
+            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group">
+                <h3 className="text-5xl md:text-6xl font-black text-foreground mb-2 flex justify-center items-center group-hover:text-primary transition-colors">23</h3>
+                <p className="text-muted-foreground font-medium uppercase tracking-widest text-sm md:text-md">Different Industry</p>
             </div>
           </div>
+        </div>
+
+        {/* Infinite Clients Marquee */}
+        <div className="relative flex overflow-hidden whitespace-nowrap py-4">
+            <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-card to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-card to-transparent z-10" />
+            <div className="flex animate-marquee whitespace-nowrap items-center w-max hover:[animation-play-state:paused]">
+                {[...clientsList, ...clientsList, ...clientsList, ...clientsList].map((client, i) => (
+                    <span key={i} className="text-3xl md:text-5xl font-black text-foreground/20 hover:text-foreground transition-all duration-300 uppercase tracking-widest cursor-default mx-12 hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]">
+                        {client}
+                    </span>
+                ))}
+            </div>
         </div>
       </section>
 
@@ -336,35 +358,40 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-32 relative z-10 border-t border-border/50">
-        <div className="container mx-auto px-6 max-w-7xl">
+      <section className="py-32 relative z-10 border-t border-border/50 bg-[#0a0a0a]">
+        <div className="container mx-auto px-6 max-w-7xl z-10 relative">
           <div className="text-center mb-16">
             <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4">
               <MessageSquare size={16} />
               <span className="text-sm font-semibold tracking-wide">CLIENT SUCCESS</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Real-world Transformations</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Driven by precision methodologies and uncompromised standards.</p>
+            <h2 className="text-4xl md:text-5xl font-sans font-bold mb-6 text-white">Real-world Transformations</h2>
+            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">Driven by precision methodologies and uncompromised standards.</p>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonialsData.map((item, i) => (
-              <div key={item.id} className={`glass-panel p-8 rounded-industrial flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-glow ${i === 3 ? 'md:col-span-2 lg:col-span-1' : ''} ${i === 4 ? 'md:col-span-2 lg:col-span-2' : ''}`}>
-                <div className="mb-8">
-                  <div className="text-primary opacity-20 mb-4 h-8">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" />
-                    </svg>
+        {/* Moving Testimonials Marquee */}
+        <div className="relative flex overflow-hidden py-10 w-full max-w-[100vw]">
+            {/* Fade Edges for the Testimonials Marquee */}
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10" />
+            
+            <div className="flex animate-marquee whitespace-nowrap items-stretch w-max hover:[animation-play-state:paused] ease-linear duration-1000">
+                {[...testimonialsData, ...testimonialsData].map((item, i) => (
+                  <div key={`${item.id}-${i}`} className="inline-flex flex-col justify-between w-[350px] md:w-[450px] whitespace-normal glass-panel p-8 mx-4 rounded-industrial transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] bg-[#111] border-border/50 hover:border-primary/50 group/testi">
+                    <div className="mb-8">
+                      <div className="text-primary opacity-30 mb-8 h-8 group-hover/testi:opacity-100 transition-opacity">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" /></svg>
+                      </div>
+                      <p className="text-base md:text-lg leading-relaxed text-zinc-300 italic flex-grow hover:text-white transition-colors">"{item.testimonial}"</p>
+                    </div>
+                    <div className="mt-auto pt-6 border-t border-border/20">
+                      <h4 className="font-bold text-white tracking-wide">{item.by}</h4>
+                      <p className="text-sm text-primary font-medium">{item.role}, {item.company}</p>
+                    </div>
                   </div>
-                  <p className="text-lg leading-relaxed text-foreground/80 italic">"{item.testimonial}"</p>
-                </div>
-                <div className="mt-auto pt-6 border-t border-border/50">
-                  <h4 className="font-bold text-foreground">{item.by}</h4>
-                  <p className="text-sm text-primary font-medium">{item.role}, {item.company}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+                ))}
+            </div>
         </div>
       </section>
 
