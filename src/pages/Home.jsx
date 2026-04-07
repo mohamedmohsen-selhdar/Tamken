@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal } from 'lucide-react';
+import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useArticles } from '../context/ArticleContext';
 
-const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 2000 }) => {
+const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 2000, className = 'font-mono' }) => {
   const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
@@ -31,7 +32,7 @@ const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 200
   }, [text, isDeleting, loopNum, phrases, typingSpeed, deletingSpeed, pause]);
 
   return (
-    <span className="font-mono inline-block text-primary">
+    <span className={`inline-block text-primary ${className}`}>
       {text}
       <span className="animate-pulse ml-1 inline-block w-2 bg-primary h-[1em] align-middle -mt-1"></span>
     </span>
@@ -40,6 +41,7 @@ const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 200
 
 const Home = () => {
   const heroRef = useRef(null);
+  const { articles } = useArticles();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,7 +90,7 @@ const Home = () => {
             {/* Aggressive Typography & Contrast */}
             <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[110px] font-black leading-[0.9] text-white tracking-tighter animate-slide-up" style={{ animationDelay: '100ms' }}>
               TRANSFORM<br/>
-              <span className="text-primary">MANUFACTURING</span><br/>
+              <Typewriter phrases={['MANUFACTURING', 'OPERATIONS', 'EFFICIENCY']} pause={2500} className="" /><br/>
               INTO EXCELLENCE.
             </h1>
             
@@ -162,6 +164,75 @@ const Home = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Articles Section */}
+      <section className="py-32 relative z-10 border-t border-border/50 bg-background/50">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4">
+                <BookOpen size={16} />
+                <span className="text-sm font-semibold tracking-wide">INSIGHTS & NEWS</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold">Latest Knowledge</h2>
+            </div>
+            <Link to="/articles" className="inline-flex items-center gap-2 font-bold text-primary hover:gap-3 transition-all shrink-0">
+              View All Articles <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {articles.slice(0, 3).map((article) => (
+              <Link to={`/articles/${article.id}`} key={article.id} className="group glass-panel rounded-industrial overflow-hidden flex flex-col transition-all hover:scale-[1.02] hover:shadow-glow cursor-pointer">
+                <div className="relative h-48 overflow-hidden bg-muted">
+                  {article.imageUrl ? (
+                    <img 
+                      src={article.imageUrl} 
+                      alt={article.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      <BookOpen size={40} className="opacity-20" />
+                    </div>
+                  )}
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-background/80 backdrop-blur-md rounded-full text-xs font-semibold">
+                      {article.category}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                    <span>{article.date}</span>
+                    <span>•</span>
+                    <span>{article.author}</span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="text-muted-foreground line-clamp-3 mb-6 flex-1">
+                    {article.content}
+                  </p>
+                  
+                  <span className="flex items-center gap-2 text-sm font-bold text-primary w-fit group/btn">
+                    Read More
+                    <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+            
+            {articles.length === 0 && (
+              <div className="md:col-span-3 text-center py-16 text-muted-foreground glass-panel rounded-industrial">
+                <BookOpen size={40} className="mx-auto mb-4 opacity-50" />
+                <h3 className="text-lg font-bold mb-2">No Articles Found</h3>
+              </div>
+            )}
           </div>
         </div>
       </section>

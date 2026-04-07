@@ -1,6 +1,7 @@
 import React from 'react';
 import { useArticles } from '../context/ArticleContext';
 import { ArrowRight, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Articles = () => {
   const { articles } = useArticles();
@@ -23,7 +24,7 @@ const Articles = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((article) => (
-            <article key={article.id} className="group glass-panel rounded-industrial overflow-hidden flex flex-col transition-all hover:scale-[1.02] hover:shadow-glow">
+            <Link to={`/articles/${article.id}`} key={article.id} className="group glass-panel rounded-industrial overflow-hidden flex flex-col transition-all hover:scale-[1.02] hover:shadow-glow cursor-pointer block">
               <div className="relative h-48 overflow-hidden bg-muted">
                 {article.imageUrl ? (
                   <img 
@@ -56,12 +57,12 @@ const Articles = () => {
                   {article.content}
                 </p>
                 
-                <button className="flex items-center gap-2 text-sm font-bold text-primary w-fit group/btn">
+                <span className="flex items-center gap-2 text-sm font-bold text-primary w-fit group/btn">
                   Read More
                   <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
-                </button>
+                </span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
         

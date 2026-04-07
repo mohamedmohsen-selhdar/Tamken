@@ -19,7 +19,6 @@ const Navbar = () => {
     { name: 'THE Journey', path: '/journey' },
     { name: 'FLAPP', path: '/flapp' },
     { name: 'Articles', path: '/articles' },
-    { name: 'Dashboard', path: '/dashboard' },
   ];
 
   return (
