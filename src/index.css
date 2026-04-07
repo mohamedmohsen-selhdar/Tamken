@@ -7,7 +7,7 @@
 @layer base {
   :root {
     /* Light Mode Palette */
-    --background: 0 0% 98%;
+    --background: 0 0% 100%;
     --foreground: 0 0% 5%;
 
     --card: 0 0% 100%;

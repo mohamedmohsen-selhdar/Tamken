@@ -5,11 +5,16 @@ import { Settings, Plus, Trash2, Edit2, LogOut } from 'lucide-react';
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const { articles, addArticle, deleteArticle } = useArticles();
+  const { articles, addArticle, updateArticle, deleteArticle } = useArticles();
   
   const [isAdding, setIsAdding] = useState(false);
   const [newArticle, setNewArticle] = useState({
     title: '', content: '', category: '', author: 'Admin', imageUrl: ''
+  });
+
+  const [editingId, setEditingId] = useState(null);
+  const [editArticle, setEditArticle] = useState({
+    title: '', content: '', category: '', imageUrl: ''
   });
 
   const handleLogin = (e) => {
@@ -27,6 +32,24 @@ const Dashboard = () => {
     addArticle(newArticle);
     setIsAdding(false);
     setNewArticle({ title: '', content: '', category: '', author: 'Admin', imageUrl: '' });
+  };
+
+  const handleEditClick = (article) => {
+    setIsAdding(false);
+    setEditingId(article.id);
+    setEditArticle({
+      title: article.title,
+      content: article.content,
+      category: article.category,
+      imageUrl: article.imageUrl || ''
+    });
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    if (!editArticle.title || !editArticle.content) return;
+    updateArticle(editingId, editArticle);
+    setEditingId(null);
   };
 
   if (!isAuthenticated) {
@@ -67,7 +90,7 @@ const Dashboard = () => {
           </div>
           <div className="flex gap-4">
             <button 
-              onClick={() => setIsAdding(!isAdding)}
+              onClick={() => { setIsAdding(!isAdding); setEditingId(null); }}
               className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-semibold hover:bg-primary-glow transition-colors"
             >
               <Plus size={20} />
@@ -110,6 +133,36 @@ const Dashboard = () => {
           </div>
         )}
 
+        {editingId !== null && (
+          <div className="glass-panel p-6 rounded-industrial border border-primary/50 mb-8 animate-fade-in relative shadow-[0_0_15px_rgba(220,38,38,0.1)]">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-primary">Edit Article</h2>
+              <button type="button" onClick={() => setEditingId(null)} className="text-muted-foreground hover:text-foreground text-sm font-semibold">Cancel</button>
+            </div>
+            <form onSubmit={handleUpdate} className="grid gap-4 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <label className="block text-sm mb-1 text-muted-foreground">Title</label>
+                <input required type="text" value={editArticle.title} onChange={e => setEditArticle({...editArticle, title: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm mb-1 text-muted-foreground">Category</label>
+                <input required type="text" value={editArticle.category} onChange={e => setEditArticle({...editArticle, category: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm mb-1 text-muted-foreground">Image URL (Optional)</label>
+                <input type="text" value={editArticle.imageUrl} onChange={e => setEditArticle({...editArticle, imageUrl: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm mb-1 text-muted-foreground">Content</label>
+                <textarea required rows="5" value={editArticle.content} onChange={e => setEditArticle({...editArticle, content: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea>
+              </div>
+              <div className="md:col-span-2 flex justify-end">
+                <button type="submit" className="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-bold">Update Article</button>
+              </div>
+            </form>
+          </div>
+        )}
+
         <div className="glass-panel rounded-industrial border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -128,7 +181,7 @@ const Dashboard = () => {
                     <td className="p-4 text-sm text-muted-foreground">{article.category}</td>
                     <td className="p-4 text-sm text-muted-foreground">{article.date}</td>
                     <td className="p-4 flex justify-end gap-2">
-                      <button className="p-2 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border">
+                      <button onClick={() => handleEditClick(article)} className="p-2 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border">
                         <Edit2 size={16} />
                       </button>
                       <button 

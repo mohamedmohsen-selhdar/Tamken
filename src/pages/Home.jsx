@@ -1,7 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen } from 'lucide-react';
+import { ArrowRight, Activity, Cpu, ShieldCheck, Terminal, BookOpen, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
+
+const testimonialsData = [
+  {
+      id: 1,
+      testimonial: "Tamken's strategic intervention completely transformed our operational efficiency. Their ability to drill down to the core issues and implement sustainable processes is unmatched.",
+      by: "Mr. Abdo Shoulah",
+      role: "CEO",
+      company: "RICHIE Furniture",
+  },
+  {
+      id: 2,
+      testimonial: "Working with Tamken was a turning point for GP Plast. Their insights into our supply chain directly impacted our bottom line. They bring a rare combination of industrial expertise and practical execution.",
+      by: "Peter Magdy",
+      role: "CEO",
+      company: "GP Plast",
+  },
+  {
+      id: 3,
+      testimonial: "The clarity and direction we gained from their consulting sessions were invaluable. They have a unique talent for taking complex business challenges and breaking them down into actionable steps.",
+      by: "Ayman Hosny",
+      role: "CEO",
+      company: "in&In",
+  },
+  {
+      id: 4,
+      testimonial: "Every time we hit a production bottleneck, Tamken's engineering frameworks help us map the exact root cause. We operate at a completely different efficiency level now.",
+      by: "M.Saad",
+      role: "CEO",
+      company: "Alamain outdoor furniture",
+  },
+  {
+      id: 5,
+      testimonial: "They don't just provide consulting; they provide actual execution architecture. We scaled our regional distribution by 3X entirely through their optimization roadmaps.",
+      by: "Mohamed El-sharkawy",
+      role: "CEO",
+      company: "APT Sharky",
+  }
+];
 
 const Typewriter = ({ phrases, typingSpeed = 50, deletingSpeed = 30, pause = 2000, className = 'font-mono' }) => {
   const [text, setText] = useState('');
@@ -64,17 +102,17 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative min-h-[100vh] flex items-end justify-start pb-24 pt-32 overflow-hidden" ref={heroRef}>
         {/* Abstract Parallax Background */}
-        <div className="hero-bg-parallax absolute inset-0 -z-20 bg-background bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/20 via-background to-background">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30 mix-blend-overlay"></div>
+        <div className="hero-bg-parallax absolute inset-0 -z-20 bg-background bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/10 via-background to-background dark:from-primary/20">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-10 dark:opacity-30 mix-blend-overlay"></div>
           {/* Heavy Overlay */}
-          <div className="absolute inset-0 bg-black/60"></div>
+          <div className="absolute inset-0 dark:bg-black/60"></div>
         </div>
 
         <div className="hero-content-parallax container mx-auto px-6 max-w-7xl z-10 w-full transition-transform duration-300 ease-out">
           <div className="flex flex-col items-start gap-6">
             
             {/* Interactive Telemetry Artifact */}
-            <div className="inline-flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 animate-slide-up shadow-[0_0_20px_rgba(220,38,38,0.15)]">
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-background/80 dark:bg-black/60 backdrop-blur-md border border-border/50 dark:border-white/10 animate-slide-up shadow-[0_0_20px_rgba(220,38,38,0.15)]">
               <Terminal size={16} className="text-primary opacity-80" />
               <div className="text-xs tracking-wider uppercase font-mono text-zinc-400">
                 <span className="hidden sm:inline">STATUS: </span>
@@ -88,7 +126,7 @@ const Home = () => {
             </div>
             
             {/* Aggressive Typography & Contrast */}
-            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[110px] font-black leading-[0.9] text-white tracking-tighter animate-slide-up" style={{ animationDelay: '100ms' }}>
+            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[110px] font-black leading-[0.9] text-foreground dark:text-white tracking-tighter animate-slide-up" style={{ animationDelay: '100ms' }}>
               TRANSFORM<br/>
               <Typewriter phrases={['MANUFACTURING', 'OPERATIONS', 'EFFICIENCY']} pause={2500} className="" /><br/>
               INTO EXCELLENCE.
@@ -100,7 +138,7 @@ const Home = () => {
             </p>
             
             <div className="animate-slide-up mt-6 flex gap-4" style={{ animationDelay: '300ms' }}>
-              <Link to="/journey" className="inline-flex items-center gap-3 bg-white text-black hover:bg-primary hover:text-white px-8 py-5 rounded-none font-bold tracking-widest uppercase transition-all duration-300 hover:translate-x-2">
+              <Link to="/journey" className="inline-flex items-center gap-3 bg-foreground text-background dark:bg-white dark:text-black hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-white px-8 py-5 rounded-none font-bold tracking-widest uppercase transition-all duration-300 hover:translate-x-2">
                 EXPLORE THE JOURNEY <ArrowRight size={20} />
               </Link>
             </div>
@@ -233,6 +271,39 @@ const Home = () => {
                 <h3 className="text-lg font-bold mb-2">No Articles Found</h3>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-32 relative z-10 border-t border-border/50">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4">
+              <MessageSquare size={16} />
+              <span className="text-sm font-semibold tracking-wide">CLIENT SUCCESS</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Real-world Transformations</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Driven by precision methodologies and uncompromised standards.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {testimonialsData.map((item, i) => (
+              <div key={item.id} className={`glass-panel p-8 rounded-industrial flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-glow ${i === 3 ? 'md:col-span-2 lg:col-span-1' : ''} ${i === 4 ? 'md:col-span-2 lg:col-span-2' : ''}`}>
+                <div className="mb-8">
+                  <div className="text-primary opacity-20 mb-4 h-8">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" />
+                    </svg>
+                  </div>
+                  <p className="text-lg leading-relaxed text-foreground/80 italic">"{item.testimonial}"</p>
+                </div>
+                <div className="mt-auto pt-6 border-t border-border/50">
+                  <h4 className="font-bold text-foreground">{item.by}</h4>
+                  <p className="text-sm text-primary font-medium">{item.role}, {item.company}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
