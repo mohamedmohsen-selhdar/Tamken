@@ -89,7 +89,7 @@ const Home = () => {
   const { articles } = useArticles();
 
   const [currentWord, setCurrentWord] = useState(0);
-  const words = ["MANUFACTURING", "OPERATIONS", "EFFICIENCY"];
+  const words = ["MANUFACTURING", "EFFICIENCY", "EXCELLENCE"];
 
   useEffect(() => {
       const interval = setInterval(() => {
@@ -116,13 +116,6 @@ const Home = () => {
 
   return (
     <div className="w-full relative">
-      {/* Floating Action Button - Microphone / Book Meeting */}
-      <div className="fixed bottom-8 right-8 z-50 animate-fade-in group" style={{ animationDelay: '1000ms' }}>
-        <div className="absolute -inset-2 bg-white/20 dark:bg-primary/20 rounded-full blur-md group-hover:bg-white/40 dark:group-hover:bg-primary/40 transition-all duration-300 animate-pulse"></div>
-        <button className="relative flex items-center justify-center w-14 h-14 bg-white text-black rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.5)] border border-black/5 hover:scale-110 transition-transform duration-300">
-          <Mic className="w-6 h-6" />
-        </button>
-      </div>
 
       {/* Hero Section */}
       <section className="relative min-h-[95vh] w-full overflow-hidden bg-background flex flex-col items-center justify-center p-4 md:p-8 pt-24" ref={heroRef}>
@@ -149,9 +142,9 @@ const Home = () => {
           </div>
 
           {/* Sliding Headline */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-[0.9] drop-shadow-xl w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
-            Transforming operations into <br className="hidden md:block" />
-            <span className="relative inline-block w-full h-[1.1em] text-center align-top overflow-hidden font-bold">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-[0.9] drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
+            TRANSFORM OPERATIONS INTO
+            <span className="relative block w-full h-[1.1em] text-center align-top overflow-hidden font-bold mt-4 text-primary text-gradient drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
                 {words.map((word, index) => (
                     <span
                         key={word}
@@ -165,8 +158,7 @@ const Home = () => {
                         {word}
                     </span>
                 ))}
-            </span><br className="hidden md:block" />
-            <span className="text-primary text-gradient drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">EXCELLENCE.</span>
+            </span>
           </h1>
 
           <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
@@ -395,36 +387,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Vision / Mission Section */}
-      <section className="py-32 bg-secondary/50 border-t border-border/50">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">Vision & Mission</h2>
-              <p className="text-xl text-muted-foreground mb-6 leading-relaxed">
-                Becoming the leading transformation partner for industrial excellence, empowering factories to reach world-class operational standards.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                We design, implement, monitor, and sustain operational excellence initiatives directly on the ground, ensuring real results.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="glass-panel p-8 text-center rounded-industrial">
-                <h4 className="text-4xl font-bold text-primary mb-2">60+</h4>
-                <span className="text-muted-foreground font-medium">Businesses</span>
-              </div>
-              <div className="glass-panel p-8 text-center rounded-industrial">
-                <h4 className="text-4xl font-bold text-primary mb-2">23+</h4>
-                <span className="text-muted-foreground font-medium">Sectors</span>
-              </div>
-              <div className="col-span-2 glass-panel p-8 text-center rounded-industrial bg-card/40">
-                <h4 className="text-4xl font-bold text-primary mb-2">100%</h4>
-                <span className="text-muted-foreground font-medium">Real-time Visibility</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
