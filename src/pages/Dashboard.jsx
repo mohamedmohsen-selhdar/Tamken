@@ -4,6 +4,8 @@ import { useCaseStudies } from '../context/CaseStudyContext';
 import { useCareers } from '../context/CareerContext';
 import { useContent } from '../context/ContentContext';
 import { Settings, Plus, Trash2, Edit2, LogOut, FileText, Briefcase, BriefcaseBusiness, BarChart2, TrendingUp, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, ExternalLink, Target, Zap, Users } from 'lucide-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import ImageUpload from '../components/ImageUpload';
 
 // ─── Helpers ──────────────────────────────────────────────────────
@@ -522,7 +524,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('articles');
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [articleForm, setArticleForm] = useState({ title: '', content: '', category: '', imageUrl: '' });
+  const [articleForm, setArticleForm] = useState({ title: '', content: '', category: '', imageUrl: '', seoTitle: '', seoDescription: '', seoKeywords: '' });
   const [caseStudyForm, setCaseStudyForm] = useState({ client: '', challenge: '', solution: '', impact: '', imageUrl: '' });
   const [careerForm, setCareerForm] = useState({ title: '', department: '', location: '', type: '', description: '' });
 
@@ -533,7 +535,7 @@ const Dashboard = () => {
   };
 
   const resetForms = () => {
-    setArticleForm({ title: '', content: '', category: '', imageUrl: '' });
+    setArticleForm({ title: '', content: '', category: '', imageUrl: '', seoTitle: '', seoDescription: '', seoKeywords: '' });
     setCaseStudyForm({ client: '', challenge: '', solution: '', impact: '', imageUrl: '' });
     setCareerForm({ title: '', department: '', location: '', type: '', description: '' });
   };
@@ -550,7 +552,7 @@ const Dashboard = () => {
 
   const handleEditClick = (item) => {
     setIsAdding(false); setEditingId(item.id);
-    if (activeTab === 'articles') setArticleForm({ title: item.title, content: item.content, category: item.category, imageUrl: item.imageUrl || '' });
+    if (activeTab === 'articles') setArticleForm({ title: item.title, content: item.content, category: item.category, imageUrl: item.imageUrl || '', seoTitle: item.seoTitle || '', seoDescription: item.seoDescription || '', seoKeywords: item.seoKeywords || '' });
     else if (activeTab === 'casestudies') setCaseStudyForm({ client: item.client, challenge: item.challenge, solution: item.solution, impact: item.impact, imageUrl: item.imageUrl || '' });
     else if (activeTab === 'careers') setCareerForm({ title: item.title, department: item.department, location: item.location, type: item.type, description: item.description });
   };
@@ -656,7 +658,13 @@ const Dashboard = () => {
                     <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Title</label><input required type="text" value={articleForm.title} onChange={e => setArticleForm({...articleForm, title: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
                     <div><label className="block text-sm mb-1 text-muted-foreground">Category</label><input required type="text" value={articleForm.category} onChange={e => setArticleForm({...articleForm, category: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
                     <div className="md:col-span-2"><ImageUpload currentUrl={articleForm.imageUrl} onUpload={(url) => setArticleForm({...articleForm, imageUrl: url})} folder="articles" label="Cover Image (upload to Supabase)" /></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Content</label><textarea required rows="5" value={articleForm.content} onChange={e => setArticleForm({...articleForm, content: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
+                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Title (Ideal: 50-60 chars)</label><input type="text" value={articleForm.seoTitle} onChange={e => setArticleForm({...articleForm, seoTitle: e.target.value})} placeholder="Focus Keyword - Modifier - Tamken" className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
+                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Description (Ideal: 150-160 chars)</label><textarea rows="2" value={articleForm.seoDescription} onChange={e => setArticleForm({...articleForm, seoDescription: e.target.value})} placeholder="Compelling snippet containing primary keyword and CTA..." className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
+                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Keywords (Comma Separated)</label><input type="text" value={articleForm.seoKeywords} onChange={e => setArticleForm({...articleForm, seoKeywords: e.target.value})} placeholder="operational excellence, lean manufacturing, factory setup" className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
+                    <div className="md:col-span-2">
+                       <label className="block text-sm mb-1 text-muted-foreground">Rich Content</label>
+                       <ReactQuill theme="snow" value={articleForm.content} onChange={content => setArticleForm({...articleForm, content})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[200px]" />
+                    </div>
                   </>)}
                   {activeTab === 'casestudies' && (<>
                     <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Client Name</label><input required type="text" value={caseStudyForm.client} onChange={e => setCaseStudyForm({...caseStudyForm, client: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>

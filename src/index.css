@@ -232,3 +232,9 @@ html { scroll-behavior: smooth; }
 .stagger-children.visible > *:nth-child(5) { opacity:1; transform:translateY(0); transition-delay: 320ms; }
 .stagger-children.visible > *:nth-child(6) { opacity:1; transform:translateY(0); transition-delay: 400ms; }
 
+.ql-snow .ql-stroke { stroke: currentColor; } 
+.ql-snow .ql-fill, .ql-snow .ql-picker-label:hover .ql-stroke { fill: currentColor; } 
+.ql-picker-options { background-color: var(--background) !important; border-color: var(--border) !important; color: currentColor; } 
+.ql-snow .ql-picker { color: currentColor; } 
+.ql-toolbar button:hover .ql-stroke, .ql-toolbar button.ql-active .ql-stroke { stroke: var(--primary) !important; } 
+.ql-toolbar button:hover .ql-fill, .ql-toolbar button.ql-active .ql-fill { fill: var(--primary) !important; }
