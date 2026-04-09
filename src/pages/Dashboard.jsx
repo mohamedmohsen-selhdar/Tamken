@@ -8,6 +8,42 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import ImageUpload from '../components/ImageUpload';
 
+const QUILL_MODULES = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, 4, 5, false] }],
+    [{ 'font': [] }],
+    [{ 'size': ['small', false, 'large', 'huge'] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'align': [] }],
+    ['link', 'image', 'video'],
+    ['clean']
+  ]
+};
+
+const AiOrganizeButton = ({ content, onFormat }) => (
+  <button type="button" onClick={async () => {
+    try {
+      let text = content ? content.replace(/<[^>]*>?/gm, '\n').trim() : '';
+      if (!text) return alert("Please paste some text first.");
+      if (window.ai && window.ai.languageModel) {
+        const session = await window.ai.languageModel.create();
+        const html = await session.prompt("Convert the following text into well-structured HTML format adding <p>, <h2>, and <ul>. Output ONLY valid HTML: " + text);
+        onFormat(html.replace(/```html|```/g, ''));
+      } else {
+        const formatted = text.split('\n').filter(l => l.trim()).map(line => `<p>${line.trim()}</p>`).join('');
+        onFormat(formatted);
+        alert("Separated into paragraphs! For smartest organization, enable the Free Chrome AI model (window.ai) in chrome://flags.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }} className="text-xs bg-primary/20 text-primary px-3 py-1 rounded-full font-bold hover:bg-primary/30 transition-colors flex flex-shrink-0 items-center gap-1">
+    ✨ AI Organize 
+  </button>
+);
+
 // ─── Helpers ──────────────────────────────────────────────────────
 const Input = ({ label, value, onChange, type = 'text', required, placeholder, className = '' }) => (
   <div className={className}>
@@ -664,48 +700,27 @@ const Dashboard = () => {
                     <div className="md:col-span-2 relative">
                        <div className="flex justify-between items-center mb-1">
                          <label className="block text-sm text-muted-foreground">Rich Content</label>
-                         <button type="button" onClick={async () => {
-                           try {
-                             let text = articleForm.content.replace(/<[^>]*>?/gm, '\n').trim();
-                             if (!text) return alert("Please paste some text first.");
-                             
-                             if (window.ai && window.ai.languageModel) {
-                               const session = await window.ai.languageModel.create();
-                               const html = await session.prompt("Convert the following text into a well-structured SEO blog post using HTML tags (<h1>, <h2>, <p>, <ul>). Output ONLY valid HTML, no markdown formatting blocks: " + text);
-                               setArticleForm({...articleForm, content: html.replace(/```html|```/g, '')});
-                             } else {
-                               const formatted = text.split('\n').filter(l => l.trim()).map(line => `<p>${line.trim()}</p>`).join('');
-                               setArticleForm({...articleForm, content: formatted});
-                               alert("Separated into paragraphs! For smart organization (adding titles/lists), please enable the Free Chrome AI model (window.ai) in chrome://flags or use ChatGPT.");
-                             }
-                           } catch (e) {
-                             console.error(e);
-                           }
-                         }} className="text-xs bg-primary/20 text-primary px-3 py-1 rounded-full font-bold hover:bg-primary/30 transition-colors flex items-center gap-1">
-                           ✨ AI Organize 
-                         </button>
+                         <AiOrganizeButton content={articleForm.content} onFormat={(html) => setArticleForm({...articleForm, content: html})} />
                        </div>
-                       <ReactQuill theme="snow" 
-                         modules={{
-                           toolbar: [
-                             [{ 'header': [1, 2, 3, 4, 5, false] }],
-                             [{ 'font': [] }],
-                             [{ 'size': ['small', false, 'large', 'huge'] }],
-                             ['bold', 'italic', 'underline', 'strike'],
-                             [{ 'color': [] }, { 'background': [] }],
-                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                             [{ 'align': [] }],
-                             ['link', 'image', 'video'],
-                             ['clean']
-                           ]
-                         }}
-                         value={articleForm.content} onChange={content => setArticleForm({...articleForm, content})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[250px]" />
+                       <ReactQuill theme="snow" modules={QUILL_MODULES} value={articleForm.content} onChange={content => setArticleForm({...articleForm, content})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[250px]" />
                     </div>
                   </>)}
                   {activeTab === 'casestudies' && (<>
                     <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Client Name</label><input required type="text" value={caseStudyForm.client} onChange={e => setCaseStudyForm({...caseStudyForm, client: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Challenge</label><textarea required rows="2" value={caseStudyForm.challenge} onChange={e => setCaseStudyForm({...caseStudyForm, challenge: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Solution</label><textarea required rows="3" value={caseStudyForm.solution} onChange={e => setCaseStudyForm({...caseStudyForm, solution: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
+                    <div className="md:col-span-2 relative">
+                       <div className="flex justify-between items-center mb-1">
+                          <label className="block text-sm text-muted-foreground">Challenge (Rich Content)</label>
+                          <AiOrganizeButton content={caseStudyForm.challenge} onFormat={(html) => setCaseStudyForm({...caseStudyForm, challenge: html})} />
+                       </div>
+                       <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.challenge} onChange={v => setCaseStudyForm({...caseStudyForm, challenge: v})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[150px]" />
+                    </div>
+                    <div className="md:col-span-2 relative">
+                       <div className="flex justify-between items-center mb-1">
+                          <label className="block text-sm text-muted-foreground">Solution (Rich Content)</label>
+                          <AiOrganizeButton content={caseStudyForm.solution} onFormat={(html) => setCaseStudyForm({...caseStudyForm, solution: html})} />
+                       </div>
+                       <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.solution} onChange={v => setCaseStudyForm({...caseStudyForm, solution: v})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[150px]" />
+                    </div>
                     <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Impact (Results)</label><input required type="text" value={caseStudyForm.impact} onChange={e => setCaseStudyForm({...caseStudyForm, impact: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
                     <div className="md:col-span-2"><ImageUpload currentUrl={caseStudyForm.imageUrl} onUpload={(url) => setCaseStudyForm({...caseStudyForm, imageUrl: url})} folder="case-studies" label="Case Study Image (upload to Supabase)" /></div>
                   </>)}

@@ -27,7 +27,7 @@ const CaseStudies = () => {
               {cs.imageUrl && (
                 <div className="h-64 overflow-hidden relative">
                   <div className="absolute inset-0 bg-black/40 z-10 group-hover:bg-black/20 transition-colors duration-300"></div>
-                  <img src={cs.imageUrl} alt={cs.client} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img src={cs.imageUrl?.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/) ? `https://drive.google.com/uc?id=${cs.imageUrl.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/)[1]}` : cs.imageUrl} alt={cs.client} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   <div className="absolute bottom-4 left-4 z-20">
                     <span className="bg-primary px-3 py-1 text-white text-xs font-bold uppercase tracking-widest rounded-sm">Case Study</span>
                   </div>
@@ -37,14 +37,14 @@ const CaseStudies = () => {
               <div className="p-8 flex-grow flex flex-col">
                 <h2 className="text-3xl font-bold mb-6 text-foreground group-hover:text-primary transition-colors">{cs.client}</h2>
                 
-                <div className="mb-6">
+                <div className="mb-6 relative">
                   <h4 className="text-sm text-primary font-bold uppercase tracking-widest mb-2 border-b border-border/50 pb-2">The Challenge</h4>
-                  <p className="text-muted-foreground leading-relaxed">{cs.challenge}</p>
+                  <div className="prose dark:prose-invert prose-sm max-w-none text-muted-foreground leading-relaxed prose-headings:font-display prose-headings:text-foreground prose-a:text-primary" dangerouslySetInnerHTML={{ __html: cs.challenge }} />
                 </div>
                 
-                <div className="mb-6">
+                <div className="mb-6 relative">
                   <h4 className="text-sm text-primary font-bold uppercase tracking-widest mb-2 border-b border-border/50 pb-2">The Solution</h4>
-                  <p className="text-muted-foreground leading-relaxed flex-grow">{cs.solution}</p>
+                  <div className="prose dark:prose-invert prose-sm max-w-none text-muted-foreground leading-relaxed flex-grow prose-headings:font-display prose-headings:text-foreground prose-a:text-primary" dangerouslySetInnerHTML={{ __html: cs.solution }} />
                 </div>
 
                 <div className="mt-auto bg-card border border-border p-6 rounded-lg relative overflow-hidden group/impact">
