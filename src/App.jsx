@@ -13,6 +13,7 @@ import { ArticleProvider } from './context/ArticleContext';
 
 import { CareerProvider } from './context/CareerContext';
 import { CaseStudyProvider } from './context/CaseStudyContext';
+import { ContentProvider } from './context/ContentContext';
 import CaseStudies from './pages/CaseStudies';
 import Careers from './pages/Careers';
 
@@ -45,6 +46,7 @@ const ReadingProgress = () => {
 function App() {
   return (
     <ThemeProvider>
+      <ContentProvider>
       <CareerProvider>
         <CaseStudyProvider>
           <ArticleProvider>
@@ -76,6 +78,7 @@ function App() {
           </ArticleProvider>
         </CaseStudyProvider>
       </CareerProvider>
+      </ContentProvider>
     </ThemeProvider>
   );
 }
