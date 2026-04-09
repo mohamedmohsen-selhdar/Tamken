@@ -674,12 +674,9 @@ const Dashboard = () => {
                                const html = await session.prompt("Convert the following text into a well-structured SEO blog post using HTML tags (<h1>, <h2>, <p>, <ul>). Output ONLY valid HTML, no markdown formatting blocks: " + text);
                                setArticleForm({...articleForm, content: html.replace(/```html|```/g, '')});
                              } else {
-                               const formatted = text.split('\n').filter(l => l.trim()).map(line => {
-                                 if (line.length < 70 && !line.includes('.') && line.length > 5) return `<h2>${line.trim()}</h2>`;
-                                 return `<p>${line.trim()}</p>`;
-                               }).join('');
+                               const formatted = text.split('\n').filter(l => l.trim()).map(line => `<p>${line.trim()}</p>`).join('');
                                setArticleForm({...articleForm, content: formatted});
-                               alert("Formatted using Offline Heuristics. To use the Free AI Model, enable Gemini Nano (window.ai) in Chrome flags.");
+                               alert("Separated into paragraphs! For smart organization (adding titles/lists), please enable the Free Chrome AI model (window.ai) in chrome://flags or use ChatGPT.");
                              }
                            } catch (e) {
                              console.error(e);

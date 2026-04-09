@@ -58,7 +58,7 @@ const ArticleDetail = () => {
           {article.imageUrl && (
             <div className="w-full h-[40vh] md:h-[60vh] rounded-industrial overflow-hidden mb-12 animate-scale-in">
               <img 
-                src={article.imageUrl?.includes('drive.google.com/file/d/') ? `https://drive.google.com/uc?id=${article.imageUrl.match(/d\/(.*?)\//)?.[1] || article.imageUrl}` : article.imageUrl} 
+                src={article.imageUrl?.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/) ? `https://drive.google.com/uc?id=${article.imageUrl.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/)[1]}` : article.imageUrl} 
                 alt={article.title} 
                 className="w-full h-full object-cover"
               />
@@ -67,7 +67,7 @@ const ArticleDetail = () => {
 
           <div className="glass-panel p-8 md:p-12 rounded-industrial border border-border/50 animate-slide-up" style={{ animationDelay: '200ms' }}>
             <div 
-              className="prose prose-invert max-w-none text-lg text-foreground/80 leading-relaxed font-sans prose-headings:font-display prose-a:text-primary prose-img:rounded-xl"
+              className="prose dark:prose-invert max-w-none text-lg text-foreground/80 leading-relaxed font-sans prose-headings:font-display prose-headings:text-foreground prose-a:text-primary prose-img:rounded-xl"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
           </div>

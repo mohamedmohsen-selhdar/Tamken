@@ -28,7 +28,7 @@ const Articles = () => {
               <div className="relative h-48 overflow-hidden bg-muted">
                 {article.imageUrl ? (
                   <img 
-                    src={article.imageUrl?.includes('drive.google.com/file/d/') ? `https://drive.google.com/uc?id=${article.imageUrl.match(/d\/(.*?)\//)?.[1] || article.imageUrl}` : article.imageUrl} 
+                    src={article.imageUrl?.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/) ? `https://drive.google.com/uc?id=${article.imageUrl.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/)[1]}` : article.imageUrl} 
                     alt={article.title} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
