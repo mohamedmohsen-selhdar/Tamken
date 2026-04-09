@@ -28,7 +28,7 @@ const Articles = () => {
               <div className="relative h-48 overflow-hidden bg-muted">
                 {article.imageUrl ? (
                   <img 
-                    src={article.imageUrl} 
+                    src={article.imageUrl?.includes('drive.google.com/file/d/') ? `https://drive.google.com/uc?id=${article.imageUrl.match(/d\/(.*?)\//)?.[1] || article.imageUrl}` : article.imageUrl} 
                     alt={article.title} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -54,7 +54,7 @@ const Articles = () => {
                   {article.title}
                 </h3>
                 <p className="text-muted-foreground line-clamp-3 mb-6 flex-1">
-                  {article.content}
+                  {article.content?.replace(/<[^>]*>?/gm, ' ')}
                 </p>
                 
                 <span className="flex items-center gap-2 text-sm font-bold text-primary w-fit group/btn">

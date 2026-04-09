@@ -661,9 +661,48 @@ const Dashboard = () => {
                     <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Title (Ideal: 50-60 chars)</label><input type="text" value={articleForm.seoTitle} onChange={e => setArticleForm({...articleForm, seoTitle: e.target.value})} placeholder="Focus Keyword - Modifier - Tamken" className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
                     <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Description (Ideal: 150-160 chars)</label><textarea rows="2" value={articleForm.seoDescription} onChange={e => setArticleForm({...articleForm, seoDescription: e.target.value})} placeholder="Compelling snippet containing primary keyword and CTA..." className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
                     <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Keywords (Comma Separated)</label><input type="text" value={articleForm.seoKeywords} onChange={e => setArticleForm({...articleForm, seoKeywords: e.target.value})} placeholder="operational excellence, lean manufacturing, factory setup" className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2">
-                       <label className="block text-sm mb-1 text-muted-foreground">Rich Content</label>
-                       <ReactQuill theme="snow" value={articleForm.content} onChange={content => setArticleForm({...articleForm, content})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[200px]" />
+                    <div className="md:col-span-2 relative">
+                       <div className="flex justify-between items-center mb-1">
+                         <label className="block text-sm text-muted-foreground">Rich Content</label>
+                         <button type="button" onClick={async () => {
+                           try {
+                             let text = articleForm.content.replace(/<[^>]*>?/gm, '\n').trim();
+                             if (!text) return alert("Please paste some text first.");
+                             
+                             if (window.ai && window.ai.languageModel) {
+                               const session = await window.ai.languageModel.create();
+                               const html = await session.prompt("Convert the following text into a well-structured SEO blog post using HTML tags (<h1>, <h2>, <p>, <ul>). Output ONLY valid HTML, no markdown formatting blocks: " + text);
+                               setArticleForm({...articleForm, content: html.replace(/```html|```/g, '')});
+                             } else {
+                               const formatted = text.split('\n').filter(l => l.trim()).map(line => {
+                                 if (line.length < 70 && !line.includes('.') && line.length > 5) return `<h2>${line.trim()}</h2>`;
+                                 return `<p>${line.trim()}</p>`;
+                               }).join('');
+                               setArticleForm({...articleForm, content: formatted});
+                               alert("Formatted using Offline Heuristics. To use the Free AI Model, enable Gemini Nano (window.ai) in Chrome flags.");
+                             }
+                           } catch (e) {
+                             console.error(e);
+                           }
+                         }} className="text-xs bg-primary/20 text-primary px-3 py-1 rounded-full font-bold hover:bg-primary/30 transition-colors flex items-center gap-1">
+                           ✨ AI Organize 
+                         </button>
+                       </div>
+                       <ReactQuill theme="snow" 
+                         modules={{
+                           toolbar: [
+                             [{ 'header': [1, 2, 3, 4, 5, false] }],
+                             [{ 'font': [] }],
+                             [{ 'size': ['small', false, 'large', 'huge'] }],
+                             ['bold', 'italic', 'underline', 'strike'],
+                             [{ 'color': [] }, { 'background': [] }],
+                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                             [{ 'align': [] }],
+                             ['link', 'image', 'video'],
+                             ['clean']
+                           ]
+                         }}
+                         value={articleForm.content} onChange={content => setArticleForm({...articleForm, content})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[250px]" />
                     </div>
                   </>)}
                   {activeTab === 'casestudies' && (<>
