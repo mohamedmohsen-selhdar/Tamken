@@ -322,7 +322,7 @@ const Home = () => {
                 <div className="relative h-48 overflow-hidden bg-muted">
                   {article.imageUrl ? (
                     <img 
-                      src={article.imageUrl} 
+                      src={article.imageUrl?.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/) ? `https://drive.google.com/uc?id=${article.imageUrl.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/)[1]}` : article.imageUrl} 
                       alt={article.title} 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
@@ -348,7 +348,7 @@ const Home = () => {
                     {article.title}
                   </h3>
                   <p className="text-muted-foreground line-clamp-3 mb-6 flex-1">
-                    {article.content}
+                    {article.content ? article.content.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ') : ''}
                   </p>
                   
                   <span className="flex items-center gap-2 text-sm font-bold text-primary w-fit group/btn">
