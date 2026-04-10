@@ -1,60 +1,86 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 const ArticleContext = createContext();
 
-const DUMMY_ARTICLES = [
-  {
-    id: '1',
-    title: 'The Future of AI in SaaS',
-    content: 'Artificial Intelligence is revolutionizing how we interact with Software as a Service. From automated customer support to predictive analytics, the landscape is changing rapidly. This article explores the key trends and how Tamken is adapting to these changes.',
-    category: 'Technology',
-    author: 'Admin',
-    date: '2026-04-01',
-    imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000'
-  },
-  {
-    id: '2',
-    title: 'Building High-Fidelity User Interfaces',
-    content: 'A high-fidelity UI is more than just good looks; it is about providing a seamless and intuitive user experience. We dive into the design principles that guide our development process at Tamken.',
-    category: 'Design',
-    author: 'Admin',
-    date: '2026-04-05',
-    imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1000'
-  }
-];
-
 export function ArticleProvider({ children }) {
-  const [articles, setArticles] = useState(() => {
-    const saved = localStorage.getItem('tamken-articles');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        return DUMMY_ARTICLES;
-      }
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchArticles = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .order('date', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching articles:', error);
+    } else {
+      setArticles(data || []);
     }
-    return DUMMY_ARTICLES;
-  });
+    setLoading(false);
+  };
 
   useEffect(() => {
-    localStorage.setItem('tamken-articles', JSON.stringify(articles));
-  }, [articles]);
+    fetchArticles();
+  }, []);
 
-  const addArticle = (article) => {
-    const newArticle = { ...article, id: Date.now().toString(), date: new Date().toISOString().split('T')[0] };
-    setArticles([newArticle, ...articles]);
+  const addArticle = async (article) => {
+    const { data, error } = await supabase
+      .from('articles')
+      .insert([{ 
+        title: article.title,
+        content: article.content,
+        category: article.category,
+        author: article.author || 'Admin',
+        imageUrl: article.imageUrl,
+        seoTitle: article.seoTitle,
+        seoDescription: article.seoDescription,
+        seoKeywords: article.seoKeywords,
+        date: new Date().toISOString()
+      }])
+      .select()
+      .single();
+      
+    if (error) {
+      console.error('Error adding article:', error);
+      alert('Failed to add article to Database. Ensure you have run the SQL script.');
+    } else if (data) {
+      setArticles([data, ...articles]);
+    }
   };
 
-  const updateArticle = (id, updatedFields) => {
-    setArticles(articles.map(a => a.id === id ? { ...a, ...updatedFields } : a));
+  const updateArticle = async (id, updatedFields) => {
+    const { data, error } = await supabase
+      .from('articles')
+      .update(updatedFields)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating article:', error);
+    } else if (data) {
+      setArticles(articles.map(a => a.id === id ? data : a));
+    }
   };
 
-  const deleteArticle = (id) => {
-    setArticles(articles.filter(a => a.id !== id));
+  const deleteArticle = async (id) => {
+    const { error } = await supabase
+      .from('articles')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting article:', error);
+    } else {
+      setArticles(articles.filter(a => a.id !== id));
+    }
   };
 
   return (
-    <ArticleContext.Provider value={{ articles, addArticle, updateArticle, deleteArticle }}>
+    <ArticleContext.Provider value={{ articles, loading, addArticle, updateArticle, deleteArticle }}>
       {children}
     </ArticleContext.Provider>
   );

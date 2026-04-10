@@ -1,51 +1,83 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 const CaseStudyContext = createContext();
 
-const DUMMY_CASE_STUDIES = [
-  {
-    id: '1',
-    client: 'Industrial Corp',
-    challenge: 'Factory line XYZ facing 30% downtime due to unoptimized machine cycles and lack of real-time monitoring.',
-    solution: 'Implemented the FLAPP ecosystem directly on the production line, paired with THE Journey 3-phase transformation.',
-    impact: 'Downtime reduced by 85%. Overall Output increased by 42%.',
-    imageUrl: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=800&q=80',
-    date: '2025-10-12'
-  }
-];
-
 export function CaseStudyProvider({ children }) {
-  const [caseStudies, setCaseStudies] = useState(() => {
-    const saved = localStorage.getItem('tamken-casestudies');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        return DUMMY_CASE_STUDIES;
-      }
+  const [caseStudies, setCaseStudies] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchCaseStudies = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('case_studies')
+      .select('*')
+      .order('date', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching case studies:', error);
+    } else {
+      setCaseStudies(data || []);
     }
-    return DUMMY_CASE_STUDIES;
-  });
+    setLoading(false);
+  };
 
   useEffect(() => {
-    localStorage.setItem('tamken-casestudies', JSON.stringify(caseStudies));
-  }, [caseStudies]);
+    fetchCaseStudies();
+  }, []);
 
-  const addCaseStudy = (caseStudy) => {
-    const newCS = { ...caseStudy, id: Date.now().toString(), date: new Date().toISOString().split('T')[0] };
-    setCaseStudies([newCS, ...caseStudies]);
+  const addCaseStudy = async (caseStudy) => {
+    const { data, error } = await supabase
+      .from('case_studies')
+      .insert([{ 
+        client: caseStudy.client,
+        challenge: caseStudy.challenge,
+        solution: caseStudy.solution,
+        impact: caseStudy.impact,
+        imageUrl: caseStudy.imageUrl,
+        date: new Date().toISOString()
+      }])
+      .select()
+      .single();
+      
+    if (error) {
+      console.error('Error adding case study:', error);
+      alert('Failed to add Case Study to Database. Ensure you have run the SQL script.');
+    } else if (data) {
+      setCaseStudies([data, ...caseStudies]);
+    }
   };
 
-  const updateCaseStudy = (id, updatedFields) => {
-    setCaseStudies(caseStudies.map(cs => cs.id === id ? { ...cs, ...updatedFields } : cs));
+  const updateCaseStudy = async (id, updatedFields) => {
+    const { data, error } = await supabase
+      .from('case_studies')
+      .update(updatedFields)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating case study:', error);
+    } else if (data) {
+      setCaseStudies(caseStudies.map(cs => cs.id === id ? data : cs));
+    }
   };
 
-  const deleteCaseStudy = (id) => {
-    setCaseStudies(caseStudies.filter(cs => cs.id !== id));
+  const deleteCaseStudy = async (id) => {
+    const { error } = await supabase
+      .from('case_studies')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting case study:', error);
+    } else {
+      setCaseStudies(caseStudies.filter(cs => cs.id !== id));
+    }
   };
 
   return (
-    <CaseStudyContext.Provider value={{ caseStudies, addCaseStudy, updateCaseStudy, deleteCaseStudy }}>
+    <CaseStudyContext.Provider value={{ caseStudies, loading, addCaseStudy, updateCaseStudy, deleteCaseStudy }}>
       {children}
     </CaseStudyContext.Provider>
   );

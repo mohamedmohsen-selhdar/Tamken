@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Activity, Cpu, BookOpen, MessageSquare, Layers, Hexagon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
-import { FloatingSquares } from '../components/FloatingSquares';
+import { BackgroundPaths } from '../components/BackgroundPaths';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const testimonialsData = [
@@ -139,7 +139,8 @@ const Home = () => {
           <div className="absolute inset-0 dark:bg-black/80"></div>
         </div>
 
-        <FloatingSquares />
+        {/* Dynamic Animated Grid Pattern */}
+        <BackgroundPaths />
 
         <div className="hero-content-parallax relative z-10 max-w-5xl text-center flex flex-col items-center mt-16 w-full transition-transform duration-300 ease-out pointer-events-none">
           
