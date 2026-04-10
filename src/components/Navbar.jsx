@@ -71,10 +71,10 @@ const Navbar = () => {
             >
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <button className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full font-semibold text-sm transition-all hover:translate-y-[-2px] hover:shadow-[0_0_20px_rgba(220,38,38,0.3)] relative overflow-hidden group hidden md:block">
-              <span className="relative z-10">Connect With Us</span>
+            <a href="https://drive.google.com/file/d/17jU6B6lLvaqUP4h9B-3-mTX8pDETZoQD/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full font-semibold text-sm transition-all hover:translate-y-[-2px] hover:shadow-[0_0_20px_rgba(220,38,38,0.3)] relative overflow-hidden group hidden md:block">
+              <span className="relative z-10">Download Company Profile</span>
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-            </button>
+            </a>
             {/* Hamburger - mobile only */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -121,9 +121,9 @@ const Navbar = () => {
           </nav>
 
           <div className="mt-auto">
-            <button className="w-full bg-primary text-primary-foreground px-6 py-4 rounded-2xl font-bold text-base hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] transition-all">
-              Connect With Us
-            </button>
+            <a href="https://drive.google.com/file/d/17jU6B6lLvaqUP4h9B-3-mTX8pDETZoQD/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-primary text-primary-foreground px-6 py-4 rounded-2xl font-bold text-base hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] transition-all">
+              Download Company Profile
+            </a>
             <p className="text-center text-muted-foreground text-xs mt-4">© 2025 TAMKEN. All rights reserved.</p>
           </div>
         </div>

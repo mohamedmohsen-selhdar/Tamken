@@ -4,6 +4,28 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
 import { BackgroundPaths } from '../components/BackgroundPaths';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { motion, useInView, animate, AnimatePresence } from 'framer-motion';
+
+const CountUp = ({ to, duration = 2, delay = 0, prefix = "", suffix = "" }) => {
+  const nodeRef = useRef(null);
+  const inView = useInView(nodeRef, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (inView && nodeRef.current) {
+      const controls = animate(0, to, {
+        duration: duration,
+        delay: delay,
+        ease: "easeOut",
+        onUpdate(value) {
+          nodeRef.current.textContent = prefix + Math.floor(value) + suffix;
+        }
+      });
+      return () => controls.stop();
+    }
+  }, [inView, to, delay, duration, prefix, suffix]);
+
+  return <span ref={nodeRef}>{prefix}0{suffix}</span>;
+};
 
 const testimonialsData = [
   {
@@ -97,7 +119,7 @@ const Home = () => {
   const [testimonialsRef, testimonialsVisible] = useScrollReveal();
 
   const [currentWord, setCurrentWord] = useState(0);
-  const words = ['MANUFACTURING', 'EFFICIENCY', 'EXCELLENCE'];
+  const words = ['MARGIN BLEED', 'INDUSTRIAL BOTTLENECKS', 'SCALING BARRIERS', 'PRODUCTION INEFFICIENCY'];
 
   useEffect(() => {
       const interval = setInterval(() => {
@@ -150,30 +172,27 @@ const Home = () => {
           </div>
 
           {/* Sliding Headline */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-tight drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
-            <span className="block">TRANSFORM</span>
-            <span className="block">OPERATIONS INTO</span>
+          <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-tight drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
+            <span className="block">WE ELIMINATE</span>
             {/* Swipe container — explicit px height matching font-size */}
-            <span className="relative block overflow-hidden w-full font-black drop-shadow-[0_0_20px_rgba(220,38,38,0.6)]" style={{ height: '1.15em', marginTop: '0.15em' }}>
-                {words.map((word, index) => (
-                    <span
-                        key={word}
-                        className={`absolute left-0 right-0 top-0 w-full text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-700 transition-all duration-700 ease-in-out ${
-                            currentWord === index
-                                ? 'opacity-100 translate-y-0'
-                                : currentWord < index
-                                    ? 'opacity-0 translate-y-full'
-                                    : 'opacity-0 -translate-y-full'
-                        }`}
-                    >
-                        {word}
-                    </span>
-                ))}
+            <span className="relative block overflow-hidden w-full font-black drop-shadow-[0_0_20px_rgba(220,38,38,0.6)]" style={{ height: '1.25em', marginTop: '0.15em' }}>
+              <AnimatePresence mode="popLayout">
+                <motion.span
+                  key={currentWord}
+                  initial={{ y: "150%", opacity: 0, rotateX: -90 }}
+                  animate={{ y: "0%", opacity: 1, rotateX: 0 }}
+                  exit={{ y: "-150%", opacity: 0, rotateX: 90 }}
+                  transition={{ duration: 0.8, ease: "circOut" }}
+                  className="absolute left-0 right-0 top-0 w-full text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-600"
+                >
+                  {words[currentWord]}
+                </motion.span>
+              </AnimatePresence>
             </span>
           </h1>
 
           <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
-            Transform designs into high-precision fabricated parts that captivate your customers and fuel business growth.
+            We don't just consult. We architect high-performance manufacturing ecosystems optimized for scale, precision, and compounded revenue growth.
           </p>
 
           {/* Central Glowing CTA */}
@@ -268,17 +287,29 @@ const Home = () => {
       >
         <div className="container mx-auto px-6 max-w-7xl mb-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group">
-                <h3 className="text-5xl md:text-6xl font-black text-foreground mb-2 flex justify-center items-center group-hover:text-primary transition-colors">+70</h3>
-                <p className="text-muted-foreground font-medium uppercase tracking-widest text-sm md:text-md">Clients</p>
+            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group overflow-hidden relative">
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <h3 className="text-6xl md:text-7xl font-black text-foreground mb-3 flex justify-center items-center group-hover:text-primary transition-colors">
+                    <CountUp to={70} prefix="+" duration={2.5} />
+                </h3>
+                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">Clients</p>
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
             </div>
-            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group">
-                <h3 className="text-5xl md:text-6xl font-black text-foreground mb-2 flex justify-center items-center group-hover:text-primary transition-colors">197</h3>
-                <p className="text-muted-foreground font-medium uppercase tracking-widest text-sm md:text-md">Implemented Projects</p>
+            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group overflow-hidden relative">
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <h3 className="text-6xl md:text-7xl font-black text-foreground mb-3 flex justify-center items-center group-hover:text-primary transition-colors">
+                    <CountUp to={197} duration={3} />
+                </h3>
+                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">Projects Executed</p>
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
             </div>
-            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group">
-                <h3 className="text-5xl md:text-6xl font-black text-foreground mb-2 flex justify-center items-center group-hover:text-primary transition-colors">23</h3>
-                <p className="text-muted-foreground font-medium uppercase tracking-widest text-sm md:text-md">Different Industry</p>
+            <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group overflow-hidden relative">
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <h3 className="text-6xl md:text-7xl font-black text-foreground mb-3 flex justify-center items-center group-hover:text-primary transition-colors">
+                    <CountUp to={23} duration={2} />
+                </h3>
+                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">Industries</p>
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
             </div>
           </div>
         </div>
