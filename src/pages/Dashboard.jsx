@@ -853,7 +853,7 @@ const Dashboard = () => {
           </>
         )}
         <div className="mt-20 pt-8 border-t border-border/30 flex justify-between items-center opacity-50">
-           <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Tamken Admin Portal v2.1 (Bilingual Enabled)</p>
+           <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Tamken Admin Portal v2.2 (Bilingual Ready)</p>
            <p className="text-[10px] text-muted-foreground">{new Date().toLocaleDateString()}</p>
         </div>
       </div>
