@@ -5,6 +5,7 @@ import {
   Plus, ClipboardList, ChevronRight, TrendingUp, TrendingDown,
   Package, Wrench, User, Zap, Filter, RefreshCw, Check, X, ArrowUp, ArrowDown
 } from 'lucide-react';
+import { ContainerScroll } from '../components/ui/container-scroll-animation';
 
 // ─── Mini Bar Chart ───────────────────────────────────────────────
 const MiniBarChart = ({ data, color = '#dc2626', height = 60 }) => {
@@ -576,19 +577,30 @@ const Flapp = () => {
 
   return (
     <div className="w-full relative z-10">
-      <header className="min-h-[40vh] flex flex-col justify-center items-center pt-32 pb-16 text-center">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <div className="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
-            Frontline Operations, Made Visible
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 text-foreground animate-slide-up" style={{ animationDelay: '100ms' }}>
-            <span className="text-gradient">FLAPP</span> Mobile App
-          </h1>
-          <p className="text-xl text-muted-foreground animate-slide-up max-w-2xl mx-auto" style={{ animationDelay: '200ms' }}>
-            A lightweight, customizable mobile application built for frontline factory operations. Interact with the 5-screen simulation below to experience it firsthand.
-          </p>
-        </div>
-      </header>
+      <div className="flex flex-col overflow-hidden pb-[50px] pt-[20px] md:pt-[50px] bg-background">
+        <ContainerScroll
+          titleComponent={
+            <>
+              <div className="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm">
+                 Frontline Operations, Built for Scale
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-semibold text-black dark:text-white mb-8">
+                Unleash the power of <br />
+                <span className="text-5xl md:text-[6rem] font-bold mt-1 leading-none text-primary">
+                  FLAPP Mobile
+                </span>
+              </h1>
+            </>
+          }
+        >
+          <img
+            src={`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=3840&auto=format&fit=crop`}
+            alt="hero factory dashboard"
+            className="mx-auto rounded-2xl object-cover h-full w-full object-center"
+            draggable={false}
+          />
+        </ContainerScroll>
+      </div>
 
       <section className="bg-secondary/50 border-t border-border/50 shadow-[inset_0_20px_40px_rgba(0,0,0,0.5)] pt-24 pb-32 overflow-hidden">
         <div className="container mx-auto px-6 max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
