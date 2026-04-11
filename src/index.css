@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,6 +7,26 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* ── Arabic / RTL Support ── */
+html[dir="rtl"],
+html[dir="rtl"] body {
+  font-family: 'Noto Naskh Arabic', 'Cairo', serif;
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .font-mono {
+  font-family: 'Noto Naskh Arabic', 'Cairo', serif;
+  letter-spacing: 0;
+}
+
+/* Keep logos / brand names LTR inside RTL pages */
+html[dir="rtl"] .ltr-force {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
 
 @layer base {
   :root {

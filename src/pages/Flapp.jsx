@@ -7,6 +7,8 @@ import {
   ArrowRight, PenTool, Cpu, ShieldCheck, Truck, BookOpen, FlaskConical, Gauge
 } from 'lucide-react';
 import { ContainerScroll } from '../components/ui/container-scroll-animation';
+import { useLanguage } from '../context/LanguageContext';
+import { t, tx } from '../lib/translations';
 
 // ─── Mini Bar Chart ───────────────────────────────────────────────
 const MiniBarChart = ({ data, color = '#dc2626', height = 60 }) => {
@@ -559,23 +561,22 @@ const Flapp = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftPos, setScrollLeftPos] = useState(0);
+  const { lang, isAr } = useLanguage();
 
   const CARD_W = 300;
 
-  const appTypes = [
-    { title: 'Production Monitoring', desc: 'Track real-time output per line, shift targets, and bottlenecks — straight from the floor.', icon: <Sliders size={32} />, tag: 'Manufacturing' },
-    { title: 'Maintenance App', desc: 'Schedule, assign, and close maintenance tasks. Zero missed services, full audit trail.', icon: <Wrench size={32} />, tag: 'Maintenance' },
-    { title: 'Downtime Analysis', desc: 'Capture downtime events instantly with root cause tagging. Turn lost time into insights.', icon: <Gauge size={32} />, tag: 'Analytics' },
-    { title: 'Quality Control', desc: 'Log inspections, flag defects, and enforce CTQ parameters across every production batch.', icon: <ShieldCheck size={32} />, tag: 'Quality' },
-    { title: 'Waste Management', desc: 'Document and categorize waste at the source. Reduce scrap with real-time tracking.', icon: <FlaskConical size={32} />, tag: 'Sustainability' },
-    { title: 'Procurement Tracker', desc: 'Manage purchasing requests and approvals end-to-end. Prevent material shortages before they happen.', icon: <Package size={32} />, tag: 'Supply Chain' },
-    { title: 'Inventory Management', desc: 'Accurate live stock counts with automatic low-inventory alerts to keep production flowing.', icon: <Database size={32} />, tag: 'Inventory' },
-    { title: 'Logistics Tracker', desc: 'Monitor inbound and outbound shipments in one view. Sync delivery with production needs.', icon: <Truck size={32} />, tag: 'Logistics' },
-    { title: 'Training Log App', desc: 'Store and verify employee training records. Ensure every operator is qualified and compliant.', icon: <BookOpen size={32} />, tag: 'HR' },
-    { title: 'Shift Management', desc: 'Assign tasks, track handovers, and measure shift performance with one tap.', icon: <ClipboardList size={32} />, tag: 'Operations' },
-    { title: 'Machine Performance', desc: 'Monitor OEE, availability, and performance metrics per machine in real time.', icon: <Cpu size={32} />, tag: 'Equipment' },
-    { title: 'Visitor Management', desc: 'Log site visitors, validate credentials, and generate digital entry reports instantly.', icon: <User size={32} />, tag: 'Security' },
+  const appIcons = [
+    <Sliders size={32} />, <Wrench size={32} />, <Gauge size={32} />, <ShieldCheck size={32} />,
+    <FlaskConical size={32} />, <Package size={32} />, <Database size={32} />, <Truck size={32} />,
+    <BookOpen size={32} />, <ClipboardList size={32} />, <Cpu size={32} />, <User size={32} />,
   ];
+
+  const appTypes = t.flapp.appTypes.map((app, i) => ({
+    title: tx(app.title, lang),
+    desc:  tx(app.desc,  lang),
+    tag:   tx(app.tag,   lang),
+    icon: appIcons[i],
+  }));
 
   const updateScrollState = () => {
     const el = scrollRef.current;
@@ -626,13 +627,13 @@ const Flapp = () => {
       <header className="min-h-[40vh] flex flex-col justify-center items-center pt-32 pb-12 text-center px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
-            Appify Your Business
+            {tx(t.flapp.badge, lang)}
           </div>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight mb-5 text-foreground animate-slide-up">
-            <span className="text-gradient">FLAPP</span> — Let Apps Do It Simple
+            <span className="ltr-force text-gradient">FLAPP</span> {isAr ? '—' : '—'} {tx(t.flapp.heading, lang).replace('FLAPP — ', '').replace('فلاب — ', '')}
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto animate-slide-up" style={{ animationDelay: '150ms' }}>
-            A fully customizable mobile platform enabling frontline teams to capture, transmit, and visualize critical data — in under 10 seconds.
+            {tx(t.flapp.subtitle, lang)}
           </p>
         </div>
       </header>
@@ -643,9 +644,9 @@ const Flapp = () => {
           titleComponent={
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 max-w-3xl mx-auto px-4 mb-8">
               {[
-                { icon: <Clock size={20} />, val: 'Step 1', label: 'Capture Data Instantly' },
-                { icon: <Zap size={20} />, val: 'Step 2', label: 'Secure Cloud Transmission' },
-                { icon: <BarChart2 size={20} />, val: 'Step 3', label: 'Visualize in Real-Time' },
+                { icon: <Clock size={20} />, val: tx(t.flapp.step1, lang), label: tx(t.flapp.step1Label, lang) },
+                { icon: <Zap size={20} />, val: tx(t.flapp.step2, lang), label: tx(t.flapp.step2Label, lang) },
+                { icon: <BarChart2 size={20} />, val: tx(t.flapp.step3, lang), label: tx(t.flapp.step3Label, lang) },
               ].map((s, i) => (
                 <div key={i} className="flex items-center gap-3 bg-card/60 backdrop-blur py-3 px-4 rounded-2xl border border-white/5 shadow-xl w-full sm:w-auto">
                   <div className="text-primary shrink-0">{s.icon}</div>
@@ -671,7 +672,7 @@ const Flapp = () => {
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/4 to-transparent mix-blend-overlay rotate-12 scale-[1.5] translate-y-[-20%] pointer-events-none" />
             </div>
             <div className="absolute -right-4 bottom-16 bg-primary text-white font-black text-[8px] uppercase tracking-widest py-1.5 px-2.5 rounded-full shadow-xl animate-bounce hidden md:block z-50 pointer-events-none">
-              Tap screens!
+              {tx(t.flapp.tapHint, lang)}
               <div className="absolute right-full top-1/2 -translate-y-1/2 translate-x-1 border-4 border-transparent border-r-primary" />
             </div>
           </div>
@@ -684,9 +685,9 @@ const Flapp = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-2">
               <Smartphone size={13} />
-              <span className="text-xs font-semibold tracking-wide uppercase">App Types</span>
+              <span className="text-xs font-semibold tracking-wide uppercase">{tx(t.flapp.appTypesBadge, lang)}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">One Platform, Infinite Apps</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">{tx(t.flapp.appTypesHeading, lang)}</h2>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
@@ -717,7 +718,7 @@ const Flapp = () => {
         {/* Swipe hint */}
         <div className="flex justify-center mb-4">
           <span className="flex items-center gap-1 text-muted-foreground text-xs font-mono animate-pulse">
-            <ChevronLeft size={12} className="opacity-50" /> Swipe to explore <ChevronRight size={12} />
+            <ChevronLeft size={12} className="opacity-50" /> {tx(t.flapp.swipeHint, lang)} <ChevronRight size={12} />
           </span>
         </div>
 

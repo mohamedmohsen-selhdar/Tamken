@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Network, Search, Briefcase, Zap, Trello, ChevronRight, ChevronLeft, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { t, tx } from '../lib/translations';
 
 const Journey = () => {
   const scrollRef = useRef(null);
@@ -9,46 +11,17 @@ const Journey = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const { lang, isAr } = useLanguage();
 
   const CARD_W = 370; // card width + gap
 
-  const phases = [
-    {
-      title: "Foundation",
-      desc: "Refining processes, defining structures, aligning teams, and enhancing data-driven decision-making across all core departments.",
-      icon: <Network size={40} />,
-      metrics: ["12~15 Weeks", "Complexity Management", "As-is Mapping"],
-      color: "#dc2626",
-    },
-    {
-      title: "Supply Chain Excellence",
-      desc: "Streamlines supply chain operations, enhancing planning, sourcing, and inventory management for end-to-end visibility.",
-      icon: <Trello size={40} />,
-      metrics: ["10~13 Weeks", "Scaling Production", "Demand Forecasting"],
-      color: "#b91c1c",
-    },
-    {
-      title: "Quality Excellence",
-      desc: "Builds robust quality systems to align with customer expectations, ensuring consistent outputs and reducing defect rates.",
-      icon: <Search size={40} />,
-      metrics: ["8~10 Weeks", "Maintaining Standards", "CTQ Parameters"],
-      color: "#991b1b",
-    },
-    {
-      title: "Maintenance Excellence",
-      desc: "Optimizes maintenance practices to maximize equipment reliability, minimize downtime, and extend machine lifespan.",
-      icon: <Briefcase size={40} />,
-      metrics: ["8~11 Weeks", "Reliability at Scale", "Criticality Analysis"],
-      color: "#7f1d1d",
-    },
-    {
-      title: "Finance & Operation Alignment",
-      desc: "Integrates financial insights with operational strategies to ensure data-driven decision-making and P&L transparency.",
-      icon: <Zap size={40} />,
-      metrics: ["8~11 Weeks", "Financial Transparency", "ABC Costing"],
-      color: "#dc2626",
-    },
-  ];
+  const phases = t.journey.phases.map((phase, i) => ({
+    title: tx(phase.title, lang),
+    desc:  tx(phase.desc,  lang),
+    metrics: phase.metrics[lang] || phase.metrics.en,
+    icon: [<Network size={40} />, <Trello size={40} />, <Search size={40} />, <Briefcase size={40} />, <Zap size={40} />][i],
+    color: ['#dc2626','#b91c1c','#991b1b','#7f1d1d','#dc2626'][i],
+  }));
 
   const updateScrollState = () => {
     const el = scrollRef.current;
@@ -100,13 +73,13 @@ const Journey = () => {
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            A Phased Transformation System
+            {tx(t.journey.badge, lang)}
           </div>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 text-foreground animate-slide-up">
-            THE <span className="text-gradient">Journey</span>
+            {isAr ? <span className="text-gradient">{tx(t.journey.heading, lang)}</span> : <>THE <span className="text-gradient">Journey</span></>}
           </h1>
           <p className="text-xl text-muted-foreground animate-slide-up max-w-2xl mx-auto" style={{ animationDelay: '100ms' }}>
-            A comprehensive, phased transformation service designed to elevate factory performance across all core operational pillars.
+            {tx(t.journey.subheading, lang)}
           </p>
         </div>
       </header>
@@ -119,7 +92,7 @@ const Journey = () => {
           <div className="flex items-center gap-2 text-muted-foreground text-sm font-medium animate-pulse">
             <span className="flex items-center gap-1">
               <ChevronLeft size={14} className="opacity-50" />
-              <span className="text-xs tracking-widest uppercase font-bold">Swipe to explore phases</span>
+              <span className="text-xs tracking-widest uppercase font-bold">{tx(t.journey.swipeHint, lang)}</span>
               <ChevronRight size={14} />
             </span>
           </div>

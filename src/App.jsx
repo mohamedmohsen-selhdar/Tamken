@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import Footer from './components/Footer';
 import { ThemeProvider } from './components/ThemeProvider';
 import { ArticleProvider } from './context/ArticleContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 import { CareerProvider } from './context/CareerContext';
 import { CaseStudyProvider } from './context/CaseStudyContext';
@@ -46,6 +47,7 @@ const ReadingProgress = () => {
 function App() {
   return (
     <ThemeProvider>
+      <LanguageProvider>
       <ContentProvider>
       <CareerProvider>
         <CaseStudyProvider>
@@ -79,6 +81,7 @@ function App() {
         </CaseStudyProvider>
       </CareerProvider>
       </ContentProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

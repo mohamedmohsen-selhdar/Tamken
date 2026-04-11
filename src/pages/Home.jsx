@@ -5,6 +5,8 @@ import { useArticles } from '../context/ArticleContext';
 import { BackgroundPaths } from '../components/BackgroundPaths';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { motion, useInView, animate, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
+import { t, tx } from '../lib/translations';
 
 const CountUp = ({ to, duration = 2, delay = 0, prefix = "", suffix = "" }) => {
   const nodeRef = useRef(null);
@@ -110,6 +112,7 @@ const Home = () => {
   const heroRef = useRef(null);
   const navigate = useNavigate();
   const { articles } = useArticles();
+  const { lang, isAr } = useLanguage();
 
 
   // Scroll reveal refs
@@ -119,7 +122,7 @@ const Home = () => {
   const [testimonialsRef, testimonialsVisible] = useScrollReveal();
 
   const [currentWord, setCurrentWord] = useState(0);
-  const words = ['MARGIN BLEED', 'INDUSTRIAL BOTTLENECKS', 'SCALING BARRIERS', 'PRODUCTION INEFFICIENCY'];
+  const words = t.hero.words[lang] || t.hero.words.en;
 
   useEffect(() => {
       const interval = setInterval(() => {
@@ -168,13 +171,12 @@ const Home = () => {
           
           {/* Semantic Badge */}
           <div className="flex items-center gap-2 mb-8 text-foreground/70 dark:text-zinc-400 font-mono tracking-widest uppercase text-[10px] md:text-xs border border-border/50 px-4 py-1.5 rounded-full bg-background/40 backdrop-blur-md animate-fade-in">
-            <span>MANUFACTURING NETWORK</span>
+            <span>{tx(t.hero.badge, lang)}</span>
           </div>
 
           {/* Sliding Headline */}
           <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-tight drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
-            <span className="block">WE ELIMINATE</span>
-            {/* Swipe container — explicit px height matching font-size */}
+            <span className="block">{tx(t.hero.weEliminate, lang)}</span>
             <span className="relative block overflow-hidden w-full font-black drop-shadow-[0_0_20px_rgba(220,38,38,0.6)]" style={{ height: '1.25em', marginTop: '0.15em' }}>
               <AnimatePresence mode="popLayout">
                 <motion.span
@@ -192,7 +194,7 @@ const Home = () => {
           </h1>
 
           <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
-            We don't just consult. We architect high-performance manufacturing ecosystems optimized for scale, precision, and compounded revenue growth.
+            {tx(t.hero.subtitle, lang)}
           </p>
 
           {/* Central Glowing CTA */}
@@ -224,7 +226,7 @@ const Home = () => {
                         <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
                     </span>
                     <div className="relative flex items-center justify-center gap-3 space-x-2 rounded-full bg-[#1f1f1f] border border-[#2a2a2a] px-8 py-4 text-base md:text-lg font-medium text-white z-10 hover:bg-[#2a2a2a] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)]">
-                        <span className="relative mt-0.5 tracking-wide">Explore the Journey</span>
+                        <span className="relative mt-0.5 tracking-wide">{tx(t.hero.cta, lang)}</span>
                     </div>
                 </button>
               </div>
@@ -242,8 +244,8 @@ const Home = () => {
       >
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Our Core Offerings</h2>
-            <p className="text-muted-foreground text-lg">End-to-End Industrial Transformation</p>
+            <h2 className="text-4xl font-bold mb-4">{tx(t.offerings.heading, lang)}</h2>
+            <p className="text-muted-foreground text-lg">{tx(t.offerings.subheading, lang)}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -254,10 +256,10 @@ const Home = () => {
                 <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                   <Activity size={32} />
                 </div>
-                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">THE Journey</h3>
-                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">A comprehensive, phased transformation service designed to elevate factory performance across all core operational pillars. Integrates process design, KPIs, digital tools, and on-ground implementation.</p>
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">{tx(t.offerings.journeyTitle, lang)}</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">{tx(t.offerings.journeyDesc, lang)}</p>
                 <Link to="/journey" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide">
-                  Discover THE Journey <ArrowRight size={18} />
+                  {tx(t.offerings.journeyLink, lang)} <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
@@ -269,10 +271,10 @@ const Home = () => {
                 <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                   <Cpu size={32} />
                 </div>
-                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">FLAPP</h3>
-                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">A mobile-first system capturing real-time shop floor data. Identifies inefficiencies to drive precision and maintain uncompromised standards.</p>
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">{tx(t.offerings.flappTitle, lang)}</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">{tx(t.offerings.flappDesc, lang)}</p>
                 <Link to="/flapp" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide">
-                  Learn About FLAPP <ArrowRight size={18} />
+                  {tx(t.offerings.flappLink, lang)} <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
@@ -292,7 +294,7 @@ const Home = () => {
                 <h3 className="text-6xl md:text-7xl font-black text-foreground mb-3 flex justify-center items-center group-hover:text-primary transition-colors">
                     <CountUp to={70} prefix="+" duration={2.5} />
                 </h3>
-                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">Clients</p>
+                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">{tx(t.stats.clients, lang)}</p>
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
             </div>
             <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group overflow-hidden relative">
@@ -300,7 +302,7 @@ const Home = () => {
                 <h3 className="text-6xl md:text-7xl font-black text-foreground mb-3 flex justify-center items-center group-hover:text-primary transition-colors">
                     <CountUp to={197} duration={3} />
                 </h3>
-                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">Projects Executed</p>
+                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">{tx(t.stats.projectsExecuted, lang)}</p>
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
             </div>
             <div className="glass-panel p-8 rounded-industrial hover:shadow-glow transition-all group overflow-hidden relative">
@@ -308,7 +310,7 @@ const Home = () => {
                 <h3 className="text-6xl md:text-7xl font-black text-foreground mb-3 flex justify-center items-center group-hover:text-primary transition-colors">
                     <CountUp to={23} duration={2} />
                 </h3>
-                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">Industries</p>
+                <p className="text-muted-foreground font-bold uppercase tracking-widest text-sm relative z-10">{tx(t.stats.industries, lang)}</p>
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors"></div>
             </div>
           </div>
@@ -338,12 +340,12 @@ const Home = () => {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4">
                 <BookOpen size={16} />
-                <span className="text-sm font-semibold tracking-wide">INSIGHTS & NEWS</span>
+                <span className="text-sm font-semibold tracking-wide">{tx(t.articles.subheading, lang)}</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold">Latest Knowledge</h2>
+              <h2 className="text-4xl md:text-5xl font-bold">{tx(t.articles.heading, lang)}</h2>
             </div>
             <Link to="/articles" className="inline-flex items-center gap-2 font-bold text-primary hover:gap-3 transition-all shrink-0">
-              View All Articles <ArrowRight size={16} />
+              {tx(t.articles.viewAll, lang)} <ArrowRight size={16} />
             </Link>
           </div>
 
@@ -383,7 +385,7 @@ const Home = () => {
                   </p>
                   
                   <span className="flex items-center gap-2 text-sm font-bold text-primary w-fit group/btn">
-                    Read More
+                    {tx(t.articles.readMore, lang)}
                     <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
                   </span>
                 </div>
@@ -411,8 +413,8 @@ const Home = () => {
               <MessageSquare size={16} />
               <span className="text-sm font-semibold tracking-wide">CLIENT SUCCESS</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-sans font-bold mb-6 text-white">Real-world Transformations</h2>
-            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">Driven by precision methodologies and uncompromised standards.</p>
+            <h2 className="text-4xl md:text-5xl font-sans font-bold mb-6 text-white">{tx(t.testimonials.heading, lang)}</h2>
+            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{tx(t.testimonials.subheading, lang)}</p>
           </div>
         </div>
 
