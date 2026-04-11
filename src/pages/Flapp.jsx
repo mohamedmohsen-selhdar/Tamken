@@ -595,22 +595,22 @@ const Flapp = () => {
         <ContainerScroll
           titleComponent={
             <>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Your factory operations, visible on any device.</h2>
-              <p className="text-xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 tracking-tight leading-tight">Your factory operations, visible on any device.</h2>
+              <p className="text-lg md:text-xl text-muted-foreground mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto px-4 md:px-0">
                 FLAPP enables manufacturers to capture real-time operational data, convert it into clear dashboards, and make timely, data-driven decisions — without the cost, complexity, or disruption of traditional ERP systems.
               </p>
               
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-4xl mx-auto mb-16">
+              <div className="grid grid-cols-3 gap-2 md:gap-4 max-w-4xl mx-auto mb-8 md:mb-16 px-2 md:px-0">
                 {[
-                  { icon: <Clock size={28} />, val: '100%', label: 'Real-time Visibility' },
-                  { icon: <Eye size={28} />, val: '0', label: 'Manual Reporting' },
-                  { icon: <Activity size={28} />, val: '5', label: 'Module Screens' },
+                  { icon: <Clock size={24} className="md:w-7 md:h-7" />, val: '100%', label: 'Visbility' },
+                  { icon: <Eye size={24} className="md:w-7 md:h-7" />, val: '0', label: 'Manual' },
+                  { icon: <Activity size={24} className="md:w-7 md:h-7" />, val: '5', label: 'Screens' },
                 ].map((s, i) => (
-                  <div key={i} className="flex flex-col items-center gap-3 bg-card/60 backdrop-blur p-4 rounded-2xl border border-white/5 shadow-xl text-center">
+                  <div key={i} className="flex flex-col items-center gap-1 md:gap-3 bg-card/60 backdrop-blur p-2 md:p-4 rounded-2xl border border-white/5 shadow-xl text-center">
                     <div className="text-primary">{s.icon}</div>
                     <div>
-                      <h4 className="text-2xl font-black text-foreground tracking-tighter">{s.val}</h4>
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{s.label}</span>
+                      <h4 className="text-lg md:text-2xl font-black text-foreground tracking-tighter leading-none mb-1">{s.val}</h4>
+                      <span className="font-mono text-[8px] md:text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{s.label}</span>
                     </div>
                   </div>
                 ))}
