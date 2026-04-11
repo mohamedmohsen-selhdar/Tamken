@@ -577,84 +577,70 @@ const Flapp = () => {
 
   return (
     <div className="w-full relative z-10">
-      <div className="flex flex-col overflow-hidden pb-[50px] pt-[20px] md:pt-[50px] bg-background">
+      <header className="min-h-[40vh] flex flex-col justify-center items-center pt-32 pb-16 text-center">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
+            Frontline Operations, Made Visible
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 text-foreground animate-slide-up" style={{ animationDelay: '100ms' }}>
+            <span className="text-gradient">FLAPP</span> Mobile App
+          </h1>
+          <p className="text-xl text-muted-foreground animate-slide-up max-w-2xl mx-auto" style={{ animationDelay: '200ms' }}>
+            A lightweight, customizable mobile application built for frontline factory operations. Interact with the simulation below to experience it firsthand.
+          </p>
+        </div>
+      </header>
+
+      <div className="bg-secondary/50 border-t border-border/50 shadow-[inset_0_20px_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pb-[50px] pt-[20px] md:pt-[50px]">
         <ContainerScroll
           titleComponent={
             <>
-              <div className="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm">
-                 Frontline Operations, Built for Scale
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Your factory operations, visible on any device.</h2>
+              <p className="text-xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
+                FLAPP enables manufacturers to capture real-time operational data, convert it into clear dashboards, and make timely, data-driven decisions — without the cost, complexity, or disruption of traditional ERP systems.
+              </p>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-4xl mx-auto mb-16">
+                {[
+                  { icon: <Clock size={28} />, val: '100%', label: 'Real-time Visibility' },
+                  { icon: <Eye size={28} />, val: '0', label: 'Manual Reporting' },
+                  { icon: <Activity size={28} />, val: '5', label: 'Module Screens' },
+                ].map((s, i) => (
+                  <div key={i} className="flex flex-col items-center gap-3 bg-card/60 backdrop-blur p-4 rounded-2xl border border-white/5 shadow-xl text-center">
+                    <div className="text-primary">{s.icon}</div>
+                    <div>
+                      <h4 className="text-2xl font-black text-foreground tracking-tighter">{s.val}</h4>
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{s.label}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-semibold text-black dark:text-white mb-8">
-                Unleash the power of <br />
-                <span className="text-5xl md:text-[6rem] font-bold mt-1 leading-none text-primary">
-                  FLAPP Mobile
-                </span>
-              </h1>
             </>
           }
         >
-          <img
-            src={`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=3840&auto=format&fit=crop`}
-            alt="hero factory dashboard"
-            className="mx-auto rounded-2xl object-cover h-full w-full object-center"
-            draggable={false}
-          />
-        </ContainerScroll>
-      </div>
-
-      <section className="bg-secondary/50 border-t border-border/50 shadow-[inset_0_20px_40px_rgba(0,0,0,0.5)] pt-24 pb-32 overflow-hidden">
-        <div className="container mx-auto px-6 max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-
-          <div className="lg:col-span-7 flex flex-col justify-center transition-all duration-700 ease-out opacity-0 translate-y-6" ref={el => elementsRef.current[0] = el}>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Your factory operations, visible on your phone.</h2>
-            <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
-              FLAPP enables manufacturers to capture real-time operational data, convert it into clear dashboards, and make timely, data-driven decisions — without the cost, complexity, or disruption of traditional ERP systems.
-            </p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {[
-                { icon: <Clock size={28} />, val: '100%', label: 'Real-time Visibility' },
-                { icon: <Eye size={28} />, val: '0', label: 'Manual Reporting' },
-                { icon: <Activity size={28} />, val: '5', label: 'Module Screens' },
-              ].map((s, i) => (
-                <div key={i} className="flex items-center gap-3 bg-card/60 backdrop-blur p-4 rounded-2xl border border-white/5 shadow-xl">
-                  <div className="text-primary shrink-0">{s.icon}</div>
-                  <div>
-                    <h4 className="text-2xl font-black text-foreground tracking-tighter">{s.val}</h4>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{s.label}</span>
-                  </div>
-                </div>
-              ))}
+          <div className="w-[280px] h-[580px] rounded-[44px] bg-[#1a1a1a] p-[9px] shadow-[0_40px_80px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.08)] relative group border border-[#2a2a2a] mx-auto">
+            {/* Notch */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#1a1a1a] rounded-b-[18px] z-30 flex justify-center items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#111] shadow-inner" />
+              <div className="w-10 h-1 rounded-full bg-[#111]" />
             </div>
-          </div>
-
-          <div className="lg:col-span-5 flex justify-center items-center py-8 lg:py-0 transition-all duration-1000 ease-out opacity-0 translate-y-6" ref={el => elementsRef.current[1] = el}>
-            {/* Phone */}
-            <div className="w-[280px] h-[580px] rounded-[44px] bg-[#1a1a1a] p-[9px] shadow-[0_40px_80px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.08)] relative transition-transform duration-700 hover:scale-105 group border border-[#2a2a2a]">
-              {/* Notch */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#1a1a1a] rounded-b-[18px] z-30 flex justify-center items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#111] shadow-inner" />
-                <div className="w-10 h-1 rounded-full bg-[#111]" />
-              </div>
-              {/* Side buttons */}
-              <div className="absolute -left-[3px] top-28 w-[3px] h-10 bg-[#333] rounded-l-md" />
-              <div className="absolute -left-[3px] top-44 w-[3px] h-20 bg-[#333] rounded-l-md" />
-              <div className="absolute -right-[3px] top-36 w-[3px] h-14 bg-[#333] rounded-r-md" />
-              {/* Screen */}
-              <div className="w-full h-full rounded-[36px] overflow-hidden bg-black relative isolate">
-                <InteractiveMobileApp />
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/4 to-transparent mix-blend-overlay rotate-12 scale-[1.5] translate-y-[-20%] pointer-events-none transition-transform duration-700 group-hover:translate-x-1/4" />
-              </div>
+            {/* Side buttons */}
+            <div className="absolute -left-[3px] top-28 w-[3px] h-10 bg-[#333] rounded-l-md" />
+            <div className="absolute -left-[3px] top-44 w-[3px] h-20 bg-[#333] rounded-l-md" />
+            <div className="absolute -right-[3px] top-36 w-[3px] h-14 bg-[#333] rounded-r-md" />
+            {/* Screen */}
+            <div className="w-full h-full rounded-[36px] overflow-hidden bg-black relative isolate">
+              <InteractiveMobileApp />
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/4 to-transparent mix-blend-overlay rotate-12 scale-[1.5] translate-y-[-20%] pointer-events-none transition-transform duration-700 group-hover:translate-x-1/4" />
             </div>
-
             {/* Badge */}
             <div className="absolute -right-6 bottom-20 bg-primary text-white font-black text-[9px] uppercase tracking-widest py-2 px-3 rounded-full shadow-xl animate-bounce hidden md:block z-50 pointer-events-none">
               Tap screens!
               <div className="absolute right-full top-1/2 -translate-y-1/2 translate-x-1 border-4 border-transparent border-r-primary" />
             </div>
           </div>
-        </div>
-      </section>
+        </ContainerScroll>
+      </div>
 
       {/* Features Grid */}
       <section className="py-24 relative z-10 container mx-auto px-6 max-w-7xl">
