@@ -31,9 +31,13 @@ export function CaseStudyProvider({ children }) {
       .from('case_studies')
       .insert([{ 
         client: caseStudy.client,
+        client_ar: caseStudy.client_ar,
         challenge: caseStudy.challenge,
+        challenge_ar: caseStudy.challenge_ar,
         solution: caseStudy.solution,
+        solution_ar: caseStudy.solution_ar,
         impact: caseStudy.impact,
+        impact_ar: caseStudy.impact_ar,
         imageUrl: caseStudy.imageUrl,
         date: new Date().toISOString()
       }])

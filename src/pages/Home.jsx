@@ -17,16 +17,23 @@ const CountUp = ({ to, duration = 2, delay = 0, prefix = "", suffix = "" }) => {
       const controls = animate(0, to, {
         duration: duration,
         delay: delay,
-        ease: "easeOut",
+        ease: [0.16, 1, 0.3, 1], // Custom easeOutExpo
         onUpdate(value) {
-          nodeRef.current.textContent = prefix + Math.floor(value) + suffix;
+          nodeRef.current.textContent = prefix + Math.floor(value).toLocaleString() + suffix;
         }
       });
       return () => controls.stop();
     }
   }, [inView, to, delay, duration, prefix, suffix]);
 
-  return <span ref={nodeRef}>{prefix}0{suffix}</span>;
+  return (
+    <span 
+      ref={nodeRef} 
+      className="tabular-nums bg-clip-text text-transparent bg-gradient-to-br from-foreground via-foreground to-foreground/50 group-hover:from-primary group-hover:to-primary-glow transition-all duration-700"
+    >
+      {prefix}0{suffix}
+    </span>
+  );
 };
 
 const testimonialsData = [

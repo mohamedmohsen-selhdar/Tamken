@@ -7,6 +7,8 @@ import { Settings, Plus, Trash2, Edit2, LogOut, FileText, Briefcase, BriefcaseBu
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import ImageUpload from '../components/ImageUpload';
+import { useLanguage } from '../context/LanguageContext';
+import { t, tx } from '../lib/translations';
 
 const QUILL_MODULES = {
   toolbar: [
@@ -545,38 +547,56 @@ const ContentSystemTab = () => {
             </table>
           </div>
         </div>
-      )}
+
+        <div className="mt-20 pt-8 border-t border-border/30 flex justify-between items-center opacity-50">
+           <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Tamken Admin Portal v2.1 (Bilingual Enabled)</p>
+           <p className="text-[10px] text-muted-foreground">{new Date().toLocaleDateString()}</p>
+        </div>
+      </div>
     </div>
   );
 };
 
 // ─── Main Dashboard ───────────────────────────────────────────────
 const Dashboard = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem('tmkn_admin_auth') === 'true');
   const [password, setPassword] = useState('');
   const { articles, addArticle, updateArticle, deleteArticle } = useArticles();
   const { caseStudies, addCaseStudy, updateCaseStudy, deleteCaseStudy } = useCaseStudies();
   const { careers, addCareer, updateCareer, deleteCareer } = useCareers();
+  const { lang, isAr } = useLanguage();
   const [activeTab, setActiveTab] = useState('articles');
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [articleForm, setArticleForm] = useState({ title: '', content: '', category: '', imageUrl: '', seoTitle: '', seoDescription: '', seoKeywords: '' });
-  const [caseStudyForm, setCaseStudyForm] = useState({ client: '', challenge: '', solution: '', impact: '', imageUrl: '' });
+  const [articleForm, setArticleForm] = useState({ title: '', title_ar: '', content: '', content_ar: '', category: '', category_ar: '', imageUrl: '', seoTitle: '', seoDescription: '', seoKeywords: '' });
+  const [caseStudyForm, setCaseStudyForm] = useState({ client: '', client_ar: '', challenge: '', challenge_ar: '', solution: '', solution_ar: '', impact: '', impact_ar: '', imageUrl: '' });
   const [careerForm, setCareerForm] = useState({ title: '', department: '', location: '', type: '', description: '' });
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (password === '123456789' || password === 'admin') setIsAuthenticated(true);
-    else alert('Invalid password');
+    if (password === '123456789' || password === 'admin') {
+      setIsAuthenticated(true);
+      localStorage.setItem('tmkn_admin_auth', 'true');
+    } else alert(isAr ? 'كلمة المرور غير صحيحة' : 'Invalid password');
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('tmkn_admin_auth');
   };
 
   const resetForms = () => {
-    setArticleForm({ title: '', content: '', category: '', imageUrl: '', seoTitle: '', seoDescription: '', seoKeywords: '' });
-    setCaseStudyForm({ client: '', challenge: '', solution: '', impact: '', imageUrl: '' });
+    setArticleForm({ title: '', title_ar: '', content: '', content_ar: '', category: '', category_ar: '', imageUrl: '', seoTitle: '', seoDescription: '', seoKeywords: '' });
+    setCaseStudyForm({ client: '', client_ar: '', challenge: '', challenge_ar: '', solution: '', solution_ar: '', impact: '', impact_ar: '', imageUrl: '' });
     setCareerForm({ title: '', department: '', location: '', type: '', description: '' });
   };
 
-  const handleTabSwitch = (tab) => { setActiveTab(tab); setIsAdding(false); setEditingId(null); resetForms(); };
+  const handleTabSwitch = (tab) => {
+    setActiveTab(tab);
+    setIsAdding(false);
+    setEditingId(null);
+    resetForms();
+  };
 
   const handleAddSubmit = (e) => {
     e.preventDefault();
@@ -588,8 +608,8 @@ const Dashboard = () => {
 
   const handleEditClick = (item) => {
     setIsAdding(false); setEditingId(item.id);
-    if (activeTab === 'articles') setArticleForm({ title: item.title, content: item.content, category: item.category, imageUrl: item.imageUrl || '', seoTitle: item.seoTitle || '', seoDescription: item.seoDescription || '', seoKeywords: item.seoKeywords || '' });
-    else if (activeTab === 'casestudies') setCaseStudyForm({ client: item.client, challenge: item.challenge, solution: item.solution, impact: item.impact, imageUrl: item.imageUrl || '' });
+    if (activeTab === 'articles') setArticleForm({ title: item.title, title_ar: item.title_ar || '', content: item.content, content_ar: item.content_ar || '', category: item.category, category_ar: item.category_ar || '', imageUrl: item.imageUrl || '', seoTitle: item.seoTitle || '', seoDescription: item.seoDescription || '', seoKeywords: item.seoKeywords || '' });
+    else if (activeTab === 'casestudies') setCaseStudyForm({ client: item.client, client_ar: item.client_ar || '', challenge: item.challenge, challenge_ar: item.challenge_ar || '', solution: item.solution, solution_ar: item.solution_ar || '', impact: item.impact, impact_ar: item.impact_ar || '', imageUrl: item.imageUrl || '' });
     else if (activeTab === 'careers') setCareerForm({ title: item.title, department: item.department, location: item.location, type: item.type, description: item.description });
   };
 
@@ -602,7 +622,7 @@ const Dashboard = () => {
   };
 
   const handleDelete = (id) => {
-    if (!window.confirm('Are you sure?')) return;
+    if (!window.confirm(isAr ? 'هل أنت متأكد؟' : 'Are you sure?')) return;
     if (activeTab === 'articles') deleteArticle(id);
     else if (activeTab === 'casestudies') deleteCaseStudy(id);
     else if (activeTab === 'careers') deleteCareer(id);
@@ -612,36 +632,63 @@ const Dashboard = () => {
     <div className="pt-32 pb-20 px-6 min-h-screen flex items-center justify-center">
       <div className="glass-panel p-8 rounded-industrial max-w-md w-full">
         <div className="flex items-center gap-3 mb-6 justify-center text-primary">
-          <Settings size={32} /><h1 className="text-2xl font-bold">Admin Login</h1>
+          <Settings size={32} />
+          <h1 className="text-2xl font-bold">{tx(t.dashboard.login, lang)}</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:outline-none focus:border-primary transition-colors" placeholder="Enter admin password" />
+          <div className={isAr ? 'text-right' : 'text-left'}>
+            <label className="block text-sm font-medium mb-1">{tx(t.dashboard.password, lang)}</label>
+            <input 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              className={`w-full bg-background border border-border rounded-lg px-4 py-2 focus:outline-none focus:border-primary transition-colors ${isAr ? 'text-right' : 'text-left'}`} 
+              placeholder={tx(t.dashboard.enterPassword, lang)} 
+            />
           </div>
-          <button type="submit" className="bg-primary text-white font-bold py-2 rounded-lg hover:bg-primary/90 transition-colors">Login</button>
+          <button type="submit" className="bg-primary text-white font-bold py-2 rounded-lg hover:bg-primary/90 transition-colors">
+            {tx(t.dashboard.loginBtn, lang)}
+          </button>
         </form>
       </div>
     </div>
   );
 
   const getTableHeaders = () => {
-    if (activeTab === 'articles') return ['Title', 'Category', 'Date', 'Actions'];
-    if (activeTab === 'casestudies') return ['Client', 'Challenge Snippet', 'Date', 'Actions'];
-    if (activeTab === 'careers') return ['Job Title', 'Department', 'Type', 'Actions'];
+    if (activeTab === 'articles') return [isAr ? 'العنوان' : 'Title', isAr ? 'الفئة' : 'Category', isAr ? 'التاريخ' : 'Date', isAr ? 'إجراءات' : 'Actions'];
+    if (activeTab === 'casestudies') return [isAr ? 'العميل' : 'Client', isAr ? 'الأثر' : 'Impact', isAr ? 'التاريخ' : 'Date', isAr ? 'إجراءات' : 'Actions'];
+    if (activeTab === 'careers') return [isAr ? 'المسمى الوظيفي' : 'Job Title', isAr ? 'القسم' : 'Department', isAr ? 'النوع' : 'Type', isAr ? 'إجراءات' : 'Actions'];
+    return [];
   };
 
   const renderTableRows = () => {
     const list = activeTab === 'articles' ? articles : activeTab === 'casestudies' ? caseStudies : careers;
-    if (list.length === 0) return <tr><td colSpan="4" className="p-8 text-center text-muted-foreground">No records found.</td></tr>;
+    if (list.length === 0) return <tr><td colSpan="4" className="p-8 text-center text-muted-foreground">{isAr ? 'لا توجد سجلات.' : 'No records found.'}</td></tr>;
     return list.map(item => (
       <tr key={item.id} className="border-b border-border/50 hover:bg-white/3 transition-colors">
-        <td className="p-4 font-medium">{activeTab === 'casestudies' ? item.client : item.title}</td>
-        <td className="p-4 text-sm text-muted-foreground truncate max-w-[200px]">{activeTab === 'articles' ? item.category : activeTab === 'casestudies' ? item.challenge : item.department}</td>
+        <td className="p-4 font-medium">
+          <div className="flex flex-col">
+            <span className="text-foreground">{activeTab === 'casestudies' ? item.client : item.title}</span>
+            <div className="flex gap-2 items-center mt-1">
+               {(activeTab === 'articles' && item.title_ar) && <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold font-arabic" dir="rtl">AR: {item.title_ar}</span>}
+               {(activeTab === 'casestudies' && item.client_ar) && <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold font-arabic" dir="rtl">AR: {item.client_ar}</span>}
+               {(!item.title_ar && !item.client_ar && activeTab !== 'careers') && <span className="text-[9px] text-yellow-500/50 uppercase">Missing Arabic</span>}
+            </div>
+          </div>
+        </td>
+        <td className="p-4 text-sm text-muted-foreground truncate max-w-[200px]">
+          <div className="flex flex-col">
+            <span>{activeTab === 'articles' ? item.category : activeTab === 'casestudies' ? item.impact : item.department}</span>
+            {(activeTab === 'articles' && item.category_ar) && <span className="text-[10px] text-muted-foreground/60 font-arabic" dir="rtl">{item.category_ar}</span>}
+            {(activeTab === 'casestudies' && item.impact_ar) && <span className="text-[10px] text-muted-foreground/60 font-arabic" dir="rtl">{item.impact_ar}</span>}
+          </div>
+        </td>
         <td className="p-4 text-sm text-muted-foreground">{activeTab === 'careers' ? item.type : item.date}</td>
-        <td className="p-4 flex justify-end gap-2">
-          <button onClick={() => handleEditClick(item)} className="p-2 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border"><Edit2 size={16} /></button>
-          <button onClick={() => handleDelete(item.id)} className="p-2 text-muted-foreground hover:text-red-400 transition-colors bg-background rounded-md border border-border"><Trash2 size={16} /></button>
+        <td className="p-4 text-right">
+          <div className="flex gap-2 justify-end">
+            <button onClick={() => handleEditClick(item)} className="p-2 text-muted-foreground hover:text-primary transition-colors bg-background rounded-md border border-border"><Edit2 size={16} /></button>
+            <button onClick={() => handleDelete(item.id)} className="p-2 text-muted-foreground hover:text-red-400 transition-colors bg-background rounded-md border border-border"><Trash2 size={16} /></button>
+          </div>
         </td>
       </tr>
     ));
@@ -651,98 +698,157 @@ const Dashboard = () => {
     <div className="pt-28 pb-20 px-6 min-h-screen">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between md:items-end mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-1">Control Dashboard</h1>
-            <p className="text-muted-foreground text-sm">Manage content, track growth, and monitor revenue impact.</p>
+        <div className={`flex flex-col md:flex-row justify-between md:items-end mb-8 gap-4 ${isAr ? 'text-right flex-row-reverse' : 'text-left'}`}>
+          <div className={isAr ? 'order-1' : ''}>
+            <h1 className="text-3xl font-bold mb-1">{isAr ? 'لوحة التحكُّم' : 'Admin Control'}</h1>
+            <p className="text-muted-foreground text-sm">{isAr ? 'إدارة المحتوى وتتبع النمو ومراقبة الأثر.' : 'Manage content, track growth, and monitor revenue impact.'}</p>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className={`flex gap-3 items-center ${isAr ? 'order-2' : ''}`}>
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] font-bold text-green-400 uppercase tracking-widest">
+              <CheckCircle size={10} /> Bilingual Sync Active
+            </div>
             {activeTab !== 'content' && (
               <button onClick={() => { setIsAdding(!isAdding); setEditingId(null); resetForms(); }}
                 className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl font-semibold hover:bg-primary/90 transition-colors text-sm">
-                <Plus size={16} />{isAdding ? 'Cancel' : 'Add New'}
+                <Plus size={16} />{isAdding ? (isAr ? 'إلغاء' : 'Cancel') : (isAr ? 'إضافة جديد' : 'Add New')}
               </button>
             )}
-            <button onClick={() => setIsAuthenticated(false)} className="flex items-center gap-2 bg-background border border-border px-4 py-2 rounded-xl hover:bg-white/5 transition-colors text-sm">
+             <button onClick={handleLogout} className="flex items-center gap-2 bg-background border border-border px-4 py-2 rounded-xl hover:bg-white/5 transition-colors text-sm">
               <LogOut size={16} />
             </button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-1 mb-8 p-1 glass-panel rounded-xl max-w-fit border border-border/60">
-          <button onClick={() => handleTabSwitch('articles')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'articles' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><FileText size={16}/> Articles</button>
-          <button onClick={() => handleTabSwitch('casestudies')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'casestudies' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><BriefcaseBusiness size={16}/> Case Studies</button>
-          <button onClick={() => handleTabSwitch('careers')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'careers' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><Briefcase size={16}/> Careers</button>
-          <button onClick={() => handleTabSwitch('content')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'content' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><BarChart2 size={16}/> Content System</button>
+        <div className={`flex flex-wrap gap-1 mb-8 p-1 glass-panel rounded-xl max-w-fit border border-border/60 ${isAr ? 'flex-row-reverse' : ''}`}>
+          <button onClick={() => handleTabSwitch('articles')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'articles' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><FileText size={16}/> {isAr ? 'المقالات' : 'Articles'}</button>
+          <button onClick={() => handleTabSwitch('casestudies')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'casestudies' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><BriefcaseBusiness size={16}/> {isAr ? 'دراسات الحالة' : 'Case Studies'}</button>
+          <button onClick={() => handleTabSwitch('careers')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'careers' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><Briefcase size={16}/> {isAr ? 'الوظائف' : 'Careers'}</button>
+          <button onClick={() => handleTabSwitch('content')} className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-sm transition-all ${activeTab === 'content' ? 'bg-primary text-white' : 'hover:bg-background/50 text-muted-foreground'}`}><BarChart2 size={16}/> {isAr ? 'نظام المحتوى' : 'Content System'}</button>
         </div>
 
         {/* Content System tab */}
         {activeTab === 'content' && <ContentSystemTab />}
 
-        {/* Standard tabs */}
+        {/* Standard tabs UI */}
         {activeTab !== 'content' && (
           <>
             {(isAdding || editingId !== null) && (
               <div className={`glass-panel p-6 rounded-industrial border mb-8 animate-fade-in ${editingId ? 'border-primary/50' : 'border-border'}`}>
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-bold">{editingId ? `Edit ${activeTab}` : `New ${activeTab}`}</h2>
-                  <button type="button" onClick={() => { setIsAdding(false); setEditingId(null); }} className="text-muted-foreground hover:text-foreground text-sm font-semibold">Cancel</button>
+                <div className={`flex justify-between items-center mb-6 ${isAr ? 'flex-row-reverse' : ''}`}>
+                  <h2 className="text-xl font-bold">{editingId ? (isAr ? 'تعديل' : 'Edit') : (isAr ? 'إضافة' : 'New')} {activeTab}</h2>
+                  <button type="button" onClick={() => { setIsAdding(false); setEditingId(null); }} className="text-muted-foreground hover:text-foreground text-sm font-semibold">{isAr ? 'إلغاء' : 'Cancel'}</button>
                 </div>
                 <form onSubmit={editingId ? handleUpdateSubmit : handleAddSubmit} className="grid gap-4 md:grid-cols-2">
                   {activeTab === 'articles' && (<>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Title</label><input required type="text" value={articleForm.title} onChange={e => setArticleForm({...articleForm, title: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div><label className="block text-sm mb-1 text-muted-foreground">Category</label><input required type="text" value={articleForm.category} onChange={e => setArticleForm({...articleForm, category: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2"><ImageUpload currentUrl={articleForm.imageUrl} onUpload={(url) => setArticleForm({...articleForm, imageUrl: url})} folder="articles" label="Cover Image (upload to Supabase)" /></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Title (Ideal: 50-60 chars)</label><input type="text" value={articleForm.seoTitle} onChange={e => setArticleForm({...articleForm, seoTitle: e.target.value})} placeholder="Focus Keyword - Modifier - Tamken" className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Description (Ideal: 150-160 chars)</label><textarea rows="2" value={articleForm.seoDescription} onChange={e => setArticleForm({...articleForm, seoDescription: e.target.value})} placeholder="Compelling snippet containing primary keyword and CTA..." className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">SEO Keywords (Comma Separated)</label><input type="text" value={articleForm.seoKeywords} onChange={e => setArticleForm({...articleForm, seoKeywords: e.target.value})} placeholder="operational excellence, lean manufacturing, factory setup" className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2 relative">
-                       <div className="flex justify-between items-center mb-1">
-                         <label className="block text-sm text-muted-foreground">Rich Content</label>
-                         <AiOrganizeButton content={articleForm.content} onFormat={(html) => setArticleForm({...articleForm, content: html})} />
-                       </div>
-                       <ReactQuill theme="snow" modules={QUILL_MODULES} value={articleForm.content} onChange={content => setArticleForm({...articleForm, content})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[250px]" />
+                    <div className="md:col-span-2 border-b border-border/50 pb-2 mb-2 flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-primary flex items-center gap-2">🇬🇧 English Version</h3>
+                      <span className="text-[10px] text-muted-foreground uppercase tracking-widest">Primary Language</span>
                     </div>
+                    <div className="md:col-span-2"><label className="block text-xs font-semibold mb-1 text-muted-foreground">Article Title (EN)</label><input required type="text" value={articleForm.title} onChange={e => setArticleForm({...articleForm, title: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2 focus:border-primary transition-colors" /></div>
+                    <div className="md:col-span-2"><label className="block text-xs font-semibold mb-1 text-muted-foreground">Category (EN)</label><input required type="text" value={articleForm.category} onChange={e => setArticleForm({...articleForm, category: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2 focus:border-primary transition-colors" /></div>
+                    
+                    <div className="md:col-span-2">
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="block text-xs font-semibold text-muted-foreground">Rich Content (EN)</label>
+                        <AiOrganizeButton content={articleForm.content} onFormat={(html) => setArticleForm({...articleForm, content: html})} />
+                      </div>
+                      <ReactQuill theme="snow" modules={QUILL_MODULES} value={articleForm.content} onChange={content => setArticleForm({...articleForm, content})} className="bg-white/5 text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[200px]" />
+                    </div>
+
+                    <div className="md:col-span-2 border-b border-border/50 pb-2 mb-2 mt-6 flex items-center justify-between flex-row-reverse">
+                      <h3 className="text-sm font-bold text-primary flex items-center gap-2 font-arabic" dir="rtl">🇸🇦 النسخة العربية</h3>
+                      <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-arabic" dir="rtl">اللغة الثانوية</span>
+                    </div>
+
+                    <div className="md:col-span-2">
+                       <label className="block text-xs font-semibold mb-1 text-muted-foreground text-right" dir="rtl">عنوان المقال (AR)</label>
+                       <input type="text" value={articleForm.title_ar} onChange={e => setArticleForm({...articleForm, title_ar: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2 focus:border-primary transition-colors text-right font-arabic" dir="rtl" placeholder="أدخل العنوان باللغة العربية..." />
+                    </div>
+                    <div className="md:col-span-2">
+                       <label className="block text-xs font-semibold mb-1 text-muted-foreground text-right" dir="rtl">الفئة (AR)</label>
+                       <input type="text" value={articleForm.category_ar} onChange={e => setArticleForm({...articleForm, category_ar: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2 focus:border-primary transition-colors text-right font-arabic" dir="rtl" placeholder="مثلاً: استراتيجية، تقنية..." />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <div className="flex justify-between items-center mb-1 flex-row-reverse">
+                        <label className="block text-xs font-semibold text-muted-foreground text-right font-arabic" dir="rtl">المحتوى العربي (AR)</label>
+                        <AiOrganizeButton content={articleForm.content_ar} onFormat={(html) => setArticleForm({...articleForm, content_ar: html})} />
+                      </div>
+                      <ReactQuill theme="snow" modules={QUILL_MODULES} value={articleForm.content_ar} onChange={content => setArticleForm({...articleForm, content_ar: content})} className="bg-white/5 text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[200px] font-arabic" />
+                    </div>
+
+                    <div className="md:col-span-2 border-b border-border/50 pb-2 mt-6 mb-2">
+                      <h3 className="text-sm font-bold text-muted-foreground">General Settings</h3>
+                    </div>
+                    <div className="md:col-span-2"><ImageUpload currentUrl={articleForm.imageUrl} onUpload={(url) => setArticleForm({...articleForm, imageUrl: url})} folder="articles" label={isAr ? 'صورة الغلاف' : "Cover Image"} /></div>
                   </>)}
                   {activeTab === 'casestudies' && (<>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Client Name</label><input required type="text" value={caseStudyForm.client} onChange={e => setCaseStudyForm({...caseStudyForm, client: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2 relative">
-                       <div className="flex justify-between items-center mb-1">
-                          <label className="block text-sm text-muted-foreground">Challenge (Rich Content)</label>
-                          <AiOrganizeButton content={caseStudyForm.challenge} onFormat={(html) => setCaseStudyForm({...caseStudyForm, challenge: html})} />
-                       </div>
-                       <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.challenge} onChange={v => setCaseStudyForm({...caseStudyForm, challenge: v})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[150px]" />
+                    <div className="md:col-span-2 border-b border-border/50 pb-2 mb-2 flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-primary flex items-center gap-2">🇬🇧 English Version</h3>
                     </div>
-                    <div className="md:col-span-2 relative">
-                       <div className="flex justify-between items-center mb-1">
-                          <label className="block text-sm text-muted-foreground">Solution (Rich Content)</label>
-                          <AiOrganizeButton content={caseStudyForm.solution} onFormat={(html) => setCaseStudyForm({...caseStudyForm, solution: html})} />
-                       </div>
-                       <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.solution} onChange={v => setCaseStudyForm({...caseStudyForm, solution: v})} className="bg-background text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[150px]" />
+                    <div className="md:col-span-2"><label className="block text-xs font-semibold mb-1 text-muted-foreground">Client Name (EN)</label><input required type="text" value={caseStudyForm.client} onChange={e => setCaseStudyForm({...caseStudyForm, client: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2" /></div>
+                    <div className="md:col-span-2 grid md:grid-cols-2 gap-4">
+                      <div className="relative">
+                        <div className="flex justify-between items-center mb-1">
+                            <label className="block text-xs font-semibold text-muted-foreground">Challenge (EN)</label>
+                            <AiOrganizeButton content={caseStudyForm.challenge} onFormat={(html) => setCaseStudyForm({...caseStudyForm, challenge: html})} />
+                        </div>
+                        <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.challenge} onChange={v => setCaseStudyForm({...caseStudyForm, challenge: v})} className="bg-white/5 text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[120px]" />
+                      </div>
+                      <div className="relative">
+                        <div className="flex justify-between items-center mb-1">
+                            <label className="block text-xs font-semibold text-muted-foreground">Solution (EN)</label>
+                            <AiOrganizeButton content={caseStudyForm.solution} onFormat={(html) => setCaseStudyForm({...caseStudyForm, solution: html})} />
+                        </div>
+                        <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.solution} onChange={v => setCaseStudyForm({...caseStudyForm, solution: v})} className="bg-white/5 text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[120px]" />
+                      </div>
                     </div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Impact (Results)</label><input required type="text" value={caseStudyForm.impact} onChange={e => setCaseStudyForm({...caseStudyForm, impact: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2"><ImageUpload currentUrl={caseStudyForm.imageUrl} onUpload={(url) => setCaseStudyForm({...caseStudyForm, imageUrl: url})} folder="case-studies" label="Case Study Image (upload to Supabase)" /></div>
+                    <div className="md:col-span-2"><label className="block text-xs font-semibold mb-1 text-muted-foreground">Impact (EN)</label><input required type="text" value={caseStudyForm.impact} onChange={e => setCaseStudyForm({...caseStudyForm, impact: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2" /></div>
+
+                    <div className="md:col-span-2 border-b border-border/50 pb-2 mb-2 mt-6 flex items-center justify-between flex-row-reverse">
+                      <h3 className="text-sm font-bold text-primary flex items-center gap-2 font-arabic" dir="rtl">🇸🇦 النسخة العربية</h3>
+                    </div>
+                    <div className="md:col-span-2"><label className="block text-xs font-semibold mb-1 text-muted-foreground text-right" dir="rtl">اسم العميل (AR)</label><input type="text" value={caseStudyForm.client_ar} onChange={e => setCaseStudyForm({...caseStudyForm, client_ar: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2 text-right font-arabic" dir="rtl" placeholder="اسم الشركة أو المصنع..." /></div>
+                    <div className="md:col-span-2 grid md:grid-cols-2 gap-4">
+                      <div className="relative">
+                        <div className="flex justify-between items-center mb-1 flex-row-reverse">
+                            <label className="block text-xs font-semibold text-muted-foreground text-right font-arabic" dir="rtl">التحدي (AR)</label>
+                            <AiOrganizeButton content={caseStudyForm.challenge_ar} onFormat={(html) => setCaseStudyForm({...caseStudyForm, challenge_ar: html})} />
+                        </div>
+                        <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.challenge_ar} onChange={v => setCaseStudyForm({...caseStudyForm, challenge_ar: v})} className="bg-white/5 text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[120px] font-arabic" />
+                      </div>
+                      <div className="relative">
+                        <div className="flex justify-between items-center mb-1 flex-row-reverse">
+                            <label className="block text-xs font-semibold text-muted-foreground text-right font-arabic" dir="rtl">الحل (AR)</label>
+                            <AiOrganizeButton content={caseStudyForm.solution_ar} onFormat={(html) => setCaseStudyForm({...caseStudyForm, solution_ar: html})} />
+                        </div>
+                        <ReactQuill theme="snow" modules={QUILL_MODULES} value={caseStudyForm.solution_ar} onChange={v => setCaseStudyForm({...caseStudyForm, solution_ar: v})} className="bg-white/5 text-foreground rounded-md border border-border [&_.ql-toolbar]:border-b-border [&_.ql-container]:border-none [&_.ql-editor]:min-h-[120px] font-arabic" />
+                      </div>
+                    </div>
+                    <div className="md:col-span-2"><label className="block text-xs font-semibold mb-1 text-muted-foreground text-right" dir="rtl">الأثر (AR)</label><input type="text" value={caseStudyForm.impact_ar} onChange={e => setCaseStudyForm({...caseStudyForm, impact_ar: e.target.value})} className="w-full bg-white/5 border border-border rounded-md px-3 py-2 text-right font-arabic" dir="rtl" placeholder="الأثر الملموس باللغة العربية..." /></div>
+                    
+                    <div className="md:col-span-2 mt-6"><ImageUpload currentUrl={caseStudyForm.imageUrl} onUpload={(url) => setCaseStudyForm({...caseStudyForm, imageUrl: url})} folder="case-studies" label={isAr ? 'صورة دراسة الحالة' : "Case Study Image"} /></div>
                   </>)}
                   {activeTab === 'careers' && (<>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Job Title</label><input required type="text" value={careerForm.title} onChange={e => setCareerForm({...careerForm, title: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div><label className="block text-sm mb-1 text-muted-foreground">Department</label><input required type="text" value={careerForm.department} onChange={e => setCareerForm({...careerForm, department: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div><label className="block text-sm mb-1 text-muted-foreground">Location</label><input required type="text" value={careerForm.location} onChange={e => setCareerForm({...careerForm, location: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Type</label><input required type="text" value={careerForm.type} onChange={e => setCareerForm({...careerForm, type: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2" /></div>
-                    <div className="md:col-span-2"><label className="block text-sm mb-1 text-muted-foreground">Description</label><textarea required rows="4" value={careerForm.description} onChange={e => setCareerForm({...careerForm, description: e.target.value})} className="w-full bg-background border border-border rounded-md px-3 py-2"></textarea></div>
+                    <div className="md:col-span-2"><label className={`block text-sm mb-1 text-muted-foreground ${isAr ? 'text-right' : ''}`}>{isAr ? 'المسمى الوظيفي' : 'Job Title'}</label><input required type="text" value={careerForm.title} onChange={e => setCareerForm({...careerForm, title: e.target.value})} className={`w-full bg-background border border-border rounded-md px-3 py-2 ${isAr ? 'text-right' : ''}`} /></div>
+                    <div className={isAr ? 'text-right' : ''}><label className="block text-sm mb-1 text-muted-foreground">{isAr ? 'القسم' : 'Department'}</label><input required type="text" value={careerForm.department} onChange={e => setCareerForm({...careerForm, department: e.target.value})} className={`w-full bg-background border border-border rounded-md px-3 py-2 ${isAr ? 'text-right' : ''}`} /></div>
+                    <div className={isAr ? 'text-right' : ''}><label className="block text-sm mb-1 text-muted-foreground">{isAr ? 'الموقع' : 'Location'}</label><input required type="text" value={careerForm.location} onChange={e => setCareerForm({...careerForm, location: e.target.value})} className={`w-full bg-background border border-border rounded-md px-3 py-2 ${isAr ? 'text-right' : ''}`} /></div>
+                    <div className="md:col-span-2"><label className={`block text-sm mb-1 text-muted-foreground ${isAr ? 'text-right' : ''}`}>{isAr ? 'النوع' : 'Type'}</label><input required type="text" value={careerForm.type} onChange={e => setCareerForm({...careerForm, type: e.target.value})} className={`w-full bg-background border border-border rounded-md px-3 py-2 ${isAr ? 'text-right' : ''}`} /></div>
+                    <div className="md:col-span-2"><label className={`block text-sm mb-1 text-muted-foreground ${isAr ? 'text-right' : ''}`}>{isAr ? 'الوصف' : 'Description'}</label><textarea required rows="4" value={careerForm.description} onChange={e => setCareerForm({...careerForm, description: e.target.value})} className={`w-full bg-background border border-border rounded-md px-3 py-2 ${isAr ? 'text-right' : ''}`}></textarea></div>
                   </>)}
-                  <div className="md:col-span-2 flex justify-end mt-2">
-                    <button type="submit" className="bg-primary hover:bg-primary/90 text-white px-8 py-2 rounded-xl font-bold transition-colors">{editingId ? 'Update Record' : 'Save Record'}</button>
+                  <div className={`md:col-span-2 flex mt-2 ${isAr ? 'justify-start' : 'justify-end'}`}>
+                    <button type="submit" className="bg-primary hover:bg-primary/90 text-white px-8 py-2 rounded-xl font-bold transition-colors">{editingId ? (isAr ? 'تحديث' : 'Update') : (isAr ? 'حفظ' : 'Save')}</button>
                   </div>
                 </form>
               </div>
             )}
             <div className="glass-panel rounded-industrial border border-border overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className={`w-full text-left border-collapse ${isAr ? 'text-right' : 'text-left'}`}>
                   <thead>
                     <tr className="bg-surface-elevated border-b border-border">
-                      {getTableHeaders().map((head, i) => <th key={i} className={`p-4 font-semibold text-muted-foreground text-sm ${i === getTableHeaders().length - 1 ? 'text-right' : ''}`}>{head}</th>)}
+                      {getTableHeaders().map((head, i) => <th key={i} className={`p-4 font-semibold text-muted-foreground text-sm ${i === getTableHeaders().length - 1 && !isAr ? 'text-right' : i === 0 && isAr ? 'text-right' : ''}`}>{head}</th>)}
                     </tr>
                   </thead>
                   <tbody>{renderTableRows()}</tbody>

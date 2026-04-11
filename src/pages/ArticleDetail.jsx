@@ -2,11 +2,14 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useArticles } from '../context/ArticleContext';
 import { ArrowLeft, BookOpen, Calendar, User } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { t, tx } from '../lib/translations';
 
 const ArticleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { articles } = useArticles();
+  const { lang, isAr } = useLanguage();
 
   const article = articles.find(a => a.id === id);
 
@@ -18,10 +21,10 @@ const ArticleDetail = () => {
     return (
       <div className="pt-32 pb-20 px-6 min-h-screen flex flex-col items-center justify-center">
         <BookOpen size={64} className="text-muted-foreground mb-6 opacity-50" />
-        <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
-        <p className="text-muted-foreground mb-8">The article you are looking for does not exist or has been removed.</p>
+        <h1 className="text-3xl font-bold mb-4">{tx(t.articlesPage.notFound, lang)}</h1>
+        <p className="text-muted-foreground mb-8">{tx(t.articlesPage.notFoundDesc, lang)}</p>
         <button onClick={() => navigate('/articles')} className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-bold">
-          Back to Articles
+          {tx(t.articlesPage.backToArticles, lang)}
         </button>
       </div>
     );
@@ -30,21 +33,21 @@ const ArticleDetail = () => {
   return (
     <div className="pt-32 pb-20 px-6 min-h-screen">
       <div className="container mx-auto max-w-4xl">
-        <Link to="/articles" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12">
-          <ArrowLeft size={20} />
-          <span className="font-semibold">Back to Articles</span>
+        <Link to="/articles" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12 group">
+          <ArrowLeft size={20} className={`transition-transform ${isAr ? 'rotate-180 group-hover:translate-x-1' : 'group-hover:-translate-x-1'}`} />
+          <span className="font-semibold">{tx(t.articlesPage.backToArticles, lang)}</span>
         </Link>
         
         <article>
           <div className="mb-10 text-center animate-slide-up">
             <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-bold mb-6">
-              {article.category}
+              {isAr && article.category_ar ? article.category_ar : article.category}
             </div>
             <h1 className="text-4xl md:text-6xl font-display font-black tracking-tight mb-8">
-              {article.title}
+              {isAr && article.title_ar ? article.title_ar : article.title}
             </h1>
             <div className="flex items-center justify-center gap-6 text-muted-foreground font-medium">
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 ltr-force">
                 <Calendar size={18} />
                 {article.date}
               </span>
@@ -59,7 +62,7 @@ const ArticleDetail = () => {
             <div className="w-full h-[40vh] md:h-[60vh] rounded-industrial overflow-hidden mb-12 animate-scale-in">
               <img 
                 src={article.imageUrl?.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/) ? `https://drive.google.com/uc?id=${article.imageUrl.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/)[1]}` : article.imageUrl} 
-                alt={article.title} 
+                alt={isAr && article.title_ar ? article.title_ar : article.title} 
                 className="w-full h-full object-cover"
               />
             </div>
@@ -68,7 +71,8 @@ const ArticleDetail = () => {
           <div className="glass-panel p-8 md:p-12 rounded-industrial border border-border/50 animate-slide-up" style={{ animationDelay: '200ms' }}>
             <div 
               className="prose dark:prose-invert max-w-none text-lg text-foreground/80 leading-relaxed font-sans prose-headings:font-display prose-headings:text-foreground prose-a:text-primary prose-img:rounded-xl"
-              dangerouslySetInnerHTML={{ __html: article.content }}
+              style={{ textAlign: isAr ? 'right' : 'left', direction: isAr ? 'rtl' : 'ltr' }}
+              dangerouslySetInnerHTML={{ __html: isAr && article.content_ar ? article.content_ar : article.content }}
             />
           </div>
         </article>
@@ -78,3 +82,4 @@ const ArticleDetail = () => {
 };
 
 export default ArticleDetail;
+

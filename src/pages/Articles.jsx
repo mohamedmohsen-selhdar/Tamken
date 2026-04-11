@@ -2,23 +2,30 @@ import React from 'react';
 import { useArticles } from '../context/ArticleContext';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
+import { t, tx } from '../lib/translations';
 
 const Articles = () => {
   const { articles } = useArticles();
+  const { lang, isAr } = useLanguage();
 
   return (
     <div className="pt-32 pb-20 px-6 min-h-screen">
       <div className="container mx-auto max-w-7xl">
-        <div className="mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-6">
+        <div className={`mb-16 ${isAr ? 'text-right' : 'text-left'}`}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-6 font-arabic">
             <BookOpen size={16} />
-            <span className="text-sm font-semibold tracking-wide">INSIGHTS & NEWS</span>
+            <span className="text-sm font-semibold tracking-wide uppercase">{tx(t.articlesPage.badge, lang)}</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">
-            Latest <span className="text-gradient">Articles</span>
+            {isAr ? (
+              <>أحدث <span className="text-gradient">المَقالات</span></>
+            ) : (
+              <>Latest <span className="text-gradient">Articles</span></>
+            )}
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl">
-            Stay up to date with the latest trends, insights, and news from the industry and our team.
+          <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
+            {tx(t.articlesPage.subheading, lang)}
           </p>
         </div>
 
@@ -29,7 +36,7 @@ const Articles = () => {
                 {article.imageUrl ? (
                   <img 
                     src={article.imageUrl?.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/) ? `https://drive.google.com/uc?id=${article.imageUrl.match(/(?:id=|d\/)([a-zA-Z0-9_-]{25,})/)[1]}` : article.imageUrl} 
-                    alt={article.title} 
+                    alt={isAr && article.title_ar ? article.title_ar : article.title} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 ) : (
@@ -39,27 +46,27 @@ const Articles = () => {
                 )}
                 <div className="absolute top-4 left-4">
                   <span className="px-3 py-1 bg-background/80 backdrop-blur-md rounded-full text-xs font-semibold">
-                    {article.category}
+                    {isAr && article.category_ar ? article.category_ar : article.category}
                   </span>
                 </div>
               </div>
               
               <div className="p-6 flex-1 flex flex-col">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                  <span>{article.date}</span>
+                  <span className="ltr-force">{article.date}</span>
                   <span>•</span>
                   <span>{article.author}</span>
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
-                  {article.title}
+                  {isAr && article.title_ar ? article.title_ar : article.title}
                 </h3>
-                <p className="text-muted-foreground line-clamp-3 mb-6 flex-1">
-                  {article.content?.replace(/<[^>]*>?/gm, ' ')}
+                <p className="text-muted-foreground line-clamp-3 mb-6 flex-1 leading-relaxed">
+                  {(isAr && article.content_ar ? article.content_ar : article.content)?.replace(/<[^>]*>?/gm, ' ')}
                 </p>
                 
                 <span className="flex items-center gap-2 text-sm font-bold text-primary w-fit group/btn">
-                  Read More
-                  <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
+                  {tx(t.articlesPage.readMore, lang)}
+                  <ArrowRight size={16} className={`transition-transform ${isAr ? 'rotate-180 group-hover/btn:-translate-x-1' : 'group-hover/btn:translate-x-1'}`} />
                 </span>
               </div>
             </Link>
@@ -69,8 +76,8 @@ const Articles = () => {
         {articles.length === 0 && (
           <div className="text-center py-20 text-muted-foreground glass-panel rounded-industrial">
             <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
-            <h3 className="text-xl font-bold mb-2">No Articles Found</h3>
-            <p>Check back later for new insights and updates.</p>
+            <h3 className="text-xl font-bold mb-2">{tx(t.articlesPage.noResults, lang)}</h3>
+            <p>{tx(t.articlesPage.checkBack, lang)}</p>
           </div>
         )}
       </div>
@@ -79,3 +86,4 @@ const Articles = () => {
 };
 
 export default Articles;
+

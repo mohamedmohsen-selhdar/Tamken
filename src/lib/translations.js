@@ -18,6 +18,25 @@ export const t = {
     },
   },
 
+  dashboard: {
+    login: { en: 'Admin Login', ar: 'دِخُولُ الأدْمِن' },
+    password: { en: 'Password', ar: 'كَلِمَةُ المُرُور' },
+    enterPassword: { en: 'Enter admin password', ar: 'أدْخِل كَلِمَة المُرُور' },
+    invalidPass: { en: 'Invalid password', ar: 'كَلِمَة المُرُور غَير صَحِيحَة' },
+    loginBtn: { en: 'Login', ar: 'دُخُول' },
+    title: { en: 'Control Dashboard', ar: 'لَوْحَةُ التَّحَكُّم' },
+    subtitle: { en: 'Manage content, track growth, and monitor revenue impact.', ar: 'إدَارةُ المُحْتَوَى، تَتَبُّع النُّمُوِّ، ومُرَاقَبَةُ الأثَر.' },
+    addNew: { en: 'Add New', ar: 'إضَافَةُ جَدِيد' },
+    cancel: { en: 'Cancel', ar: 'إلْغَاء' },
+    save: { en: 'Save Record', ar: 'حِفظُ السِّجِلّ' },
+    update: { en: 'Update Record', ar: 'تَحْدِيثُ السِّجِلّ' },
+    articles: { en: 'Articles', ar: 'المَقَالَات' },
+    caseStudies: { en: 'Case Studies', ar: 'دِرَاسَات الحَالَة' },
+    careers: { en: 'Careers', ar: 'الوَظَائف' },
+    contentSystem: { en: 'Content System', ar: 'نِظَامُ المُحْتَوَى' },
+    sure: { en: 'Are you sure?', ar: 'هَل أنْتَ مُتَأكِّد؟' },
+  },
+
   // ─── Hero Section ─────────────────────────────────────────────────────────
   hero: {
     badge:    { en: 'MANUFACTURING NETWORK', ar: 'شَبكةُ التَّصنيع' },
@@ -92,6 +111,9 @@ export const t = {
       ar: 'نُمكِّن الصِّناعات، ونُطلق النُّموَّ.',
     },
     rights: { en: 'All rights reserved.', ar: 'جميع الحقوق محفوظة.' },
+    contact: { en: 'Connect With Us', ar: 'تَوَاصَل مَعَنَا' },
+    company: { en: 'Company', ar: 'الشَّرِكَة' },
+    download: { en: 'Download Company Profile', ar: 'تَحْمِيل المَلَفّ التَّعْرِيفِيّ' },
   },
 
   // ─── Journey Page ─────────────────────────────────────────────────────────
@@ -224,37 +246,52 @@ export const t = {
 
   // ─── Articles Page ────────────────────────────────────────────────────────
   articlesPage: {
-    badge:       { en: 'Knowledge Hub',       ar: 'مركزُ المعرفة' },
-    heading:     { en: 'Industrial Insights', ar: 'رؤىً صِناعيَّة' },
+    badge:       { en: 'INSIGHTS & NEWS',       ar: 'الأخبار والرُّؤى' },
+    heading:     { en: 'Latest Articles',       ar: 'أحدثُ المَقالات' },
     subheading:  {
-      en: 'Research, frameworks, and field observations from the operational front lines.',
-      ar: 'أبحاثٌ وأطرٌ معرفيَّة وملاحظاتٌ ميدانية من خطوط المواجهة التشغيلية.',
+      en: 'Stay up to date with the latest trends, insights, and news from the industry and our team.',
+      ar: 'ابقَ على اطِّلاعٍ بأحدث الاتِّجاهات والرُّؤى والأخبار من قلب الصِّناعة وفريقنا.',
     },
-    readMore:  { en: 'Read Article',      ar: 'اقرأ المقال' },
-    noResults: { en: 'No articles found.', ar: 'لم يُعثَر على مقالات.' },
+    readMore:  { en: 'Read More',      ar: 'اقرأ المَزيد' },
+    noResults: { en: 'No Articles Found', ar: 'لا توجد مقالات مَنشورة.' },
+    checkBack: { en: 'Check back later for new insights and updates.', ar: 'عُد لاحقاً لمتابعة أحدث الرُّؤى والتَّحديثات.' },
+    backToArticles: { en: 'Back to Articles', ar: 'العودة للمقالات' },
+    notFound: { en: 'Article Not Found', ar: 'المقالُ غيرُ مَوجود' },
+    notFoundDesc: { en: 'The article you are looking for does not exist or has been removed.', ar: 'المقالُ الذي تبحثُ عنه غيرُ موجودٍ أو تمَّ حذفُه.' },
   },
 
   // ─── Case Studies Page ────────────────────────────────────────────────────
   caseStudies: {
-    badge:      { en: 'Real World Impact',  ar: 'أثرٌ واقعيٌّ ملموس' },
-    heading:    { en: 'Case Studies',       ar: 'دِراسات الحالة' },
+    badge:      { en: 'SUCCESS STORIES',  ar: 'قِصَصُ الـنَّجاح' },
+    heading:    { en: 'Impact Delivered.', ar: 'أثرٌ مُنجَز.' },
     subheading: {
-      en: 'Documented transformations across Egyptian manufacturing clients.',
-      ar: 'تحوُّلاتٌ موثَّقة لعملاء في قطاع التصنيع المصري.',
+      en: "Explore how we've partnered with leading manufacturers to transform operations, dramatically reduce inefficiency, and accelerate scale.",
+      ar: 'اكتشف كيف شاركنا كبار المصنِّعين في تحويل العمليات، وتقليص الهدر جذرياً، وتسريع خطى التوسُّع.',
     },
-    readMore: { en: 'Read Full Case', ar: 'اقرأ الحالة كاملةً' },
+    caseStudyTag: { en: 'Case Study', ar: 'دراسة حالة' },
+    challenge:    { en: 'The Challenge', ar: 'التَّحدِّي' },
+    solution:     { en: 'The Solution',  ar: 'الحَلّ' },
+    impact:       { en: 'Measurable Impact', ar: 'أثرٌ ملموس' },
+    noResults:    { en: 'No Case Studies Yet', ar: 'لا توجد دراسات حالة حالياً' },
+    checkBack:    { en: 'Check back soon for our latest success stories.', ar: 'عُد قريباً لمتابعة أحدث قصص نجاحنا.' },
   },
 
   // ─── Careers Page ─────────────────────────────────────────────────────────
   careers: {
-    badge:      { en: 'Join the Team',   ar: 'انضم إلى الفريق' },
-    heading:    { en: 'Build Your Career With Tamken', ar: 'ابنِ مسارَك المهنيَّ مع تمكين' },
+    badge:      { en: 'CAREERS',   ar: 'فُرَصُ العَمَل' },
+    heading:    { en: 'Build the Future of Manufacturing.', ar: 'ابنِ مُستقبلَ الصِّناعة.' },
     subheading: {
-      en: 'We look for exceptional individuals who thrive in complex industrial environments.',
-      ar: 'نبحث عن أفرادٍ استثنائيين يتألَّقون في البيئات الصناعية المعقَّدة.',
+      en: 'Join a specialized squad of engineers and transformation agents obsessed with unlocking operational excellence on the factory floor.',
+      ar: 'انضمَّ إلى فريقٍ نُخبةٍ من المهندسين ووكلاء التحوُّل الشَّغوفين بتحقيق التميُّز التشغيلي في المصانع.',
     },
-    apply:     { en: 'Apply Now',      ar: 'قدِّم طلبَك الآن' },
-    openRoles: { en: 'Open Positions', ar: 'الشَّواغر المُتاحة' },
+    apply:     { en: 'Apply Now',      ar: 'قدِّم الآن' },
+    noResults: { en: 'No Open Roles', ar: 'لا توجد شواغر حاليَّاً' },
+    noResultsDesc: { en: "We aren't actively hiring right now, but we are always looking for exceptional talent. Check back later.", ar: 'لا توجد وظائف شاغرة حالياً، لكننا نبحث دائماً عن المواهب الاستثنائية. عُد لاحقاً.' },
+    labels: {
+      department: { en: 'Department', ar: 'القِسم' },
+      location:   { en: 'Location',   ar: 'المَوقع' },
+      type:       { en: 'Type',       ar: 'نظام العَمَل' },
+    }
   },
 
 };

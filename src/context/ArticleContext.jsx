@@ -31,8 +31,11 @@ export function ArticleProvider({ children }) {
       .from('articles')
       .insert([{ 
         title: article.title,
+        title_ar: article.title_ar,
         content: article.content,
+        content_ar: article.content_ar,
         category: article.category,
+        category_ar: article.category_ar,
         author: article.author || 'Admin',
         imageUrl: article.imageUrl,
         seoTitle: article.seoTitle,
