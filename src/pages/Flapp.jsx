@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Smartphone, CheckCircle, Clock, Eye, Sliders, Database, Menu, Bell,
   Home as HomeIcon, Settings, BarChart2, Activity, AlertTriangle,
-  Plus, ClipboardList, ChevronRight, TrendingUp, TrendingDown,
-  Package, Wrench, User, Zap, Filter, RefreshCw, Check, X, ArrowUp, ArrowDown
+  Plus, ClipboardList, ChevronRight, ChevronLeft, TrendingUp, TrendingDown,
+  Package, Wrench, User, Zap, Filter, RefreshCw, Check, X, ArrowUp, ArrowDown,
+  ArrowRight, PenTool, Cpu, ShieldCheck, Truck, BookOpen, FlaskConical, Gauge
 } from 'lucide-react';
 import { ContainerScroll } from '../components/ui/container-scroll-animation';
 
@@ -551,90 +552,125 @@ const InteractiveMobileApp = () => {
 
 // ─── Flapp Page ───────────────────────────────────────────────────
 const Flapp = () => {
-  const elementsRef = useRef([]);
+  const scrollRef = useRef(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftPos, setScrollLeftPos] = useState(0);
+
+  const CARD_W = 300;
+
+  const appTypes = [
+    { title: 'Production Monitoring', desc: 'Track real-time output per line, shift targets, and bottlenecks — straight from the floor.', icon: <Sliders size={32} />, tag: 'Manufacturing' },
+    { title: 'Maintenance App', desc: 'Schedule, assign, and close maintenance tasks. Zero missed services, full audit trail.', icon: <Wrench size={32} />, tag: 'Maintenance' },
+    { title: 'Downtime Analysis', desc: 'Capture downtime events instantly with root cause tagging. Turn lost time into insights.', icon: <Gauge size={32} />, tag: 'Analytics' },
+    { title: 'Quality Control', desc: 'Log inspections, flag defects, and enforce CTQ parameters across every production batch.', icon: <ShieldCheck size={32} />, tag: 'Quality' },
+    { title: 'Waste Management', desc: 'Document and categorize waste at the source. Reduce scrap with real-time tracking.', icon: <FlaskConical size={32} />, tag: 'Sustainability' },
+    { title: 'Procurement Tracker', desc: 'Manage purchasing requests and approvals end-to-end. Prevent material shortages before they happen.', icon: <Package size={32} />, tag: 'Supply Chain' },
+    { title: 'Inventory Management', desc: 'Accurate live stock counts with automatic low-inventory alerts to keep production flowing.', icon: <Database size={32} />, tag: 'Inventory' },
+    { title: 'Logistics Tracker', desc: 'Monitor inbound and outbound shipments in one view. Sync delivery with production needs.', icon: <Truck size={32} />, tag: 'Logistics' },
+    { title: 'Training Log App', desc: 'Store and verify employee training records. Ensure every operator is qualified and compliant.', icon: <BookOpen size={32} />, tag: 'HR' },
+    { title: 'Shift Management', desc: 'Assign tasks, track handovers, and measure shift performance with one tap.', icon: <ClipboardList size={32} />, tag: 'Operations' },
+    { title: 'Machine Performance', desc: 'Monitor OEE, availability, and performance metrics per machine in real time.', icon: <Cpu size={32} />, tag: 'Equipment' },
+    { title: 'Visitor Management', desc: 'Log site visitors, validate credentials, and generate digital entry reports instantly.', icon: <User size={32} />, tag: 'Security' },
+  ];
+
+  const updateScrollState = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+    const idx = Math.round(el.scrollLeft / CARD_W);
+    setActiveIdx(Math.min(idx, appTypes.length - 1));
+  };
+
+  const scrollTo = (dir) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * CARD_W, behavior: 'smooth' });
+  };
+
+  const scrollToCard = (idx) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: idx * CARD_W, behavior: 'smooth' });
+  };
+
+  const onMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeftPos(scrollRef.current.scrollLeft);
+  };
+  const onMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    scrollRef.current.scrollLeft = scrollLeftPos - (x - startX);
+  };
+  const onMouseUp = () => setIsDragging(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('opacity-100', 'translate-y-0');
-          entry.target.classList.remove('opacity-0', 'translate-y-6');
-        }
-      });
-    }, { threshold: 0.1 });
-    elementsRef.current.forEach((el) => { if (el) observer.observe(el); });
-    return () => observer.disconnect();
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', updateScrollState, { passive: true });
+    updateScrollState();
+    return () => el.removeEventListener('scroll', updateScrollState);
   }, []);
-
-  const features = [
-    { title: "Production Tracking", desc: "Monitor output per line, track progress against shift goals, and identify real-time bottlenecks directly from the floor.", icon: <Sliders size={32} /> },
-    { title: "Inventory Oversight", desc: "Live, accurate count of raw materials and finished goods. Automatic low-stock alerts prevent production halts.", icon: <Database size={32} /> },
-    { title: "Task Management", desc: "Assign, track and close operational tasks for each shift team from a single, mobile-first interface.", icon: <ClipboardList size={32} /> },
-    { title: "Analytics Dashboard", desc: "Weekly OEE trends, shift comparisons, and scrap rate history — all visualized clearly for fast decisions.", icon: <BarChart2 size={32} /> },
-    { title: "Instant Alerts", desc: "Receive critical threshold alerts for temperature, machine state changes, and quality issues in real time.", icon: <Bell size={32} /> },
-    { title: "Purchasing Management", desc: "Streamline procurement requests and approvals — maintain material flow without disrupting operations.", icon: <CheckCircle size={32} /> },
-  ];
 
   return (
     <div className="w-full relative z-10">
-      <header className="min-h-[40vh] flex flex-col justify-center items-center pt-32 pb-16 text-center">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <div className="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
-            Frontline Operations, Made Visible
+
+      {/* ── Single Brief Hero ── */}
+      <header className="min-h-[40vh] flex flex-col justify-center items-center pt-32 pb-12 text-center px-4">
+        <div className="container mx-auto max-w-4xl">
+          <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm animate-slide-up">
+            Appify Your Business
           </div>
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 text-foreground animate-slide-up" style={{ animationDelay: '100ms' }}>
-            <span className="text-gradient">FLAPP</span> Mobile App
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight mb-5 text-foreground animate-slide-up">
+            <span className="text-gradient">FLAPP</span> — Let Apps Do It Simple
           </h1>
-          <p className="text-xl text-muted-foreground animate-slide-up max-w-2xl mx-auto" style={{ animationDelay: '200ms' }}>
-            A lightweight, customizable mobile application built for frontline factory operations. Interact with the simulation below to experience it firsthand.
+          <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto animate-slide-up" style={{ animationDelay: '150ms' }}>
+            A fully customizable mobile platform enabling frontline teams to capture, transmit, and visualize critical data — in under 10 seconds.
           </p>
         </div>
       </header>
 
-      <div className="bg-secondary/50 border-t border-border/50 shadow-[inset_0_20px_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pb-[50px] pt-[20px] md:pt-[50px]">
+      {/* ── 3D Scroll Phone Demo ── */}
+      <div className="bg-secondary/50 border-t border-border/50 shadow-[inset_0_20px_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pb-[50px] pt-[20px] md:pt-[40px]">
         <ContainerScroll
           titleComponent={
-            <>
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 tracking-tight leading-tight">Your factory operations, visible on any device.</h2>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto px-4 md:px-0">
-                FLAPP enables manufacturers to capture real-time operational data, convert it into clear dashboards, and make timely, data-driven decisions — without the cost, complexity, or disruption of traditional ERP systems.
-              </p>
-              
-              <div className="grid grid-cols-3 gap-2 md:gap-4 max-w-4xl mx-auto mb-8 md:mb-16 px-2 md:px-0">
-                {[
-                  { icon: <Clock size={24} className="md:w-7 md:h-7" />, val: '100%', label: 'Visbility' },
-                  { icon: <Eye size={24} className="md:w-7 md:h-7" />, val: '0', label: 'Manual' },
-                  { icon: <Activity size={24} className="md:w-7 md:h-7" />, val: '5', label: 'Screens' },
-                ].map((s, i) => (
-                  <div key={i} className="flex flex-col items-center gap-1 md:gap-3 bg-card/60 backdrop-blur p-2 md:p-4 rounded-2xl border border-white/5 shadow-xl text-center">
-                    <div className="text-primary">{s.icon}</div>
-                    <div>
-                      <h4 className="text-lg md:text-2xl font-black text-foreground tracking-tighter leading-none mb-1">{s.val}</h4>
-                      <span className="font-mono text-[8px] md:text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{s.label}</span>
-                    </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 max-w-3xl mx-auto px-4 mb-8">
+              {[
+                { icon: <Clock size={20} />, val: 'Step 1', label: 'Capture Data Instantly' },
+                { icon: <Zap size={20} />, val: 'Step 2', label: 'Secure Cloud Transmission' },
+                { icon: <BarChart2 size={20} />, val: 'Step 3', label: 'Visualize in Real-Time' },
+              ].map((s, i) => (
+                <div key={i} className="flex items-center gap-3 bg-card/60 backdrop-blur py-3 px-4 rounded-2xl border border-white/5 shadow-xl w-full sm:w-auto">
+                  <div className="text-primary shrink-0">{s.icon}</div>
+                  <div className="text-left">
+                    <div className="text-xs font-black text-primary tracking-widest uppercase">{s.val}</div>
+                    <div className="text-[11px] font-mono text-muted-foreground">{s.label}</div>
                   </div>
-                ))}
-              </div>
-            </>
+                </div>
+              ))}
+            </div>
           }
         >
-          <div className="w-[280px] h-[580px] rounded-[44px] bg-[#1a1a1a] p-[9px] shadow-[0_40px_80px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.08)] relative group border border-[#2a2a2a] mx-auto">
-            {/* Notch */}
+          <div className="w-[240px] sm:w-[280px] h-[520px] sm:h-[580px] rounded-[44px] bg-[#1a1a1a] p-[9px] shadow-[0_40px_80px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.08)] relative group border border-[#2a2a2a] mx-auto">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#1a1a1a] rounded-b-[18px] z-30 flex justify-center items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#111] shadow-inner" />
               <div className="w-10 h-1 rounded-full bg-[#111]" />
             </div>
-            {/* Side buttons */}
             <div className="absolute -left-[3px] top-28 w-[3px] h-10 bg-[#333] rounded-l-md" />
             <div className="absolute -left-[3px] top-44 w-[3px] h-20 bg-[#333] rounded-l-md" />
             <div className="absolute -right-[3px] top-36 w-[3px] h-14 bg-[#333] rounded-r-md" />
-            {/* Screen */}
             <div className="w-full h-full rounded-[36px] overflow-hidden bg-black relative isolate">
               <InteractiveMobileApp />
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/4 to-transparent mix-blend-overlay rotate-12 scale-[1.5] translate-y-[-20%] pointer-events-none transition-transform duration-700 group-hover:translate-x-1/4" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/4 to-transparent mix-blend-overlay rotate-12 scale-[1.5] translate-y-[-20%] pointer-events-none" />
             </div>
-            {/* Badge */}
-            <div className="absolute -right-6 bottom-20 bg-primary text-white font-black text-[9px] uppercase tracking-widest py-2 px-3 rounded-full shadow-xl animate-bounce hidden md:block z-50 pointer-events-none">
+            <div className="absolute -right-4 bottom-16 bg-primary text-white font-black text-[8px] uppercase tracking-widest py-1.5 px-2.5 rounded-full shadow-xl animate-bounce hidden md:block z-50 pointer-events-none">
               Tap screens!
               <div className="absolute right-full top-1/2 -translate-y-1/2 translate-x-1 border-4 border-transparent border-r-primary" />
             </div>
@@ -642,31 +678,119 @@ const Flapp = () => {
         </ContainerScroll>
       </div>
 
-      {/* Features Grid */}
-      <section className="py-24 relative z-10 container mx-auto px-6 max-w-7xl">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4">
-            <Zap size={14} />
-            <span className="text-sm font-semibold tracking-wide">CORE MODULES</span>
-          </div>
-          <h2 className="text-4xl font-bold mb-4">Built for the Factory Floor</h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">Every module is purpose-built for operational teams, not office workers.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feat, idx) => (
-            <div
-              className="glass-panel rounded-industrial transition-all duration-700 ease-out opacity-0 translate-y-6 hover:-translate-y-2 hover:border-primary/60 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] group cursor-default"
-              key={idx}
-              ref={el => elementsRef.current[2 + idx] = el}
-            >
-              <div className="p-8 h-full flex flex-col bg-gradient-to-b from-card to-background">
-                <div className="mb-6 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20">
-                  {feat.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{feat.title}</h3>
-                <p className="text-muted-foreground leading-relaxed flex-1">{feat.desc}</p>
-              </div>
+      {/* ── App Types Swipe Carousel ── */}
+      <section className="overflow-hidden py-16 md:py-24">
+        <div className="flex items-center justify-between px-4 sm:px-6 md:px-12 mb-6 max-w-7xl mx-auto">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-2">
+              <Smartphone size={13} />
+              <span className="text-xs font-semibold tracking-wide uppercase">App Types</span>
             </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">One Platform, Infinite Apps</h2>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => scrollTo(-1)}
+              disabled={!canScrollLeft}
+              className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-200 ${
+                canScrollLeft
+                  ? 'border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:scale-105'
+                  : 'border-border/30 bg-background/50 text-muted-foreground/30 cursor-not-allowed'
+              }`}
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              onClick={() => scrollTo(1)}
+              disabled={!canScrollRight}
+              className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-200 ${
+                canScrollRight
+                  ? 'border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:scale-105'
+                  : 'border-border/30 bg-background/50 text-muted-foreground/30 cursor-not-allowed'
+              }`}
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Swipe hint */}
+        <div className="flex justify-center mb-4">
+          <span className="flex items-center gap-1 text-muted-foreground text-xs font-mono animate-pulse">
+            <ChevronLeft size={12} className="opacity-50" /> Swipe to explore <ChevronRight size={12} />
+          </span>
+        </div>
+
+        <div className="relative">
+          <div className={`absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none bg-gradient-to-r from-background to-transparent transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0'}`} />
+          <div className={`absolute right-0 top-0 bottom-0 w-12 z-10 pointer-events-none bg-gradient-to-l from-background to-transparent transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`} />
+
+          <div
+            ref={scrollRef}
+            className={`flex gap-4 overflow-x-auto snap-x snap-mandatory pb-6 px-4 sm:px-6 md:px-12 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+          >
+            {appTypes.map((app, idx) => (
+              <div
+                key={idx}
+                className={`glass-panel rounded-industrial min-w-[260px] sm:min-w-[280px] w-[260px] sm:w-[280px] shrink-0 snap-center relative p-6 flex flex-col cursor-pointer transition-all duration-500 group ${
+                  activeIdx === idx
+                    ? 'border-primary/60 shadow-[0_0_40px_rgba(220,38,38,0.15)] scale-[1.01]'
+                    : 'hover:border-primary/30 hover:shadow-[0_0_20px_rgba(220,38,38,0.08)]'
+                }`}
+                onClick={() => scrollToCard(idx)}
+              >
+                {/* Watermark number */}
+                <div className="absolute top-4 right-4 font-mono text-6xl font-black text-white/[0.04] leading-none select-none">
+                  {String(idx + 1).padStart(2, '0')}
+                </div>
+
+                {/* Active indicator */}
+                {activeIdx === idx && (
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent rounded-t-2xl" />
+                )}
+
+                {/* Tag */}
+                <div className="text-[9px] font-mono tracking-[0.2em] text-primary uppercase mb-3">
+                  {app.tag}
+                </div>
+
+                {/* Icon */}
+                <div className="mb-5 text-primary bg-primary/10 w-14 h-14 flex items-center justify-center rounded-xl group-hover:bg-primary/20 group-hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.1)]">
+                  {app.icon}
+                </div>
+
+                <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors duration-300">
+                  {app.title}
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed flex-grow">
+                  {app.desc}
+                </p>
+
+                {idx < appTypes.length - 1 && activeIdx === idx && (
+                  <div className="absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg animate-bounce hidden md:flex">
+                    <ArrowRight size={12} className="text-white" />
+                  </div>
+                )}
+              </div>
+            ))}
+            <div className="min-w-[40px] shrink-0" />
+          </div>
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex justify-center gap-1.5 mt-6">
+          {appTypes.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToCard(i)}
+              className={`rounded-full transition-all duration-300 ${
+                activeIdx === i ? 'w-5 h-2 bg-primary' : 'w-2 h-2 bg-border hover:bg-primary/40'
+              }`}
+            />
           ))}
         </div>
       </section>
