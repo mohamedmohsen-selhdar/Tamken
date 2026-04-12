@@ -1,6 +1,6 @@
 // ─── Tamken Translation Dictionary ───────────────────────────────────────────
 // Arabic uses full tashkeel (حركات) for professional clarity.
-// Font: "Noto Naskh Arabic" — elegant, readable, authoritative.
+// Font: "Cairo" — elegant, readable, authoritative.
 
 export const t = {
 
@@ -40,10 +40,21 @@ export const t = {
   // ─── Hero Section ─────────────────────────────────────────────────────────
   hero: {
     badge:    { en: 'MANUFACTURING NETWORK', ar: 'شَبكةُ التَّصنيع' },
-    weEliminate: { en: 'WE ELIMINATE', ar: 'نُزيل' },
     words: {
-      en: ['MARGIN BLEED', 'INDUSTRIAL BOTTLENECKS', 'SCALING BARRIERS', 'PRODUCTION INEFFICIENCY'],
-      ar: ['نَزيفَ الهامِش', 'عُقَد الإنتاج', 'عَوائقَ التَّوسُّع', 'قُصورَ التَّشغيل'],
+      en: [
+        'Turn Chaos Into Systems',
+        'Scale Factories Without Guesswork',
+        'Profit Starts With Process',
+        'Fix Operations. Unlock Growth',
+        'From Mess To Measurable Control'
+      ],
+      ar: [
+        'حوّل الفوضى إلى أنظمة',
+        'وسّع مصانعك بأسس مدروسة',
+        'الأرباح تبدأ من العمليات',
+        'أصلح العمليات، وأطلق النمو',
+        'من التخبط إلى تحكم قابل للقياس'
+      ],
     },
     subtitle: {
       en: "We don't just consult. We architect high-performance manufacturing ecosystems optimized for scale, precision, and compounded revenue growth.",

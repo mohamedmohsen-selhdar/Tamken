@@ -43,7 +43,7 @@ const Navbar = () => {
       {isAr ? (
         <span className="ltr-force text-xs font-bold">EN</span>
       ) : (
-        <span className="font-arabic text-sm" style={{ fontFamily: "'Noto Naskh Arabic', serif" }}>ع</span>
+        <span className="font-arabic text-sm" style={{ fontFamily: "'Cairo', sans-serif" }}>ع</span>
       )}
     </button>
   );

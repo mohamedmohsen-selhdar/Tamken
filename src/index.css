@@ -11,13 +11,13 @@ html {
 /* ── Arabic / RTL Support ── */
 html[dir="rtl"],
 html[dir="rtl"] body {
-  font-family: 'Noto Naskh Arabic', 'Cairo', serif;
+  font-family: 'Cairo', 'Noto Naskh Arabic', sans-serif;
   direction: rtl;
   text-align: right;
 }
 
 html[dir="rtl"] .font-mono {
-  font-family: 'Noto Naskh Arabic', 'Cairo', serif;
+  font-family: 'Cairo', 'Noto Naskh Arabic', monospace;
   letter-spacing: 0;
 }
 

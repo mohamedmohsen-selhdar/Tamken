@@ -182,22 +182,21 @@ const Home = () => {
           </div>
 
           {/* Sliding Headline */}
-          <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-8xl font-sans tracking-tight text-foreground dark:text-white mb-8 leading-tight drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
-            <span className="block">{tx(t.hero.weEliminate, lang)}</span>
-            <span className="relative block overflow-hidden w-full font-black drop-shadow-[0_0_20px_rgba(220,38,38,0.6)]" style={{ height: '1.25em', marginTop: '0.15em' }}>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans tracking-tight text-foreground dark:text-white mb-8 drop-shadow-xl w-full animate-slide-up uppercase" style={{ animationDelay: '100ms' }}>
+            <div className="relative grid w-full drop-shadow-[0_0_20px_rgba(220,38,38,0.6)] place-items-center font-black">
               <AnimatePresence mode="popLayout">
-                <motion.span
+                <motion.div
                   key={currentWord}
-                  initial={{ y: "150%", opacity: 0, rotateX: -90 }}
-                  animate={{ y: "0%", opacity: 1, rotateX: 0 }}
-                  exit={{ y: "-150%", opacity: 0, rotateX: 90 }}
-                  transition={{ duration: 0.8, ease: "circOut" }}
-                  className="absolute left-0 right-0 top-0 w-full text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-600"
+                  initial={{ y: "50%", opacity: 0, filter: "blur(5px)" }}
+                  animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+                  exit={{ y: "-50%", opacity: 0, filter: "blur(5px)" }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className="col-start-1 row-start-1 text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-600 w-full whitespace-normal leading-[1.1] max-w-[1200px]"
                 >
                   {words[currentWord]}
-                </motion.span>
+                </motion.div>
               </AnimatePresence>
-            </span>
+            </div>
           </h1>
 
           <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base lg:text-lg leading-relaxed mb-12 animate-slide-up" style={{ animationDelay: '200ms' }}>
