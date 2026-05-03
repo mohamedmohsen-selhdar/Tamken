@@ -168,7 +168,8 @@ const Home = () => {
         <div className="hero-bg-parallax absolute inset-0 -z-20 bg-background bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-background to-background dark:from-primary/10">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-10 dark:opacity-30 mix-blend-overlay"></div>
           {/* Heavy Overlay */}
-          <div className="absolute inset-0 dark:bg-black/80"></div>
+          {/* Lighter Overlay for Hero */}
+          <div className="absolute inset-0 dark:bg-background/80"></div>
         </div>
 
         {/* Dynamic Animated Grid Pattern */}
@@ -231,7 +232,7 @@ const Home = () => {
                     <span className="absolute inset-0 rounded-full overflow-hidden">
                         <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
                     </span>
-                    <div className="relative flex items-center justify-center gap-3 space-x-2 rounded-full bg-[#1f1f1f] border border-[#2a2a2a] px-8 py-4 text-base md:text-lg font-medium text-white z-10 hover:bg-[#2a2a2a] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)]">
+                    <div className="relative flex items-center justify-center gap-3 space-x-2 rounded-full bg-zinc-800 border border-zinc-700 px-8 py-4 text-base md:text-lg font-medium text-white z-10 hover:bg-zinc-700 transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)]">
                         <span className="relative mt-0.5 tracking-wide">{tx(t.hero.cta, lang)}</span>
                     </div>
                 </button>
@@ -426,7 +427,7 @@ const Home = () => {
       {/* Testimonials Section */}
       <section
         ref={testimonialsRef}
-        className={`py-32 relative z-10 border-t border-border/50 bg-background dark:bg-[#0a0a0a] reveal ${ testimonialsVisible ? 'visible' : '' }`}
+        className={`py-32 relative z-10 border-t border-border/50 bg-background dark:bg-background/50 reveal ${ testimonialsVisible ? 'visible' : '' }`}
       >
         <div className="container mx-auto px-6 max-w-7xl z-10 relative">
           <div className="text-center mb-16">
@@ -442,12 +443,12 @@ const Home = () => {
         {/* Moving Testimonials Marquee */}
         <div className="relative flex overflow-hidden py-10 w-full max-w-[100vw]">
             {/* Fade Edges for the Testimonials Marquee */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background dark:from-[#0a0a0a] to-transparent z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background dark:from-[#0a0a0a] to-transparent z-10" />
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background dark:from-background/50 to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background dark:from-background/50 to-transparent z-10" />
             
             <div className="flex animate-marquee whitespace-nowrap items-stretch w-max hover:[animation-play-state:paused] ease-linear duration-1000">
                 {[...testimonialsData, ...testimonialsData].map((item, i) => (
-                  <div key={`${item.id}-${i}`} className="inline-flex flex-col justify-between w-[350px] md:w-[450px] whitespace-normal glass-panel p-8 mx-4 rounded-industrial transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] bg-card dark:bg-[#111] border-border/50 hover:border-primary/50 group/testi">
+                  <div key={`${item.id}-${i}`} className="inline-flex flex-col justify-between w-[350px] md:w-[450px] whitespace-normal glass-panel p-8 mx-4 rounded-industrial transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] bg-card dark:bg-card/50 border-border/50 hover:border-primary/50 group/testi">
                     <div className="mb-8">
                       <div className="text-primary opacity-30 mb-8 h-8 group-hover/testi:opacity-100 transition-opacity">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" /></svg>

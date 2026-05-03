@@ -148,10 +148,10 @@ const InteractiveMobileApp = () => {
   ];
 
   return (
-    <div className="w-full h-full bg-[#080808] text-white flex flex-col font-sans relative overflow-hidden select-none" style={{ fontSize: 11 }}>
+    <div className="w-full h-full bg-[#121212] text-white flex flex-col font-sans relative overflow-hidden select-none" style={{ fontSize: 11 }}>
 
       {/* Status Bar */}
-      <div className="h-6 w-full flex justify-between items-center px-4 text-[9px] text-zinc-400 bg-black/60 shrink-0">
+      <div className="h-6 w-full flex justify-between items-center px-4 text-[9px] text-zinc-400 bg-[#0f0f0f]/60 shrink-0">
         <span className="font-bold tracking-wider">9:41</span>
         <div className="flex gap-1.5 items-center">
           <div className="flex gap-0.5 items-end h-[9px]">
@@ -166,7 +166,7 @@ const InteractiveMobileApp = () => {
       </div>
 
       {/* Header */}
-      <div className="py-2.5 px-4 flex justify-between items-center bg-[#0d0d0d] border-b border-white/8 z-10 shrink-0">
+      <div className="py-2.5 px-4 flex justify-between items-center bg-[#181818] border-b border-white/8 z-10 shrink-0">
         <button className="text-zinc-400 hover:text-white transition-colors w-7 h-7 flex items-center justify-center">
           <Menu size={16} />
         </button>
@@ -182,7 +182,7 @@ const InteractiveMobileApp = () => {
 
       {/* Notification Dropdown */}
       {notifOpen && (
-        <div className="absolute top-[62px] right-0 left-0 bg-[#111] border-b border-white/10 z-30 animate-fade-in">
+        <div className="absolute top-[62px] right-0 left-0 bg-[#222] border-b border-white/10 z-30 animate-fade-in">
           <div className="px-3 py-2 border-b border-white/5 flex justify-between items-center">
             <span className="text-[9px] uppercase tracking-widest text-zinc-500 font-bold">Notifications</span>
             <button onClick={() => setNotifOpen(false)}><X size={12} className="text-zinc-500" /></button>
@@ -523,7 +523,7 @@ const InteractiveMobileApp = () => {
       </div>
 
       {/* Bottom Nav */}
-      <div className="h-[58px] bg-[#0d0d0d] border-t border-white/8 flex justify-around items-center px-2 z-20 shrink-0">
+      <div className="h-[58px] bg-[#181818] border-t border-white/8 flex justify-around items-center px-2 z-20 shrink-0">
         {[
           { id: 'home', icon: <HomeIcon size={18} />, label: 'Home' },
           { id: 'metrics', icon: <BarChart2 size={18} />, label: 'Analytics' },
@@ -639,7 +639,7 @@ const Flapp = () => {
       </header>
 
       {/* ── 3D Scroll Phone Demo ── */}
-      <div className="bg-secondary/50 border-t border-border/50 shadow-[inset_0_20px_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pb-[50px] pt-[20px] md:pt-[40px]">
+      <div className="bg-secondary/30 border-t border-border/50 shadow-[inset_0_20px_40px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col pb-[50px] pt-[20px] md:pt-[40px]">
         <ContainerScroll
           titleComponent={
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 max-w-3xl mx-auto px-4 mb-8">
@@ -659,15 +659,15 @@ const Flapp = () => {
             </div>
           }
         >
-          <div className="w-[240px] sm:w-[280px] h-[520px] sm:h-[580px] rounded-[44px] bg-[#1a1a1a] p-[9px] shadow-[0_40px_80px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.08)] relative group border border-[#2a2a2a] mx-auto">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#1a1a1a] rounded-b-[18px] z-30 flex justify-center items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#111] shadow-inner" />
-              <div className="w-10 h-1 rounded-full bg-[#111]" />
+          <div className="w-[240px] sm:w-[280px] h-[520px] sm:h-[580px] rounded-[44px] bg-[#222] p-[9px] shadow-[0_40px_80px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.08)] relative group border border-[#333] mx-auto">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#222] rounded-b-[18px] z-30 flex justify-center items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a] shadow-inner" />
+              <div className="w-10 h-1 rounded-full bg-[#1a1a1a]" />
             </div>
             <div className="absolute -left-[3px] top-28 w-[3px] h-10 bg-[#333] rounded-l-md" />
             <div className="absolute -left-[3px] top-44 w-[3px] h-20 bg-[#333] rounded-l-md" />
             <div className="absolute -right-[3px] top-36 w-[3px] h-14 bg-[#333] rounded-r-md" />
-            <div className="w-full h-full rounded-[36px] overflow-hidden bg-black relative isolate">
+            <div className="w-full h-full rounded-[36px] overflow-hidden bg-[#0f0f0f] relative isolate">
               <InteractiveMobileApp />
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/4 to-transparent mix-blend-overlay rotate-12 scale-[1.5] translate-y-[-20%] pointer-events-none" />
             </div>
