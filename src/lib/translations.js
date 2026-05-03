@@ -81,6 +81,13 @@ export const t = {
       ar: 'نظامٌ رقميٌّ للهواتف الذكية يَرصد بياناتِ الإنتاج لحظةً بلحظة، ويكشف الاختناقات بدقَّةٍ متناهية للحفاظ على المعايير العليا.',
     },
     flappLink: { en: 'Learn About FLAPP', ar: 'تعرَّف على فلاب' },
+    
+    operationalExcellenceTitle: { en: 'Operational Excellence', ar: 'التميُّز التشغيليّ' },
+    operationalExcellenceDesc: {
+      en: 'Master efficiency with Lean and Six Sigma. We deliver measurable cost reduction projects, comprehensive team training, and executive coaching to unlock peak performance.',
+      ar: 'حقِّق الكفاءة القصوى بمنهجيات "لين" و"سيكس سيجما". نُقدِّم مشاريع مدروسة لخفض التكاليف، وبرامج تدريبية شاملة، وتوجيهاً قيادياً للوصول إلى أعلى مستويات الأداء.',
+    },
+    operationalExcellenceLink: { en: 'Optimize Operations', ar: 'حسِّن عملياتك' },
   },
 
   // ─── Stats Section ────────────────────────────────────────────────────────
@@ -253,6 +260,51 @@ export const t = {
                  ar: 'سجِّل زوار الموقع، تحقَّق من الهوية، وأنشئ تقارير الدخول الرقمية على الفور.' },
         tag: { en: 'Security', ar: 'أمن' } },
     ],
+  },
+
+  // ─── Operational Excellence Page ──────────────────────────────────────────
+  operationalExcellence: {
+    badge: { en: 'Lean & Six Sigma Mastery', ar: 'إتقان "لين" وسيكس سيجما' },
+    heading: { en: 'Operational Excellence', ar: 'التميُّز التشغيليّ' },
+    subheading: {
+      en: 'A systemic approach to eliminating waste, reducing costs, and building a culture of continuous improvement through advanced industrial methodologies.',
+      ar: 'نهجٌ نظاميٌّ للقضاء على الهدر، وخفض التكاليف، وبناء ثقافة التحسين المستمر من خلال منهجيات صناعية متطورة.',
+    },
+    sections: [
+      {
+        title: { en: 'Cost Reduction Projects', ar: 'مشاريع خفض التكاليف' },
+        desc: { 
+          en: 'We identify and eliminate non-value-added activities (Waste) to directly impact your bottom line while maintaining or improving quality.',
+          ar: 'نُحدِّد ونقضي على الأنشطة التي لا تضيف قيمة (الهدر) للتأثير المباشر على الأرباح مع الحفاظ على الجودة أو تحسينها.',
+        },
+        features: {
+          en: ['Scrap Reduction', 'Energy Optimization', 'Cycle Time Improvement'],
+          ar: ['تقليل الفواقد', 'تحسين استهلاك الطاقة', 'تحسين زمن الدورة'],
+        }
+      },
+      {
+        title: { en: 'Lean Six Sigma Training', ar: 'تدريب لين سيكس سيجما' },
+        desc: {
+          en: 'Empower your workforce with the tools to solve problems. From Yellow Belt to Black Belt, we build internal problem-solving engines.',
+          ar: 'مكِّن قوَّتك العاملة بأدوات حل المشكلات. من "الحزام الأصفر" إلى "الحزام الأسود"، نبني محركات داخلية لحل المشكلات.',
+        },
+        features: {
+          en: ['DMAIC Methodology', 'Statistical Process Control', 'Root Cause Analysis'],
+          ar: ['منهجية DMAIC', 'التحكم الإحصائي في العمليات', 'تحليل الأسباب الجذرية'],
+        }
+      },
+      {
+        title: { en: 'Executive Coaching', ar: 'التوجيه القيادي (Coaching)' },
+        desc: {
+          en: 'Strategic guidance for leadership teams to sustain transformation and lead cultural shifts toward operational excellence.',
+          ar: 'توجيهٌ استراتيجي لفرق القيادة لضمان استدامة التحوُّل وقيادة التغيير الثقافي نحو التميُّز التشغيلي.',
+        },
+        features: {
+          en: ['Hoshin Kanri (Strategy Deployment)', 'Gemba Walks', 'Leadership Standards'],
+          ar: ['هوشين كانري (نشر الاستراتيجية)', 'جولات "جيمبا"', 'معايير القيادة'],
+        }
+      }
+    ]
   },
 
   // ─── Articles Page ────────────────────────────────────────────────────────

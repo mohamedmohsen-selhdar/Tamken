@@ -254,7 +254,7 @@ const Home = () => {
             <p className="text-muted-foreground text-lg">{tx(t.offerings.subheading, lang)}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Journey Card */}
             <div className="glass-panel p-10 rounded-industrial overflow-hidden relative group hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-500 hover:-translate-y-2 border border-border/50 hover:border-primary/50">
               <div className="absolute inset-0 bg-gradient-to-br from-card via-background to-primary/5 group-hover:to-primary/10 transition-colors duration-500"></div>
@@ -262,9 +262,9 @@ const Home = () => {
                 <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                   <Activity size={32} />
                 </div>
-                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">{tx(t.offerings.journeyTitle, lang)}</h3>
-                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">{tx(t.offerings.journeyDesc, lang)}</p>
-                <Link to="/journey" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide">
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{tx(t.offerings.journeyTitle, lang)}</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-base leading-relaxed">{tx(t.offerings.journeyDesc, lang)}</p>
+                <Link to="/journey" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide text-sm">
                   {tx(t.offerings.journeyLink, lang)} <ArrowRight size={18} />
                 </Link>
               </div>
@@ -277,10 +277,25 @@ const Home = () => {
                 <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                   <Cpu size={32} />
                 </div>
-                <h3 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">{tx(t.offerings.flappTitle, lang)}</h3>
-                <p className="text-muted-foreground flex-grow mb-8 text-lg leading-relaxed">{tx(t.offerings.flappDesc, lang)}</p>
-                <Link to="/flapp" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide">
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{tx(t.offerings.flappTitle, lang)}</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-base leading-relaxed">{tx(t.offerings.flappDesc, lang)}</p>
+                <Link to="/flapp" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide text-sm">
                   {tx(t.offerings.flappLink, lang)} <ArrowRight size={18} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Operational Excellence Card */}
+            <div className="glass-panel p-10 rounded-industrial overflow-hidden relative group hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-500 hover:-translate-y-2 border border-border/50 hover:border-primary/50">
+              <div className="absolute inset-0 bg-gradient-to-br from-card via-background to-primary/5 group-hover:to-primary/10 transition-colors duration-500"></div>
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="mb-8 text-primary bg-primary/10 w-16 h-16 flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                  <Layers size={32} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{tx(t.offerings.operationalExcellenceTitle, lang)}</h3>
+                <p className="text-muted-foreground flex-grow mb-8 text-base leading-relaxed">{tx(t.offerings.operationalExcellenceDesc, lang)}</p>
+                <Link to="/operational-excellence" className="font-heading font-semibold text-primary inline-flex items-center gap-2 hover:gap-4 transition-all uppercase tracking-wide text-sm">
+                  {tx(t.offerings.operationalExcellenceLink, lang)} <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
@@ -411,7 +426,7 @@ const Home = () => {
       {/* Testimonials Section */}
       <section
         ref={testimonialsRef}
-        className={`py-32 relative z-10 border-t border-border/50 bg-[#0a0a0a] reveal ${ testimonialsVisible ? 'visible' : '' }`}
+        className={`py-32 relative z-10 border-t border-border/50 bg-background dark:bg-[#0a0a0a] reveal ${ testimonialsVisible ? 'visible' : '' }`}
       >
         <div className="container mx-auto px-6 max-w-7xl z-10 relative">
           <div className="text-center mb-16">
@@ -419,28 +434,28 @@ const Home = () => {
               <MessageSquare size={16} />
               <span className="text-sm font-semibold tracking-wide">CLIENT SUCCESS</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-sans font-bold mb-6 text-white">{tx(t.testimonials.heading, lang)}</h2>
-            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{tx(t.testimonials.subheading, lang)}</p>
+            <h2 className="text-4xl md:text-5xl font-sans font-bold mb-6 text-foreground dark:text-white">{tx(t.testimonials.heading, lang)}</h2>
+            <p className="text-muted-foreground dark:text-zinc-400 text-lg max-w-2xl mx-auto">{tx(t.testimonials.subheading, lang)}</p>
           </div>
         </div>
 
         {/* Moving Testimonials Marquee */}
         <div className="relative flex overflow-hidden py-10 w-full max-w-[100vw]">
             {/* Fade Edges for the Testimonials Marquee */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10" />
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background dark:from-[#0a0a0a] to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background dark:from-[#0a0a0a] to-transparent z-10" />
             
             <div className="flex animate-marquee whitespace-nowrap items-stretch w-max hover:[animation-play-state:paused] ease-linear duration-1000">
                 {[...testimonialsData, ...testimonialsData].map((item, i) => (
-                  <div key={`${item.id}-${i}`} className="inline-flex flex-col justify-between w-[350px] md:w-[450px] whitespace-normal glass-panel p-8 mx-4 rounded-industrial transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] bg-[#111] border-border/50 hover:border-primary/50 group/testi">
+                  <div key={`${item.id}-${i}`} className="inline-flex flex-col justify-between w-[350px] md:w-[450px] whitespace-normal glass-panel p-8 mx-4 rounded-industrial transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] bg-card dark:bg-[#111] border-border/50 hover:border-primary/50 group/testi">
                     <div className="mb-8">
                       <div className="text-primary opacity-30 mb-8 h-8 group-hover/testi:opacity-100 transition-opacity">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" /></svg>
                       </div>
-                      <p className="text-base md:text-lg leading-relaxed text-zinc-300 italic flex-grow hover:text-white transition-colors">"{item.testimonial}"</p>
+                      <p className="text-base md:text-lg leading-relaxed text-foreground/80 dark:text-zinc-300 italic flex-grow group-hover/testi:text-foreground dark:group-hover/testi:text-white transition-colors">"{item.testimonial}"</p>
                     </div>
                     <div className="mt-auto pt-6 border-t border-border/20">
-                      <h4 className="font-bold text-white tracking-wide">{item.by}</h4>
+                      <h4 className="font-bold text-foreground dark:text-white tracking-wide">{item.by}</h4>
                       <p className="text-sm text-primary font-medium">{item.role}, {item.company}</p>
                     </div>
                   </div>

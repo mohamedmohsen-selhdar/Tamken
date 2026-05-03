@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Journey from './pages/Journey';
 import Flapp from './pages/Flapp';
+import OperationalExcellence from './pages/OperationalExcellence';
 import Articles from './pages/Articles';
 import ArticleDetail from './pages/ArticleDetail';
 import Dashboard from './pages/Dashboard';
@@ -68,6 +69,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/journey" element={<Journey />} />
                   <Route path="/flapp" element={<Flapp />} />
+                  <Route path="/operational-excellence" element={<OperationalExcellence />} />
                   <Route path="/articles" element={<Articles />} />
                   <Route path="/articles/:id" element={<ArticleDetail />} />
                   <Route path="/case-studies" element={<CaseStudies />} />
